@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Categories on $ make life</title>
+    <link>https://owlinux1000.github.io/categories/</link>
+    <description>Recent content in Categories on $ make life</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Wed, 29 Sep 2021 09:54:40 +0900</lastBuildDate>
+    
+	<atom:link href="https://owlinux1000.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>certification</title>
+      <link>https://owlinux1000.github.io/categories/certification/</link>
+      <pubDate>Wed, 29 Sep 2021 09:54:40 +0900</pubDate>
+      
+      <guid>https://owlinux1000.github.io/categories/certification/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>security</title>
+      <link>https://owlinux1000.github.io/categories/security/</link>
+      <pubDate>Sat, 29 Feb 2020 10:17:51 +0900</pubDate>
+      
+      <guid>https://owlinux1000.github.io/categories/security/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>misc</title>
+      <link>https://owlinux1000.github.io/categories/misc/</link>
+      <pubDate>Sat, 07 Dec 2019 18:47:45 +0900</pubDate>
+      
+      <guid>https://owlinux1000.github.io/categories/misc/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>writeup</title>
+      <link>https://owlinux1000.github.io/categories/writeup/</link>
+      <pubDate>Thu, 19 Sep 2019 23:49:38 +0900</pubDate>
+      
+      <guid>https://owlinux1000.github.io/categories/writeup/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Infrastructure</title>
+      <link>https://owlinux1000.github.io/categories/infrastructure/</link>
+      <pubDate>Sat, 18 May 2019 12:24:26 +0900</pubDate>
+      
+      <guid>https://owlinux1000.github.io/categories/infrastructure/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>forensics</title>
+      <link>https://owlinux1000.github.io/categories/forensics/</link>
+      <pubDate>Mon, 29 Apr 2019 07:03:53 +0900</pubDate>
+      
+      <guid>https://owlinux1000.github.io/categories/forensics/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>cryptography</title>
+      <link>https://owlinux1000.github.io/categories/cryptography/</link>
+      <pubDate>Mon, 01 Apr 2019 22:33:26 +0900</pubDate>
+      
+      <guid>https://owlinux1000.github.io/categories/cryptography/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

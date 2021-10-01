@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang='en' dir='auto'><head>
+  <meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta name='description' content='tl;dr  GIAC Reverse Engineering Malware（GREM） に 81.33% で合格した 勉強方法  受講したトレーニングのテキストを読み込むのと、演習をすべてやり直す 模擬試験を本番と同様の状況で受ける（紙の辞書やテキストを用意して） 少しでも詰まった概念などについては、ググって知識を補完した   トレーニング以外の総合計勉強時間は30 ~ 40時間ほど 試験言語は、英語だが英語自体の難易度は高くない  よっぽど英語に自信がない限りは、保険のために紙の辞書を持っていくと良い    はじめに 今回GREMと呼ばれるGIACのマルウェア解析系の資格試験を受けてきて、見事81.33%で合格することができた。この資格については、あまり情報を公開できないのだが、触れられる範囲で勉強法など当日までの道のりをメモしておく。私自身、初めてGIACの試験を受けたのだが、あまり事前情報がない(日本国内の)ため、今後受ける人の参考になると嬉しい。
+はじめに、この手の話は筆者のスペックを語っておいた方が勉強時間や勉強方法などの参考になると思うので少し触れておく。私は、CTFを通して主にELFファイルの解析等を3年ほどやっているため、普通のx86やamd64のバイナリ(逆アセンブル結果)なら苦じゃなく読むことはできる。しかしながら、PEバイナリなどWindows環境やWin32 API、今流行りのマルウェアやキャンペーンなどについては、ド素人である。マルウェアがどういうレジストリキーを書き込むとか、どんなファイルを作成するとかその手の話題も正直あまり詳しくない。そこで、私は2019年3月にSANS For 610というコースに参加してきた。そのため、何もトレーニングを受けてない人に比べるとかなり優位ではある。このコースでは、主に前述した内容などを学んできた。そのため、当初に比べるとかなりスキルは上がったような気はする。また、英語スキル的には、英語で書かれたドキュメントや技術洋書は苦じゃなく読むことができるが、ちょこちょこ英単語ググりながら読んでるレベルである。正直得意ではない。以上がざっとしたスペックである。
+勉強方法 トレーニングを受講してから、およそ4ヵ月以内に本試験を受けなければならない。社会人2年目になった私は、あまり勉強時間が取れないと思い、このGWに勉強しようと決めてGWに突入した。当初の予定では、このGWに勉強して、受験期限日のギリギリに試験を受ける予定だった。
+SANS For610では、5日間にかけて講義を行う。そのため、5つのテキストが手元にはある。そこで、1日1冊を丁寧に復習するようにした。1冊復習するのに、だいたい5,6時間はかかったと思う。テキストの復習では、主にテキストの内容をざーっと眺めつつ、トレーニング中にやっていた演習などをやり直した。しかしながら、バイナリ解析の基本的なところはすでに得意分野だったので、x86アセンブリ自体の話などは斜め読み程度だった。特に苦手なPE周りやマルウェアの特徴的な挙動だったり解析方法、ツールの使い方などに注力した。公式サイトで、試験でどんなことが問われるかなどは書いてあるので、絶対に見るべし。
+GIACの試験では、トレーニングテキストを持ち込むことができるため、必要なことをすべて丸暗記する必要はないが、ある程度覚えておいたほうが必要なときに参照するスピードがあがるので良い。また、英語の試験だが、紙の辞書も持ち込める ため英語に自信がないなら持ち込んだほうが良い。
+すべてのテキストを復習し終えたら、模擬試験を受けた（模擬試験のスコアが73,4%程度だったので、実はこの時かなりスレスレで、内心険しかった。）。模擬試験を受ける際は、本番と同じ時間、状況で行うことをおすすめする。そのため、紙の辞書なども用意して受けた。あまり問題などについては詳しくいえないが、模擬試験を受けると結果が見れるので、そこで苦手分野を特定して、再度その分野を勉強し直した。その際は、最初よりもより丁寧にテキストを読み込んだり、少しでも詰まった単語や挙動、概念などについてはテキストにとどまらずググって知識を補完した。模擬試験ではだいたい試験時間の半分以下で解答し終わっていたので、本番は丁寧に英文を読み、時間をいっぱい使おうと決めた。また、私は、模擬試験を受けた翌日に本試験を申し込んでいたので、苦手分野を復習し終えた後は、ひたすら寝る時間が来るまでテキストの精読と疑問点や気になったところの知識の補完に努めた。このフェーズでは、もう演習系はやらなかった。総合計の勉強時間としては、30~40時間ほどはやったと思う。
+当日 当時は、朝起きてすぐに昨日の復習をして、試験開始の1時間前ぐらいに試験会場に向かった。事前に本人確認などの手続きがあるため、最低でも15分前に来いと書かれていた。持ち物としては、私が受けた試験会場（もしくはGIAC）では、顔写真付きの公的証明書系が2つ必要だったので、パスポートとマイナンバーカードを持っていた。また、試験予約したときのメールも印刷しろと書かれていたので、持っていった。正直ここらへんは、人の記事読むよりはちゃんと自分で現時点で必要なものを確認することをおすすめする。その他、トレーニングテキスト一式と紙の英和辞典を持っていた。
+試験中 パソコンでぽちぽちやるのだが、トレーニングテキストを持ち込むとやたらと机が狭くなり難しかった。それに加え辞書などを持ち込んでいると机が狭く圧迫感を感じるので気をつけてほしい。試験中は、ひたすら問題解くのとテキストや紙の辞書をめくりまくった記憶がある。私の場合は、模擬試験でかなり時間が余っていたので、すぐに答えがわかっても再度テキストを見直して本当にあってるかなどを再確認したりして解いていった。これでケアレスミスを防げたので、この作業が合否を分けたと思う。結果として、1時間30程度で本試験を終えた。また、本試験の特徴として、わからない問題など後で見返すために問題をスキップできるのだが、結局10問ほどはそれをやって最後に解いた。定期的に、「あーこの話どこかで見たけどテキストで見つからねぇ・・・」みたいなのがやってくるから、そういいった問題はすぐにスキップした。最終問題を解き終えると、その場で合否がわかる。そのため、「この問題があってれば合格できる！」といった願掛けみたいなことを脳内で思って答えた。最終問題を答え、出てきた画面には、合格を表す文章が現れていた。やったぜ。
+やっておけばよかったこと 合格しておいてアレだが、個人的にやっておけばよかったことを箇条書きでまとめておく。
+ もっと詳細にテキストを読み込む テキストだけでとどまらず用語や挙動などをインターネットで調べる 英語の勉強  文意が読み取りにくいことがあり、何を問われているか若干わからず時間を溶かした   紙の辞書をめくる練習  久しぶりで結構もたついた    おわりに 以上が、GREM合格までの話である。一般に、資格試験というのは比較的勉強した成果がちゃんとついてきてくれるものだと思っている。受ける方は、ぜひいっぱい勉強して受かってほしい。この試験勉強を通して学んだことはとても有意義で良いスキルが身についたと思った。某なんちゃら支援士よりもよっぽどスキルが身についた気がする。所感だが、なんとかGWの勉強の成果が出てよかった。実は、本試験は、受験期限日のギリギリに受ける予定だったのだが、模擬試験でスコアがふるわず若干ヤケになって模擬試験を受けた翌日に試験を申し込んでいた。その結果、夜に飲み会があるのに、午前中に試験を受けるというアホなスケジュールになってしまった。不合格だったら落ち込んで飲み会に行くつもりだったが、それは避ける事ができたよかった。
+最後に、勉強時間を捻出するために、家事など全面的に協力してくれた奥さんに感謝したいと思う。'>
+<meta name='theme-color' content='#ffcd00'>
+
+<meta property='og:title' content='GIAC Reverse Engineering Malware（GREM）合格体験記 • $ make life'>
+<meta property='og:description' content='tl;dr  GIAC Reverse Engineering Malware（GREM） に 81.33% で合格した 勉強方法  受講したトレーニングのテキストを読み込むのと、演習をすべてやり直す 模擬試験を本番と同様の状況で受ける（紙の辞書やテキストを用意して） 少しでも詰まった概念などについては、ググって知識を補完した   トレーニング以外の総合計勉強時間は30 ~ 40時間ほど 試験言語は、英語だが英語自体の難易度は高くない  よっぽど英語に自信がない限りは、保険のために紙の辞書を持っていくと良い    はじめに 今回GREMと呼ばれるGIACのマルウェア解析系の資格試験を受けてきて、見事81.33%で合格することができた。この資格については、あまり情報を公開できないのだが、触れられる範囲で勉強法など当日までの道のりをメモしておく。私自身、初めてGIACの試験を受けたのだが、あまり事前情報がない(日本国内の)ため、今後受ける人の参考になると嬉しい。
+はじめに、この手の話は筆者のスペックを語っておいた方が勉強時間や勉強方法などの参考になると思うので少し触れておく。私は、CTFを通して主にELFファイルの解析等を3年ほどやっているため、普通のx86やamd64のバイナリ(逆アセンブル結果)なら苦じゃなく読むことはできる。しかしながら、PEバイナリなどWindows環境やWin32 API、今流行りのマルウェアやキャンペーンなどについては、ド素人である。マルウェアがどういうレジストリキーを書き込むとか、どんなファイルを作成するとかその手の話題も正直あまり詳しくない。そこで、私は2019年3月にSANS For 610というコースに参加してきた。そのため、何もトレーニングを受けてない人に比べるとかなり優位ではある。このコースでは、主に前述した内容などを学んできた。そのため、当初に比べるとかなりスキルは上がったような気はする。また、英語スキル的には、英語で書かれたドキュメントや技術洋書は苦じゃなく読むことができるが、ちょこちょこ英単語ググりながら読んでるレベルである。正直得意ではない。以上がざっとしたスペックである。
+勉強方法 トレーニングを受講してから、およそ4ヵ月以内に本試験を受けなければならない。社会人2年目になった私は、あまり勉強時間が取れないと思い、このGWに勉強しようと決めてGWに突入した。当初の予定では、このGWに勉強して、受験期限日のギリギリに試験を受ける予定だった。
+SANS For610では、5日間にかけて講義を行う。そのため、5つのテキストが手元にはある。そこで、1日1冊を丁寧に復習するようにした。1冊復習するのに、だいたい5,6時間はかかったと思う。テキストの復習では、主にテキストの内容をざーっと眺めつつ、トレーニング中にやっていた演習などをやり直した。しかしながら、バイナリ解析の基本的なところはすでに得意分野だったので、x86アセンブリ自体の話などは斜め読み程度だった。特に苦手なPE周りやマルウェアの特徴的な挙動だったり解析方法、ツールの使い方などに注力した。公式サイトで、試験でどんなことが問われるかなどは書いてあるので、絶対に見るべし。
+GIACの試験では、トレーニングテキストを持ち込むことができるため、必要なことをすべて丸暗記する必要はないが、ある程度覚えておいたほうが必要なときに参照するスピードがあがるので良い。また、英語の試験だが、紙の辞書も持ち込める ため英語に自信がないなら持ち込んだほうが良い。
+すべてのテキストを復習し終えたら、模擬試験を受けた（模擬試験のスコアが73,4%程度だったので、実はこの時かなりスレスレで、内心険しかった。）。模擬試験を受ける際は、本番と同じ時間、状況で行うことをおすすめする。そのため、紙の辞書なども用意して受けた。あまり問題などについては詳しくいえないが、模擬試験を受けると結果が見れるので、そこで苦手分野を特定して、再度その分野を勉強し直した。その際は、最初よりもより丁寧にテキストを読み込んだり、少しでも詰まった単語や挙動、概念などについてはテキストにとどまらずググって知識を補完した。模擬試験ではだいたい試験時間の半分以下で解答し終わっていたので、本番は丁寧に英文を読み、時間をいっぱい使おうと決めた。また、私は、模擬試験を受けた翌日に本試験を申し込んでいたので、苦手分野を復習し終えた後は、ひたすら寝る時間が来るまでテキストの精読と疑問点や気になったところの知識の補完に努めた。このフェーズでは、もう演習系はやらなかった。総合計の勉強時間としては、30~40時間ほどはやったと思う。
+当日 当時は、朝起きてすぐに昨日の復習をして、試験開始の1時間前ぐらいに試験会場に向かった。事前に本人確認などの手続きがあるため、最低でも15分前に来いと書かれていた。持ち物としては、私が受けた試験会場（もしくはGIAC）では、顔写真付きの公的証明書系が2つ必要だったので、パスポートとマイナンバーカードを持っていた。また、試験予約したときのメールも印刷しろと書かれていたので、持っていった。正直ここらへんは、人の記事読むよりはちゃんと自分で現時点で必要なものを確認することをおすすめする。その他、トレーニングテキスト一式と紙の英和辞典を持っていた。
+試験中 パソコンでぽちぽちやるのだが、トレーニングテキストを持ち込むとやたらと机が狭くなり難しかった。それに加え辞書などを持ち込んでいると机が狭く圧迫感を感じるので気をつけてほしい。試験中は、ひたすら問題解くのとテキストや紙の辞書をめくりまくった記憶がある。私の場合は、模擬試験でかなり時間が余っていたので、すぐに答えがわかっても再度テキストを見直して本当にあってるかなどを再確認したりして解いていった。これでケアレスミスを防げたので、この作業が合否を分けたと思う。結果として、1時間30程度で本試験を終えた。また、本試験の特徴として、わからない問題など後で見返すために問題をスキップできるのだが、結局10問ほどはそれをやって最後に解いた。定期的に、「あーこの話どこかで見たけどテキストで見つからねぇ・・・」みたいなのがやってくるから、そういいった問題はすぐにスキップした。最終問題を解き終えると、その場で合否がわかる。そのため、「この問題があってれば合格できる！」といった願掛けみたいなことを脳内で思って答えた。最終問題を答え、出てきた画面には、合格を表す文章が現れていた。やったぜ。
+やっておけばよかったこと 合格しておいてアレだが、個人的にやっておけばよかったことを箇条書きでまとめておく。
+ もっと詳細にテキストを読み込む テキストだけでとどまらず用語や挙動などをインターネットで調べる 英語の勉強  文意が読み取りにくいことがあり、何を問われているか若干わからず時間を溶かした   紙の辞書をめくる練習  久しぶりで結構もたついた    おわりに 以上が、GREM合格までの話である。一般に、資格試験というのは比較的勉強した成果がちゃんとついてきてくれるものだと思っている。受ける方は、ぜひいっぱい勉強して受かってほしい。この試験勉強を通して学んだことはとても有意義で良いスキルが身についたと思った。某なんちゃら支援士よりもよっぽどスキルが身についた気がする。所感だが、なんとかGWの勉強の成果が出てよかった。実は、本試験は、受験期限日のギリギリに受ける予定だったのだが、模擬試験でスコアがふるわず若干ヤケになって模擬試験を受けた翌日に試験を申し込んでいた。その結果、夜に飲み会があるのに、午前中に試験を受けるというアホなスケジュールになってしまった。不合格だったら落ち込んで飲み会に行くつもりだったが、それは避ける事ができたよかった。
+最後に、勉強時間を捻出するために、家事など全面的に協力してくれた奥さんに感謝したいと思う。'>
+<meta property='og:url' content='https://owlinux1000.github.io/blog/passed_grem/'>
+<meta property='og:site_name' content='$ make life'>
+<meta property='og:type' content='article'><meta property='article:section' content='blog'><meta property='article:tag' content='GIAC'><meta property='article:published_time' content='2019-05-03T14:32:45&#43;09:00'/><meta property='article:modified_time' content='2019-05-03T14:32:45&#43;09:00'/><meta name='twitter:card' content='summary'><meta name='twitter:site' content='@encry1024'>
+
+<meta name="generator" content="Hugo 0.73.0" />
+
+  <title>GIAC Reverse Engineering Malware（GREM）合格体験記 • $ make life</title>
+  <link rel='canonical' href='https://owlinux1000.github.io/blog/passed_grem/'>
+  
+  
+  <link rel='icon' href='/favicon.ico'>
+<link rel='stylesheet' href='/assets/css/main.ab98e12b.css'><link rel='stylesheet' href='/css/custom.css'><style>
+:root{--color-accent:#ffcd00;}
+</style>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-154126244-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  
+
+</head>
+<body class='page type-blog has-sidebar'>
+
+  <div class='site'><div id='sidebar' class='sidebar'>
+  <a class='screen-reader-text' href='#main-menu'>Skip to Main Menu</a>
+
+  <div class='container'><section class='widget widget-about sep-after'>
+  <header>
+    
+    <div class='logo'>
+      <a href='/'>
+        <img src='/images/me.jpg'>
+      </a>
+    </div>
+    
+    <h2 class='title site-title '>
+      <a href='/'>
+      $ make life
+      </a>
+    </h2>
+    <div class='desc'>
+    Welcome to my homepage :)
+    </div>
+  </header>
+
+</section>
+</div>
+
+  <div class='sidebar-overlay'></div>
+</div><div class='main'><nav id='main-menu' class='menu main-menu' aria-label='Main Menu'>
+  <div class='container'>
+    <a class='screen-reader-text' href='#content'>Skip to Content</a>
+
+<button id='sidebar-toggler' class='sidebar-toggler' aria-controls='sidebar'>
+  <span class='screen-reader-text'>Toggle Sidebar</span>
+  <span class='open'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="3" y1="12" x2="21" y2="12" />
+<line x1="3" y1="6" x2="21" y2="6" />
+<line x1="3" y1="18" x2="21" y2="18" />
+</svg>
+</span>
+  <span class='close'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="18" y1="6" x2="6" y2="18" />
+<line x1="6" y1="6" x2="18" y2="18" />
+</svg>
+</span>
+</button>
+    <ul><li class='item'>
+        <a href='/resume/'>Résumé</a>
+      </li><li class='item'>
+        <a href='/blog/'>Blog</a>
+      </li><li class='item'>
+        <a href='/private/'>Private</a>
+      </li></ul>
+  </div>
+</nav><div class='header-widgets'>
+        <div class='container'></div>
+      </div>
+
+      <header id='header' class='header site-header'>
+        <div class='container sep-after'>
+          <div class='header-info'><p class='site-title title'>$ make life</p><p class='desc site-desc'>Making the world more secure</p>
+          </div>
+        </div>
+      </header>
+
+      <main id='content'>
+
+
+<article lang='en' class='entry'>
+  <header class='header entry-header'>
+  <div class='container sep-after'>
+    <div class='header-info'>
+      <h1 class='title'>GIAC Reverse Engineering Malware（GREM）合格体験記</h1>
+      
+
+    </div>
+    <div class='entry-meta'>
+  <span class='posted-on'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+<line x1="16" y1="2" x2="16" y2="6" />
+<line x1="8" y1="2" x2="8" y2="6" />
+<line x1="3" y1="10" x2="21" y2="10" />
+</svg>
+<span class='screen-reader-text'>Posted on </span>
+  <time class='entry-date' datetime='2019-05-03T14:32:45&#43;09:00'>2019, May 03</time>
+</span>
+
+  
+  
+<span class='reading-time'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><circle cx="12" cy="12" r="10" />
+<polyline points="12 6 12 12 15 15" />
+</svg>
+One min read
+</span>
+
+
+</div>
+
+
+  </div>
+</header>
+
+  
+  
+
+  <div class='container entry-content'>
+  <h2 id="tldr">tl;dr</h2>
+<ul>
+<li><a href="https://www.giac.org/certification/reverse-engineering-malware-grem">GIAC Reverse Engineering Malware（GREM）</a> に 81.33% で合格した</li>
+<li>勉強方法
+<ul>
+<li>受講したトレーニングのテキストを読み込むのと、演習をすべてやり直す</li>
+<li>模擬試験を本番と同様の状況で受ける（紙の辞書やテキストを用意して）</li>
+<li>少しでも詰まった概念などについては、ググって知識を補完した</li>
+</ul>
+</li>
+<li>トレーニング以外の総合計勉強時間は30 ~ 40時間ほど</li>
+<li>試験言語は、英語だが英語自体の難易度は高くない
+<ul>
+<li>よっぽど英語に自信がない限りは、保険のために紙の辞書を持っていくと良い</li>
+</ul>
+</li>
+</ul>
+<h2 id="はじめに">はじめに</h2>
+<p>今回GREMと呼ばれるGIACのマルウェア解析系の資格試験を受けてきて、見事81.33%で合格することができた。この資格については、あまり情報を公開できないのだが、触れられる範囲で勉強法など当日までの道のりをメモしておく。私自身、初めてGIACの試験を受けたのだが、あまり事前情報がない(日本国内の)ため、今後受ける人の参考になると嬉しい。</p>
+<p>はじめに、この手の話は筆者のスペックを語っておいた方が勉強時間や勉強方法などの参考になると思うので少し触れておく。私は、CTFを通して主にELFファイルの解析等を3年ほどやっているため、普通のx86やamd64のバイナリ(逆アセンブル結果)なら苦じゃなく読むことはできる。しかしながら、PEバイナリなどWindows環境やWin32 API、今流行りのマルウェアやキャンペーンなどについては、ド素人である。マルウェアがどういうレジストリキーを書き込むとか、どんなファイルを作成するとかその手の話題も正直あまり詳しくない。そこで、私は2019年3月にSANS For 610というコースに参加してきた。そのため、何もトレーニングを受けてない人に比べるとかなり優位ではある。このコースでは、主に前述した内容などを学んできた。そのため、当初に比べるとかなりスキルは上がったような気はする。また、英語スキル的には、英語で書かれたドキュメントや技術洋書は苦じゃなく読むことができるが、ちょこちょこ英単語ググりながら読んでるレベルである。正直得意ではない。以上がざっとしたスペックである。</p>
+<h2 id="勉強方法">勉強方法</h2>
+<p>トレーニングを受講してから、およそ4ヵ月以内に本試験を受けなければならない。社会人2年目になった私は、あまり勉強時間が取れないと思い、このGWに勉強しようと決めてGWに突入した。当初の予定では、このGWに勉強して、受験期限日のギリギリに試験を受ける予定だった。</p>
+<p>SANS For610では、5日間にかけて講義を行う。そのため、5つのテキストが手元にはある。そこで、1日1冊を丁寧に復習するようにした。1冊復習するのに、だいたい5,6時間はかかったと思う。テキストの復習では、主にテキストの内容をざーっと眺めつつ、トレーニング中にやっていた演習などをやり直した。しかしながら、バイナリ解析の基本的なところはすでに得意分野だったので、x86アセンブリ自体の話などは斜め読み程度だった。特に苦手なPE周りやマルウェアの特徴的な挙動だったり解析方法、ツールの使い方などに注力した。<a href="https://www.giac.org/certification/reverse-engineering-malware-grem">公式サイト</a>で、試験でどんなことが問われるかなどは書いてあるので、絶対に見るべし。</p>
+<p>GIACの試験では、トレーニングテキストを持ち込むことができるため、必要なことをすべて丸暗記する必要はないが、ある程度覚えておいたほうが必要なときに参照するスピードがあがるので良い。また、英語の試験だが、<strong>紙の辞書も持ち込める</strong> ため英語に自信がないなら持ち込んだほうが良い。</p>
+<p>すべてのテキストを復習し終えたら、模擬試験を受けた（模擬試験のスコアが73,4%程度だったので、実はこの時かなりスレスレで、内心険しかった。）。模擬試験を受ける際は、<strong>本番と同じ時間、状況で行う</strong>ことをおすすめする。そのため、紙の辞書なども用意して受けた。あまり問題などについては詳しくいえないが、模擬試験を受けると結果が見れるので、そこで苦手分野を特定して、再度その分野を勉強し直した。その際は、最初よりもより丁寧にテキストを読み込んだり、少しでも詰まった単語や挙動、概念などについてはテキストにとどまらずググって知識を補完した。模擬試験ではだいたい試験時間の半分以下で解答し終わっていたので、<strong>本番は丁寧に英文を読み、時間をいっぱい使おう</strong>と決めた。また、私は、模擬試験を受けた翌日に本試験を申し込んでいたので、苦手分野を復習し終えた後は、ひたすら寝る時間が来るまでテキストの精読と疑問点や気になったところの知識の補完に努めた。このフェーズでは、もう演習系はやらなかった。総合計の勉強時間としては、30~40時間ほどはやったと思う。</p>
+<h2 id="当日">当日</h2>
+<p>当時は、朝起きてすぐに昨日の復習をして、試験開始の1時間前ぐらいに試験会場に向かった。事前に本人確認などの手続きがあるため、最低でも15分前に来いと書かれていた。持ち物としては、私が受けた試験会場（もしくはGIAC）では、顔写真付きの公的証明書系が2つ必要だったので、パスポートとマイナンバーカードを持っていた。また、試験予約したときのメールも印刷しろと書かれていたので、持っていった。<strong>正直ここらへんは、人の記事読むよりはちゃんと自分で現時点で必要なものを確認する</strong>ことをおすすめする。その他、トレーニングテキスト一式と紙の英和辞典を持っていた。</p>
+<h2 id="試験中">試験中</h2>
+<p>パソコンでぽちぽちやるのだが、トレーニングテキストを持ち込むとやたらと机が狭くなり難しかった。それに加え辞書などを持ち込んでいると机が狭く圧迫感を感じるので気をつけてほしい。試験中は、ひたすら問題解くのとテキストや紙の辞書をめくりまくった記憶がある。私の場合は、模擬試験でかなり時間が余っていたので、すぐに答えがわかっても再度テキストを見直して本当にあってるかなどを再確認したりして解いていった。これでケアレスミスを防げたので、この作業が合否を分けたと思う。結果として、1時間30程度で本試験を終えた。また、本試験の特徴として、わからない問題など後で見返すために問題をスキップできるのだが、結局10問ほどはそれをやって最後に解いた。定期的に、「あーこの話どこかで見たけどテキストで見つからねぇ・・・」みたいなのがやってくるから、そういいった問題はすぐにスキップした。最終問題を解き終えると、その場で合否がわかる。そのため、「この問題があってれば合格できる！」といった願掛けみたいなことを脳内で思って答えた。最終問題を答え、出てきた画面には、合格を表す文章が現れていた。やったぜ。</p>
+<h2 id="やっておけばよかったこと">やっておけばよかったこと</h2>
+<p>合格しておいてアレだが、個人的にやっておけばよかったことを箇条書きでまとめておく。</p>
+<ul>
+<li>もっと詳細にテキストを読み込む</li>
+<li>テキストだけでとどまらず用語や挙動などをインターネットで調べる</li>
+<li>英語の勉強
+<ul>
+<li>文意が読み取りにくいことがあり、何を問われているか若干わからず時間を溶かした</li>
+</ul>
+</li>
+<li>紙の辞書をめくる練習
+<ul>
+<li>久しぶりで結構もたついた</li>
+</ul>
+</li>
+</ul>
+<h2 id="おわりに">おわりに</h2>
+<p>以上が、GREM合格までの話である。一般に、資格試験というのは比較的勉強した成果がちゃんとついてきてくれるものだと思っている。受ける方は、ぜひいっぱい勉強して受かってほしい。この試験勉強を通して学んだことはとても有意義で良いスキルが身についたと思った。<!-- raw HTML omitted -->某なんちゃら支援士よりもよっぽどスキルが身についた気がする。<!-- raw HTML omitted --></p>
+<p>所感だが、なんとかGWの勉強の成果が出てよかった。実は、本試験は、受験期限日のギリギリに受ける予定だったのだが、模擬試験でスコアがふるわず若干ヤケになって模擬試験を受けた翌日に試験を申し込んでいた。その結果、夜に飲み会があるのに、午前中に試験を受けるというアホなスケジュールになってしまった。不合格だったら落ち込んで飲み会に行くつもりだったが、それは避ける事ができたよかった。</p>
+<p>最後に、勉強時間を捻出するために、家事など全面的に協力してくれた奥さんに感謝したいと思う。</p>
+
+</div>
+
+  
+<footer class='entry-footer'>
+  <div class='container sep-before'><div class='categories'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M22,19a2,2,0,0,1-2,2H4a2,2,0,0,1-2-2V5A2,2,0,0,1,4,3H9l2,3h9a2,2,0,0,1,2,2Z" />
+</svg>
+<span class='screen-reader-text'>Categories: </span><a class='category' href='/categories/certification/'>certification</a></div>
+<div class='tags'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M20.59,13.41l-7.17,7.17a2,2,0,0,1-2.83,0L2,12V2H12l8.59,8.59A2,2,0,0,1,20.59,13.41Z" />
+<line x1="7" y1="7" x2="7" y2="7" />
+</svg>
+<span class='screen-reader-text'>Tags: </span><a class='tag' href='/tags/giac/'>GIAC</a></div>
+
+  </div>
+</footer>
+
+
+</article>
+
+<nav class='entry-nav'>
+  <div class='container'><div class='prev-entry sep-before'>
+      <a href='/blog/yara/'>
+        <span aria-hidden='true'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="20" y1="12" x2="4" y2="12" />
+<polyline points="10 18 4 12 10 6" />
+</svg>
+ Previous</span>
+        <span class='screen-reader-text'>Previous post: </span>平成のうちに理解しておくYara 入門</a>
+    </div><div class='next-entry sep-before'>
+      <a href='/blog/terraform_for_conoha/'>
+        <span class='screen-reader-text'>Next post: </span>Terraform でConoha のインスタンスを立ててみる<span aria-hidden='true'>Next <svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="4" y1="12" x2="20" y2="12" />
+<polyline points="14 6 20 12 14 18" />
+</svg>
+</span>
+      </a>
+    </div></div>
+</nav>
+
+
+
+
+      </main>
+
+      <footer id='footer' class='footer'>
+        <div class='container sep-before'><section class='widget widget-social_menu sep-after'><nav aria-label='Social Menu'>
+    <ul><li>
+        <a href='https://github.com/owlinux1000' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Github account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+</svg>
+</a>
+      </li><li>
+        <a href='https://facebook.com/MunifTanjim' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Facebook account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+</svg>
+</a>
+      </li><li>
+        <a href='https://twitter.com/encry1024' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Twitter account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" />
+</svg>
+</a>
+      </li><li>
+        <a href='https://instagram.com/encry1024' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Instagram account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+<path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+<line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+</svg>
+</a>
+      </li><li>
+        <a href='mailto:encry1024@gmail.com' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Contact via Email</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+<polyline points="22,6 12,13 2,6" />
+</svg>
+</a>
+      </li></ul>
+  </nav>
+</section><div class='copyright'>
+  <p> &copy; 2021 Chihiro Hasegawa </p>
+</div>
+
+        </div>
+      </footer>
+
+    </div>
+  </div><script>window.__assets_js_src="/assets/js/"</script>
+
+<script src='/assets/js/main.c3bcf2df.js'></script><script src='/js/custom.js'></script>
+
+</body>
+
+</html>
+

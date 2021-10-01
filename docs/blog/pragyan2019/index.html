@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang='en' dir='auto'><head>
+  <meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta name='description' content='Welcome  JPEGが渡されるが、binwalkをかけると中にzipがあるので取り出す 取り出したzipを展開すると壊れたbmpとパスワード付きのzipが展開される bmpファイルの末尾にはbase64エンコードされたような文字列があるのでデコードするとzipのパスワード zipを展開するとpngファイルがでてくる stegosolveで適当にぽちぽちやるとFLAG pctf{st3gs0lv3_1s_u53ful}  Cookie Monster  Cookieにflagというフィールドがあり、MD5が設定されている どこかのMD5クラックサイトで検索するとpcがでてくる フラグフォーマットは、pctf{なのでひたすらこのCookieのMD5の元を考えれば良いとわかる pctf{c0oki3s_@re_yUm_bUt_tHEy_@ls0_r3vEaL_@_l0t}  Feed_me  バイナリを読むと、渡された乱数3つがチェック用の値になっている 入力文字列を10byteずつ分割してatoiに流し込んでいて、以下の式が成り立てばおｋなので、あとは算数  x &#43; y = a1 y &#43; z = a2 x &#43; z = a3  自分が解いたときのケース  Can you cook my favourite food using these ingredients :) -10026 ; -8250 ; -12490 ; -000007133-000002893-000005357 That&#39;s yummy.... Here is your gift: pctf{p1zz4_t0pp3d_w1th_p1n34ppl3_s4uc3} Game of Faces  ページにアクセスすると3色のよくわからん正方形があるが、ソースを見るとファイルアップロードが見える 適当にファイルをアップロードするとh1タグでbase64エンコードされた文字列が帰ってくるのでデコードするとファイル名がわかる ファイル名で直接アクセスするとフラグ pctf{You_L00K_Wi3Rd_IN_H3R3}  Easy RSA  e, c, nのパラメータが渡されるが、eが著しく大きいので、Wiener&rsquo;s Attackだとわかる コード書いて、秘密鍵dを計算すると12978409760901509356642421072925801006324287746872153539187221529835976408177だとわかる あとは普通にRSAを解読したら、出てきた数値を16進数表記にして1byteずつasciiにすればフラグ pctf{Sup3r_st4nd4rd_W31n3r_4tt4ck}  Late PR  課題を提出しようとしてたけどパソコンがクラッシュしたという問題文とともにイメージファイルが渡される vol.'>
+<meta name='theme-color' content='#ffcd00'>
+
+<meta property='og:title' content='PragyanCTF 2019 writeup • $ make life'>
+<meta property='og:description' content='Welcome  JPEGが渡されるが、binwalkをかけると中にzipがあるので取り出す 取り出したzipを展開すると壊れたbmpとパスワード付きのzipが展開される bmpファイルの末尾にはbase64エンコードされたような文字列があるのでデコードするとzipのパスワード zipを展開するとpngファイルがでてくる stegosolveで適当にぽちぽちやるとFLAG pctf{st3gs0lv3_1s_u53ful}  Cookie Monster  Cookieにflagというフィールドがあり、MD5が設定されている どこかのMD5クラックサイトで検索するとpcがでてくる フラグフォーマットは、pctf{なのでひたすらこのCookieのMD5の元を考えれば良いとわかる pctf{c0oki3s_@re_yUm_bUt_tHEy_@ls0_r3vEaL_@_l0t}  Feed_me  バイナリを読むと、渡された乱数3つがチェック用の値になっている 入力文字列を10byteずつ分割してatoiに流し込んでいて、以下の式が成り立てばおｋなので、あとは算数  x &#43; y = a1 y &#43; z = a2 x &#43; z = a3  自分が解いたときのケース  Can you cook my favourite food using these ingredients :) -10026 ; -8250 ; -12490 ; -000007133-000002893-000005357 That&#39;s yummy.... Here is your gift: pctf{p1zz4_t0pp3d_w1th_p1n34ppl3_s4uc3} Game of Faces  ページにアクセスすると3色のよくわからん正方形があるが、ソースを見るとファイルアップロードが見える 適当にファイルをアップロードするとh1タグでbase64エンコードされた文字列が帰ってくるのでデコードするとファイル名がわかる ファイル名で直接アクセスするとフラグ pctf{You_L00K_Wi3Rd_IN_H3R3}  Easy RSA  e, c, nのパラメータが渡されるが、eが著しく大きいので、Wiener&rsquo;s Attackだとわかる コード書いて、秘密鍵dを計算すると12978409760901509356642421072925801006324287746872153539187221529835976408177だとわかる あとは普通にRSAを解読したら、出てきた数値を16進数表記にして1byteずつasciiにすればフラグ pctf{Sup3r_st4nd4rd_W31n3r_4tt4ck}  Late PR  課題を提出しようとしてたけどパソコンがクラッシュしたという問題文とともにイメージファイルが渡される vol.'>
+<meta property='og:url' content='https://owlinux1000.github.io/blog/pragyan2019/'>
+<meta property='og:site_name' content='$ make life'>
+<meta property='og:type' content='article'><meta property='article:section' content='blog'><meta property='article:published_time' content='2019-03-10T22:48:37&#43;09:00'/><meta property='article:modified_time' content='2019-03-10T22:48:37&#43;09:00'/><meta name='twitter:card' content='summary'><meta name='twitter:site' content='@encry1024'>
+
+<meta name="generator" content="Hugo 0.73.0" />
+
+  <title>PragyanCTF 2019 writeup • $ make life</title>
+  <link rel='canonical' href='https://owlinux1000.github.io/blog/pragyan2019/'>
+  
+  
+  <link rel='icon' href='/favicon.ico'>
+<link rel='stylesheet' href='/assets/css/main.ab98e12b.css'><link rel='stylesheet' href='/css/custom.css'><style>
+:root{--color-accent:#ffcd00;}
+</style>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-154126244-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  
+
+</head>
+<body class='page type-blog has-sidebar'>
+
+  <div class='site'><div id='sidebar' class='sidebar'>
+  <a class='screen-reader-text' href='#main-menu'>Skip to Main Menu</a>
+
+  <div class='container'><section class='widget widget-about sep-after'>
+  <header>
+    
+    <div class='logo'>
+      <a href='/'>
+        <img src='/images/me.jpg'>
+      </a>
+    </div>
+    
+    <h2 class='title site-title '>
+      <a href='/'>
+      $ make life
+      </a>
+    </h2>
+    <div class='desc'>
+    Welcome to my homepage :)
+    </div>
+  </header>
+
+</section>
+</div>
+
+  <div class='sidebar-overlay'></div>
+</div><div class='main'><nav id='main-menu' class='menu main-menu' aria-label='Main Menu'>
+  <div class='container'>
+    <a class='screen-reader-text' href='#content'>Skip to Content</a>
+
+<button id='sidebar-toggler' class='sidebar-toggler' aria-controls='sidebar'>
+  <span class='screen-reader-text'>Toggle Sidebar</span>
+  <span class='open'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="3" y1="12" x2="21" y2="12" />
+<line x1="3" y1="6" x2="21" y2="6" />
+<line x1="3" y1="18" x2="21" y2="18" />
+</svg>
+</span>
+  <span class='close'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="18" y1="6" x2="6" y2="18" />
+<line x1="6" y1="6" x2="18" y2="18" />
+</svg>
+</span>
+</button>
+    <ul><li class='item'>
+        <a href='/resume/'>Résumé</a>
+      </li><li class='item'>
+        <a href='/blog/'>Blog</a>
+      </li><li class='item'>
+        <a href='/private/'>Private</a>
+      </li></ul>
+  </div>
+</nav><div class='header-widgets'>
+        <div class='container'></div>
+      </div>
+
+      <header id='header' class='header site-header'>
+        <div class='container sep-after'>
+          <div class='header-info'><p class='site-title title'>$ make life</p><p class='desc site-desc'>Making the world more secure</p>
+          </div>
+        </div>
+      </header>
+
+      <main id='content'>
+
+
+<article lang='en' class='entry'>
+  <header class='header entry-header'>
+  <div class='container sep-after'>
+    <div class='header-info'>
+      <h1 class='title'>PragyanCTF 2019 writeup</h1>
+      
+
+    </div>
+    <div class='entry-meta'>
+  <span class='posted-on'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+<line x1="16" y1="2" x2="16" y2="6" />
+<line x1="8" y1="2" x2="8" y2="6" />
+<line x1="3" y1="10" x2="21" y2="10" />
+</svg>
+<span class='screen-reader-text'>Posted on </span>
+  <time class='entry-date' datetime='2019-03-10T22:48:37&#43;09:00'>2019, Mar 10</time>
+</span>
+
+  
+  
+<span class='reading-time'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><circle cx="12" cy="12" r="10" />
+<polyline points="12 6 12 12 15 15" />
+</svg>
+One min read
+</span>
+
+
+</div>
+
+
+  </div>
+</header>
+
+  
+  
+
+  <div class='container entry-content'>
+  <h2 id="welcome">Welcome</h2>
+<ul>
+<li>JPEGが渡されるが、binwalkをかけると中にzipがあるので取り出す</li>
+<li>取り出したzipを展開すると壊れたbmpとパスワード付きのzipが展開される</li>
+<li>bmpファイルの末尾にはbase64エンコードされたような文字列があるのでデコードするとzipのパスワード</li>
+<li>zipを展開するとpngファイルがでてくる</li>
+<li>stegosolveで適当にぽちぽちやるとFLAG</li>
+<li><code>pctf{st3gs0lv3_1s_u53ful}</code></li>
+</ul>
+<h2 id="cookie-monster">Cookie Monster</h2>
+<ul>
+<li>Cookieにflagというフィールドがあり、MD5が設定されている</li>
+<li>どこかのMD5クラックサイトで検索すると<code>pc</code>がでてくる</li>
+<li>フラグフォーマットは、<code>pctf{</code>なのでひたすらこのCookieのMD5の元を考えれば良いとわかる</li>
+<li><code>pctf{c0oki3s_@re_yUm_bUt_tHEy_@ls0_r3vEaL_@_l0t}</code></li>
+</ul>
+<h2 id="feed_me">Feed_me</h2>
+<ul>
+<li>バイナリを読むと、渡された乱数3つがチェック用の値になっている</li>
+<li>入力文字列を10byteずつ分割してatoiに流し込んでいて、以下の式が成り立てばおｋなので、あとは算数</li>
+</ul>
+<pre><code>x + y = a1
+y + z = a2
+x + z = a3
+</code></pre><ul>
+<li>自分が解いたときのケース</li>
+</ul>
+<pre><code>Can you cook my favourite food using these ingredients :)
+-10026 ; -8250 ; -12490 ;
+-000007133-000002893-000005357
+That's yummy.... Here is your gift:
+pctf{p1zz4_t0pp3d_w1th_p1n34ppl3_s4uc3}
+</code></pre><h2 id="game-of-faces">Game of Faces</h2>
+<ul>
+<li>ページにアクセスすると3色のよくわからん正方形があるが、ソースを見るとファイルアップロードが見える</li>
+<li>適当にファイルをアップロードするとh1タグでbase64エンコードされた文字列が帰ってくるのでデコードするとファイル名がわかる</li>
+<li>ファイル名で直接アクセスするとフラグ</li>
+<li><code>pctf{You_L00K_Wi3Rd_IN_H3R3}</code></li>
+</ul>
+<h2 id="easy-rsa">Easy RSA</h2>
+<ul>
+<li>e, c, nのパラメータが渡されるが、eが著しく大きいので、Wiener&rsquo;s Attackだとわかる</li>
+<li>コード書いて、秘密鍵dを計算すると<code>12978409760901509356642421072925801006324287746872153539187221529835976408177</code>だとわかる</li>
+<li>あとは普通にRSAを解読したら、出てきた数値を16進数表記にして1byteずつasciiにすればフラグ</li>
+<li><code>pctf{Sup3r_st4nd4rd_W31n3r_4tt4ck}</code></li>
+</ul>
+<h2 id="late-pr">Late PR</h2>
+<ul>
+<li>課題を提出しようとしてたけどパソコンがクラッシュしたという問題文とともにイメージファイルが渡される</li>
+<li>vol.pyでプロセスを見るとchrome.exeがexitしていることがわかり、GoogleChromeCrashHandler.exeというプロセスの存在に気づくので、当該プロセスのメモリダンプを見てみるとフラグ
+<ul>
+<li><code>vol.py -f *.raw --profile Win7SP1x86_23418 pslist</code></li>
+<li><code>vol.py -f *.raw --profile Win7SP1x86_23418 memdump --dump-dir .</code></li>
+<li><code>strings 468.dmp | grep pctf</code></li>
+</ul>
+</li>
+<li><code>pctf{Late_submissions_can_be_good}</code></li>
+</ul>
+<h2 id="mandatory-php">Mandatory PHP</h2>
+<ul>
+<li>以下のPHPのコードが渡される</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#75715e">&lt;?php</span> 
+<span style="color:#66d9ef">include</span> <span style="color:#e6db74">&#39;flag.php&#39;</span>; 
+<span style="color:#a6e22e">highlight_file</span>(<span style="color:#e6db74">&#39;index.php&#39;</span>); 
+$a <span style="color:#f92672">=</span> $_GET[<span style="color:#e6db74">&#34;val1&#34;</span>]; 
+$b <span style="color:#f92672">=</span> $_GET[<span style="color:#e6db74">&#34;val2&#34;</span>]; 
+$c <span style="color:#f92672">=</span> $_GET[<span style="color:#e6db74">&#34;val3&#34;</span>]; 
+$d <span style="color:#f92672">=</span> $_GET[<span style="color:#e6db74">&#34;val4&#34;</span>]; 
+<span style="color:#66d9ef">if</span>(<span style="color:#a6e22e">preg_match</span>(<span style="color:#e6db74">&#39;/[^A-Za-z]/&#39;</span>, $a)) 
+<span style="color:#66d9ef">die</span>(<span style="color:#e6db74">&#39;oh my gawd...&#39;</span>); 
+$a<span style="color:#f92672">=</span><span style="color:#a6e22e">hash</span>(<span style="color:#e6db74">&#34;sha256&#34;</span>,$a); 
+$a<span style="color:#f92672">=</span>(<span style="color:#a6e22e">log10</span>($a<span style="color:#f92672">**</span>(<span style="color:#ae81ff">0.5</span>)))<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span>; 
+<span style="color:#66d9ef">if</span>($c<span style="color:#f92672">&gt;</span><span style="color:#ae81ff">0</span><span style="color:#f92672">&amp;&amp;</span>$d<span style="color:#f92672">&gt;</span><span style="color:#ae81ff">0</span><span style="color:#f92672">&amp;&amp;</span>$d<span style="color:#f92672">&gt;</span>$c<span style="color:#f92672">&amp;&amp;</span>$a<span style="color:#f92672">==</span>$c<span style="color:#f92672">*</span>$c<span style="color:#f92672">+</span>$d<span style="color:#f92672">*</span>$d) 
+$s1<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;true&#34;</span>; 
+<span style="color:#66d9ef">else</span> 
+    <span style="color:#66d9ef">die</span>(<span style="color:#e6db74">&#34;Bye...&#34;</span>); 
+<span style="color:#66d9ef">if</span>($s1<span style="color:#f92672">===</span><span style="color:#e6db74">&#34;true&#34;</span>) 
+    <span style="color:#66d9ef">echo</span> $flag1; 
+<span style="color:#66d9ef">for</span>($i<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>;$i<span style="color:#f92672">&lt;=</span><span style="color:#ae81ff">10</span>;$i<span style="color:#f92672">++</span>){ 
+    <span style="color:#66d9ef">if</span>($b<span style="color:#f92672">==</span><span style="color:#a6e22e">urldecode</span>($b)) 
+        <span style="color:#66d9ef">die</span>(<span style="color:#e6db74">&#39;duck&#39;</span>); 
+    <span style="color:#66d9ef">else</span> 
+        $b<span style="color:#f92672">=</span><span style="color:#a6e22e">urldecode</span>($b); 
+}     
+<span style="color:#66d9ef">if</span>($b<span style="color:#f92672">===</span><span style="color:#e6db74">&#34;WoAHh!&#34;</span>) 
+$s2<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;true&#34;</span>; 
+<span style="color:#66d9ef">else</span> 
+    <span style="color:#66d9ef">die</span>(<span style="color:#e6db74">&#39;oops..&#39;</span>); 
+<span style="color:#66d9ef">if</span>($s2<span style="color:#f92672">===</span><span style="color:#e6db74">&#34;true&#34;</span>) 
+    <span style="color:#66d9ef">echo</span> $flag2; 
+<span style="color:#66d9ef">die</span>(<span style="color:#e6db74">&#39;end...&#39;</span>); 
+<span style="color:#75715e">?&gt;</span> 
+</code></pre></div><ul>
+<li><code>val1</code>が<code>INF</code>になるので、<code>val3</code>と<code>val4</code>でINFになるようにデカイ数を渡して、<code>val2</code>は10回urldecodeして<code>WoAHh!</code>になるようにパラメータを渡せば良い</li>
+<li><code>curl 'http://159.89.166.12:14000///index.php?ffval1=0&amp;val2=WoAHh%2525252525252525252521&amp;val3=101&amp;val4=大きい値'</code></li>
+<li><code>pctf{b3_c4r3fu1_w1th_pHp_f31145}</code></li>
+</ul>
+<h2 id="終了後に解いた問題">終了後に解いた問題</h2>
+<h3 id="magic-pngs">Magic PNGs</h3>
+<ul>
+<li>パスワード付きzipとpngファイルが渡されるが、<code>file</code>コマンドを叩くと<code>data</code>都市てか表示されないためヘッダーなどが間違っていると推測できる</li>
+<li>案の定Magic numberが間違っているので修正するが、それでも開かない</li>
+<li>PNGは通常IDATチャンクがあるはずだが、そのキーワードが<code>idat</code>と小文字になっていたのでこれを修正すると開けて、<code>h4CK3RM4n</code>が読み取れる</li>
+<li>ヒントから、この値をmd5してパスワードzipを展開するとフラグ</li>
+<li><code>pctf{y0u_s33_m33_n0w!}</code></li>
+<li><strong>ファイルヘッダーとかが違うところに気づいていなかった</strong></li>
+</ul>
+<h3 id="exorcism">EXORcism</h3>
+<ul>
+<li>大量の1と0があるファイルを渡される</li>
+<li>100x100の正方形に整形して、1をスペース、0は黒として描画するとQRコードになる</li>
+<li>QRコードを読み取ると、<code>160f15011d1b095339595138535f135613595e1a</code></li>
+<li>タイトルがXORなので、この文字列となにかをxorする必要があると推測できる</li>
+<li>フラグフォーマットの<code>pctf{</code>になるようにxorする値を計算すると<code>flagf</code>になるので、<code>flag</code>を繰り返してxorすれば良いとわかるので、それで計算するとフラグ</li>
+<li><code>pctf{wh4_50_53r1u5?}</code></li>
+<li><strong>そもそもQRコードになるなんて想像ができなかった</strong></li>
+</ul>
+<h2 id="save-earth">Save Earth</h2>
+<ul>
+<li>USBパケットのデータが渡されて入力した値を求めさせる</li>
+<li>データ内にasciiがないので、間隔つまりモールス信号だと推測する</li>
+<li>USBパケットの末尾のデータ部から4をスペース、1と2をそれぞれモールス信号にするとフラグが得られる</li>
+<li><code>CTFS4V3</code></li>
+</ul>
+
+</div>
+
+  
+<footer class='entry-footer'>
+  <div class='container sep-before'><div class='categories'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M22,19a2,2,0,0,1-2,2H4a2,2,0,0,1-2-2V5A2,2,0,0,1,4,3H9l2,3h9a2,2,0,0,1,2,2Z" />
+</svg>
+<span class='screen-reader-text'>Categories: </span><a class='category' href='/categories/writeup/'>writeup</a></div>
+
+  </div>
+</footer>
+
+
+</article>
+
+<nav class='entry-nav'>
+  <div class='container'><div class='prev-entry sep-before'>
+      <a href='/blog/bsidessf2019/'>
+        <span aria-hidden='true'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="20" y1="12" x2="4" y2="12" />
+<polyline points="10 18 4 12 10 6" />
+</svg>
+ Previous</span>
+        <span class='screen-reader-text'>Previous post: </span>BesidesCTF 2019 writeup</a>
+    </div><div class='next-entry sep-before'>
+      <a href='/blog/predict_lcg/'>
+        <span class='screen-reader-text'>Next post: </span>線形合同法で生成される乱数値を予測する<span aria-hidden='true'>Next <svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="4" y1="12" x2="20" y2="12" />
+<polyline points="14 6 20 12 14 18" />
+</svg>
+</span>
+      </a>
+    </div></div>
+</nav>
+
+
+
+
+      </main>
+
+      <footer id='footer' class='footer'>
+        <div class='container sep-before'><section class='widget widget-social_menu sep-after'><nav aria-label='Social Menu'>
+    <ul><li>
+        <a href='https://github.com/owlinux1000' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Github account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+</svg>
+</a>
+      </li><li>
+        <a href='https://facebook.com/MunifTanjim' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Facebook account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+</svg>
+</a>
+      </li><li>
+        <a href='https://twitter.com/encry1024' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Twitter account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" />
+</svg>
+</a>
+      </li><li>
+        <a href='https://instagram.com/encry1024' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Instagram account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+<path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+<line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+</svg>
+</a>
+      </li><li>
+        <a href='mailto:encry1024@gmail.com' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Contact via Email</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+<polyline points="22,6 12,13 2,6" />
+</svg>
+</a>
+      </li></ul>
+  </nav>
+</section><div class='copyright'>
+  <p> &copy; 2021 Chihiro Hasegawa </p>
+</div>
+
+        </div>
+      </footer>
+
+    </div>
+  </div><script>window.__assets_js_src="/assets/js/"</script>
+
+<script src='/assets/js/main.c3bcf2df.js'></script><script src='/js/custom.js'></script>
+
+</body>
+
+</html>
+

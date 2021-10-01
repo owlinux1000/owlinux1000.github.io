@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>misc on $ make life</title>
+    <link>https://owlinux1000.github.io/categories/misc/</link>
+    <description>Recent content in misc on $ make life</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sat, 07 Dec 2019 18:47:45 +0900</lastBuildDate>
+    
+	<atom:link href="https://owlinux1000.github.io/categories/misc/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>GitHub Action を使ってみる</title>
+      <link>https://owlinux1000.github.io/blog/playground_with_github_action/</link>
+      <pubDate>Sat, 07 Dec 2019 18:47:45 +0900</pubDate>
+      
+      <guid>https://owlinux1000.github.io/blog/playground_with_github_action/</guid>
+      <description>はじめに リリースされてからまだGitHub Actionを使っていなかったので、勉強がてら触ってみた。その際に学んだことをまとめておく。
+GitHub Action とは GitHub Actionは、簡単に言ってしまえばGitHubで使える標準のCI/CDのようなツールだ。独自のワークフローを定義することで、GitHub上の様々なイベントでそれを発火させることができる。設定方法は簡単で、repository/.github/workflows/[ファイル名].yml にTravisのようなYMLファイルを作成するだけ。
+使ってみる 今回試してみたのは、このブログの内容をGitHubにpushしたら、自動的に自分のVPSへデプロイするようなCDとしての機能の実現のために利用してみた。対象リポジトリは以下である。
+ owlinux1000/blog  このやりたいことだけ聞くと、Git Hookでもいいと思えるだろうが、今回はGitHub Actionを使ってみるのが目的なので問題無い。この目的のために作成したのが以下のdeploy.ymlだ。
+name: Deploy my website to the server on: push: branches: - master jobs: build: name: Build runs-on: ubuntu-latest steps: - uses: actions/checkout@master - name: copy file via ssh password uses: appleboy/scp-action@master with: host: ${{ secrets.HOST }} username: ${{ secrets.USERNAME }} password: ${{ secrets.PASSWORD }} port: ${{ secrets.PORT }} source: &amp;#34;docs&amp;#34; target: &amp;#34;html&amp;#34; rm: true strip_components: 1 フォーマットの様相は、あまり他のCIツールと変わらない。onの要素で、masterブランチのpush時に後続の処理を行うような設定にしてある。on: [push, pull_request] のような形でpushとpull-request時に実行することも可能だ。また、scheduleで、cron形式で設定することも可能っぽい。runs-onでは、動作させる環境を指定する。複数の環境で実行したいときはよくある以下のようなMatrix形式の設定をする。</description>
+    </item>
+    
+    <item>
+      <title>新年なのでHugo でGitHub Pages にデプロイ</title>
+      <link>https://owlinux1000.github.io/blog/helloworld/</link>
+      <pubDate>Wed, 02 Jan 2019 22:27:14 +0900</pubDate>
+      
+      <guid>https://owlinux1000.github.io/blog/helloworld/</guid>
+      <description>あけましておめでとうございます。本年もよろしくお願いいたします。
+新年なので、Hugo で技術ブログを作成してみました。私ははてなブログやMedium などいろいろサイトを持っているわけですが、このブログには自分の備忘録的なことを書いて行こうと思います。
+1. Hugo のインストールと事前準備 まずはHugo をインストールし、使いたいテーマ(今回はoneというテーマ)をsubmoduleとして取り込む。今回は、GitHub にblog というリポジトリを作成(アクセスする際には、https://owlinux1000.github.io/blog/) して、GitHubの設定で masterブランチのdocs/ を公開対象として設定する。
+config.toml を編集する際には、publishDir = &amp;quot;docs&amp;quot; を追加しておく。これはGitHub 側で公開するディレクトリをdocs にしているから。
+$ brew install hugo $ hugo new site blog $ cd blog $ git init $ cd themes $ git submodule add https://github.com/resugary/hugo-theme-one one $ cp one/exampleSite/config.toml ../../../ $ emacs config.toml # 適宜パラメータを修正する 2. 記事作成 hugo コマンドで記事を作成してまずは、server サブコマンドを使ってPreview を見てみる。大丈夫そうならGitHub にpushする
+$ hugo new posts/helloworld # この記事 $ emacs content/posts/helloworld.md # draft: false に変更 $ hugo # Webページを生成。これでdocsに吐かれる $ hugo server # アクセスして見れるか確認する $ git add .</description>
+    </item>
+    
+  </channel>
+</rss>

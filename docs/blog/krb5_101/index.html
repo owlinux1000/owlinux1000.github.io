@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang='en' dir='auto'><head>
+  <meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta name='description' content='はじめに 本記事では、基本的なKerberosの概念や動作概要について紹介します。次回執筆予定のKerberosに対するペネトレーションテストの記事を理解するために必要な知識をまとめています。Kerberosは一見複雑そうに見えるプロトコルですが、Kerberos用語などを理解すると動作内容がとても明快でシンプルなことがわかります。そこで、まずは知らない用語も含まれてきてしまうかもしれませんが、基本用語を始めに記載しました。まずは、ここに目を通していただいてから、動作概要を見ていただくのが良いかと思います。筆者自身もKerberosについて深い理解があるわけではなく勉強がてらまとめているので間違いなどありましたら、Twitterなどでご指摘いただけると幸いです。
+Kerberosとは Kerberosは、パスワードがネットワーク上を流れる箇所を減らし、代わりにチケットと呼ばれる暗号化されたデータを用いて、各種サービスを利用する仕組みを提供するプロトコルです。Kerberosには、大きく分けて3つのバージョンの括りが存在します。バージョン1,2,3はテストの目的で作られMITの内部でのみ使われていました。MITが最初に外部に配布したのがバージョン4です。しかしながら、バージョン4ではDES暗号を使っており、当時のアメリカ合衆国政府が課した暗号化ソフトウェアに対する輸出規制のためアメリカ合衆国以外へ輸出することができませんでした（そのため、MITの開発チームは、Kerberosからすべての暗号化コードを抜いた輸出可能なBonesというソフトウェアを構築しました）。そして、現在主流となるのがバージョン5です。バージョン4では提供されなかった機能の追加やセキュリティの強化を目的として開発されました。今日ではKerberosは、MicrosoftのActive Directoryなどにも採用されており企業ネットワークでは非常に重要な存在になっています。
+基本用語  レルム(REALM)  Kerberosにおける管理対象となる論理的なネットワーク レルム名には、**DNSのドメイン名(大文字)**が利用されることが多い  例) ALICEMACS.COM     プリンシパル(PRINCIPAL)  Kerberosから認識されるユーザ、サービスやホストのこと  ユーザプリンシパル、サービスプリンシパル(SPN)、ホストプリンシパルの3つに大別される   プリンシパル名と呼ばれる一意な名前を利用する([]内はオプション項目)  username[/instance]@REALM (instanceは、ホスト名) service[/FQDN]@REALM (ホストプリンシパルの場合、serviceが&quot;host&quot;という固定文字列になる)     サービスサーバ(SS: Service Server)  Kerberos対応したサービスを提供するサーバ   サービスチケット(ST: Service Ticket)  サービスの利用するためにクライアントがサービスサーバに送信するチケット   チケット交付チケット(TGT: Ticket Granting Ticket)  サービスチケットを要求するために利用されるチケット   認証サーバ(AS: Authentication Server)  クライアントに、暗号化されたTGTを発行する この暗号化には、クライアントのパスワードが利用されるため本人でないと復号できない   チケット交付サーバ(TGS: Ticket Granting Server)  サービスチケットをクライアントに発行する   鍵配布センター(KDC: Key Distribution Center)  以下の3つの要素から構成される  すべてのプリンシパルと関連する暗号化鍵のデータベース 認証サーバ チケット交付サーバ   1つのレルムには少なくとも1つの鍵配布センターが必要    動作概要 ここでは、例としてあるユーザがクライアントからKerberos対応したサービスを利用するまでの流れを見ていきます。初めに以降に説明する流れを簡単に図示したものを示します。適宜、この図を見返しながら読むとわかりやすいかもしれません。'>
+<meta name='theme-color' content='#ffcd00'>
+
+<meta property='og:title' content='Kerberos 入門 • $ make life'>
+<meta property='og:description' content='はじめに 本記事では、基本的なKerberosの概念や動作概要について紹介します。次回執筆予定のKerberosに対するペネトレーションテストの記事を理解するために必要な知識をまとめています。Kerberosは一見複雑そうに見えるプロトコルですが、Kerberos用語などを理解すると動作内容がとても明快でシンプルなことがわかります。そこで、まずは知らない用語も含まれてきてしまうかもしれませんが、基本用語を始めに記載しました。まずは、ここに目を通していただいてから、動作概要を見ていただくのが良いかと思います。筆者自身もKerberosについて深い理解があるわけではなく勉強がてらまとめているので間違いなどありましたら、Twitterなどでご指摘いただけると幸いです。
+Kerberosとは Kerberosは、パスワードがネットワーク上を流れる箇所を減らし、代わりにチケットと呼ばれる暗号化されたデータを用いて、各種サービスを利用する仕組みを提供するプロトコルです。Kerberosには、大きく分けて3つのバージョンの括りが存在します。バージョン1,2,3はテストの目的で作られMITの内部でのみ使われていました。MITが最初に外部に配布したのがバージョン4です。しかしながら、バージョン4ではDES暗号を使っており、当時のアメリカ合衆国政府が課した暗号化ソフトウェアに対する輸出規制のためアメリカ合衆国以外へ輸出することができませんでした（そのため、MITの開発チームは、Kerberosからすべての暗号化コードを抜いた輸出可能なBonesというソフトウェアを構築しました）。そして、現在主流となるのがバージョン5です。バージョン4では提供されなかった機能の追加やセキュリティの強化を目的として開発されました。今日ではKerberosは、MicrosoftのActive Directoryなどにも採用されており企業ネットワークでは非常に重要な存在になっています。
+基本用語  レルム(REALM)  Kerberosにおける管理対象となる論理的なネットワーク レルム名には、**DNSのドメイン名(大文字)**が利用されることが多い  例) ALICEMACS.COM     プリンシパル(PRINCIPAL)  Kerberosから認識されるユーザ、サービスやホストのこと  ユーザプリンシパル、サービスプリンシパル(SPN)、ホストプリンシパルの3つに大別される   プリンシパル名と呼ばれる一意な名前を利用する([]内はオプション項目)  username[/instance]@REALM (instanceは、ホスト名) service[/FQDN]@REALM (ホストプリンシパルの場合、serviceが&quot;host&quot;という固定文字列になる)     サービスサーバ(SS: Service Server)  Kerberos対応したサービスを提供するサーバ   サービスチケット(ST: Service Ticket)  サービスの利用するためにクライアントがサービスサーバに送信するチケット   チケット交付チケット(TGT: Ticket Granting Ticket)  サービスチケットを要求するために利用されるチケット   認証サーバ(AS: Authentication Server)  クライアントに、暗号化されたTGTを発行する この暗号化には、クライアントのパスワードが利用されるため本人でないと復号できない   チケット交付サーバ(TGS: Ticket Granting Server)  サービスチケットをクライアントに発行する   鍵配布センター(KDC: Key Distribution Center)  以下の3つの要素から構成される  すべてのプリンシパルと関連する暗号化鍵のデータベース 認証サーバ チケット交付サーバ   1つのレルムには少なくとも1つの鍵配布センターが必要    動作概要 ここでは、例としてあるユーザがクライアントからKerberos対応したサービスを利用するまでの流れを見ていきます。初めに以降に説明する流れを簡単に図示したものを示します。適宜、この図を見返しながら読むとわかりやすいかもしれません。'>
+<meta property='og:url' content='https://owlinux1000.github.io/blog/krb5_101/'>
+<meta property='og:site_name' content='$ make life'>
+<meta property='og:type' content='article'><meta property='article:section' content='blog'><meta property='article:published_time' content='2020-02-24T17:36:24&#43;09:00'/><meta property='article:modified_time' content='2020-02-24T17:36:24&#43;09:00'/><meta name='twitter:card' content='summary'><meta name='twitter:site' content='@encry1024'>
+
+<meta name="generator" content="Hugo 0.73.0" />
+
+  <title>Kerberos 入門 • $ make life</title>
+  <link rel='canonical' href='https://owlinux1000.github.io/blog/krb5_101/'>
+  
+  
+  <link rel='icon' href='/favicon.ico'>
+<link rel='stylesheet' href='/assets/css/main.ab98e12b.css'><link rel='stylesheet' href='/css/custom.css'><style>
+:root{--color-accent:#ffcd00;}
+</style>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-154126244-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  
+
+</head>
+<body class='page type-blog has-sidebar'>
+
+  <div class='site'><div id='sidebar' class='sidebar'>
+  <a class='screen-reader-text' href='#main-menu'>Skip to Main Menu</a>
+
+  <div class='container'><section class='widget widget-about sep-after'>
+  <header>
+    
+    <div class='logo'>
+      <a href='/'>
+        <img src='/images/me.jpg'>
+      </a>
+    </div>
+    
+    <h2 class='title site-title '>
+      <a href='/'>
+      $ make life
+      </a>
+    </h2>
+    <div class='desc'>
+    Welcome to my homepage :)
+    </div>
+  </header>
+
+</section>
+</div>
+
+  <div class='sidebar-overlay'></div>
+</div><div class='main'><nav id='main-menu' class='menu main-menu' aria-label='Main Menu'>
+  <div class='container'>
+    <a class='screen-reader-text' href='#content'>Skip to Content</a>
+
+<button id='sidebar-toggler' class='sidebar-toggler' aria-controls='sidebar'>
+  <span class='screen-reader-text'>Toggle Sidebar</span>
+  <span class='open'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="3" y1="12" x2="21" y2="12" />
+<line x1="3" y1="6" x2="21" y2="6" />
+<line x1="3" y1="18" x2="21" y2="18" />
+</svg>
+</span>
+  <span class='close'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="18" y1="6" x2="6" y2="18" />
+<line x1="6" y1="6" x2="18" y2="18" />
+</svg>
+</span>
+</button>
+    <ul><li class='item'>
+        <a href='/resume/'>Résumé</a>
+      </li><li class='item'>
+        <a href='/blog/'>Blog</a>
+      </li><li class='item'>
+        <a href='/private/'>Private</a>
+      </li></ul>
+  </div>
+</nav><div class='header-widgets'>
+        <div class='container'></div>
+      </div>
+
+      <header id='header' class='header site-header'>
+        <div class='container sep-after'>
+          <div class='header-info'><p class='site-title title'>$ make life</p><p class='desc site-desc'>Making the world more secure</p>
+          </div>
+        </div>
+      </header>
+
+      <main id='content'>
+
+
+<article lang='en' class='entry'>
+  <header class='header entry-header'>
+  <div class='container sep-after'>
+    <div class='header-info'>
+      <h1 class='title'>Kerberos 入門</h1>
+      
+
+    </div>
+    <div class='entry-meta'>
+  <span class='posted-on'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+<line x1="16" y1="2" x2="16" y2="6" />
+<line x1="8" y1="2" x2="8" y2="6" />
+<line x1="3" y1="10" x2="21" y2="10" />
+</svg>
+<span class='screen-reader-text'>Posted on </span>
+  <time class='entry-date' datetime='2020-02-24T17:36:24&#43;09:00'>2020, Feb 24</time>
+</span>
+
+  
+  
+<span class='reading-time'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><circle cx="12" cy="12" r="10" />
+<polyline points="12 6 12 12 15 15" />
+</svg>
+One min read
+</span>
+
+
+</div>
+
+
+  </div>
+</header>
+
+  
+  
+
+  <div class='container entry-content'>
+  <h2 id="はじめに">はじめに</h2>
+<p>本記事では、基本的なKerberosの概念や動作概要について紹介します。次回執筆予定のKerberosに対するペネトレーションテストの記事を理解するために必要な知識をまとめています。Kerberosは一見複雑そうに見えるプロトコルですが、Kerberos用語などを理解すると動作内容がとても明快でシンプルなことがわかります。そこで、まずは知らない用語も含まれてきてしまうかもしれませんが、基本用語を始めに記載しました。まずは、ここに目を通していただいてから、動作概要を見ていただくのが良いかと思います。筆者自身もKerberosについて深い理解があるわけではなく勉強がてらまとめているので間違いなどありましたら、<a href="https://twitter.com/encry1024">Twitter</a>などでご指摘いただけると幸いです。</p>
+<h2 id="kerberosとは">Kerberosとは</h2>
+<p>Kerberosは、パスワードがネットワーク上を流れる箇所を減らし、代わりに<strong>チケット</strong>と呼ばれる暗号化されたデータを用いて、各種サービスを利用する仕組みを提供するプロトコルです。Kerberosには、大きく分けて3つのバージョンの括りが存在します。バージョン1,2,3はテストの目的で作られMITの内部でのみ使われていました。MITが最初に外部に配布したのがバージョン4です。しかしながら、バージョン4ではDES暗号を使っており、当時のアメリカ合衆国政府が課した暗号化ソフトウェアに対する輸出規制のためアメリカ合衆国以外へ輸出することができませんでした（そのため、MITの開発チームは、Kerberosからすべての暗号化コードを抜いた輸出可能なBonesというソフトウェアを構築しました）。そして、現在主流となるのがバージョン5です。バージョン4では提供されなかった機能の追加やセキュリティの強化を目的として開発されました。今日ではKerberosは、MicrosoftのActive Directoryなどにも採用されており企業ネットワークでは非常に重要な存在になっています。</p>
+<h2 id="基本用語">基本用語</h2>
+<ul>
+<li>レルム(REALM)
+<ul>
+<li>Kerberosにおける管理対象となる論理的なネットワーク</li>
+<li>レルム名には、**DNSのドメイン名(大文字)**が利用されることが多い
+<ul>
+<li>例) <code>ALICEMACS.COM</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>プリンシパル(PRINCIPAL)
+<ul>
+<li>Kerberosから認識されるユーザ、サービスやホストのこと
+<ul>
+<li>ユーザプリンシパル、サービスプリンシパル(SPN)、ホストプリンシパルの3つに大別される</li>
+</ul>
+</li>
+<li>プリンシパル名と呼ばれる一意な名前を利用する(<code>[]</code>内はオプション項目)
+<ul>
+<li><code>username[/instance]@REALM</code> (<strong>instance</strong>は、ホスト名)</li>
+<li><code>service[/FQDN]@REALM</code> (ホストプリンシパルの場合、<strong>service</strong>が<code>&quot;host&quot;</code>という固定文字列になる)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>サービスサーバ(SS: Service Server)
+<ul>
+<li>Kerberos対応したサービスを提供するサーバ</li>
+</ul>
+</li>
+<li>サービスチケット(ST: Service Ticket)
+<ul>
+<li>サービスの利用するためにクライアントがサービスサーバに送信するチケット</li>
+</ul>
+</li>
+<li>チケット交付チケット(TGT: Ticket Granting Ticket)
+<ul>
+<li>サービスチケットを要求するために利用されるチケット</li>
+</ul>
+</li>
+<li>認証サーバ(AS: Authentication Server)
+<ul>
+<li>クライアントに、暗号化された<strong>TGT</strong>を発行する</li>
+<li>この暗号化には、<strong>クライアントのパスワードが利用される</strong>ため本人でないと復号できない</li>
+</ul>
+</li>
+<li>チケット交付サーバ(TGS: Ticket Granting Server)
+<ul>
+<li>サービスチケットをクライアントに発行する</li>
+</ul>
+</li>
+<li>鍵配布センター(KDC: Key Distribution Center)
+<ul>
+<li>以下の3つの要素から構成される
+<ul>
+<li>すべてのプリンシパルと関連する暗号化鍵のデータベース</li>
+<li>認証サーバ</li>
+<li>チケット交付サーバ</li>
+</ul>
+</li>
+<li>1つのレルムには少なくとも1つの鍵配布センターが必要</li>
+</ul>
+</li>
+</ul>
+<h2 id="動作概要">動作概要</h2>
+<p>ここでは、例としてあるユーザがクライアントからKerberos対応したサービスを利用するまでの流れを見ていきます。初めに以降に説明する流れを簡単に図示したものを示します。適宜、この図を見返しながら読むとわかりやすいかもしれません。</p>
+<!-- raw HTML omitted -->
+<h3 id="1-ユーザのログインと鍵生成">1. ユーザのログインと鍵生成</h3>
+<p>まず初めにユーザは、クライアントに自身のユーザIDとパスワードを使ってログインします。これによりKerberos対応しているクライアントは、パスワードを用いて共通鍵暗号の鍵を生成します(この変換処理のことを一般に<code>strings2Key</code>と呼びます)。この鍵のことを便宜上「<strong>クライアントの鍵</strong>」と定義しておきます。鍵を生成したらクライアントはTGTを取得する処理に移ります。</p>
+<h3 id="2-tgtの取得">2. TGTの取得</h3>
+<p>TGTを取得したいクライアントは、ASに対して**AS_REQ(Authentication Server REQuest)**と呼ばれるリクエストを送信します。AS_REQでは、主に以下の3つの情報を送信します。</p>
+<ol>
+<li>クライアントのプリンシパル名</li>
+<li>クライアントのタイムスタンプ</li>
+<li>TGSのプリンシパル名</li>
+</ol>
+<p>1つ目のクライアントのプリンシパル名とは、ユーザプリンシパル名やWindowsの場合SAMアカウント名が利用されます。2つ目のタイムスタンプは、各プリンシパルやKDCでの時刻がずれていないかを確認するために利用されます。最後のTGSのプリンシパル名は、<code>krbtgt/FQDN@REALM</code>で固定されています（Kerberos 5の場合）。これは、krbtgtのSPNと言い換えることもできます。
+ASは、この要求を受け取ると上述した<strong>クライアントプリンシパルが存在すること</strong>と<strong>タイムスタンプがKDCのローカルタイムとずれていないこと（通常5分以内）<strong>を確認します。問題がなければ、ASは</strong>クライアントとTGS間のセッション鍵</strong>を生成します。この鍵のことを便宜上「クライアント/TGSセッション鍵」と定義しておきます。そしてASは以下の2つの情報を含む**AS_REP(Authentication Server REsPonse)**と呼ばれるレスポンスを行います。</p>
+<ol>
+<li>「クライアントの鍵」を利用して暗号化された「クライアント/TGSセッション鍵」</li>
+<li>TGSが持つ鍵で暗号化されたTGT(以下の情報を含む)</li>
+</ol>
+<ul>
+<li>クライアントのプリンシパル名</li>
+<li>クライアントのIPアドレス</li>
+<li>チケットの有効期限</li>
+<li>クライアント/TGSセッション鍵</li>
+</ul>
+<p>クライアントは、上記2つの情報を受取ると自身が持つ「クライアントの鍵」を用いて「クライアント/TGSセッション鍵」を復号します。これにより、クライアントはTGSと通信を行う際に暗号化したデータで送受信することができるようになります。しかしながら、TGTはTGSのみが保つ鍵で暗号化されているためクライアントは復号することができません。<br>
+次にクライアントは、TGSから利用したいサービスのSTを取得する処理に移ります。</p>
+<h3 id="3-stの取得">3. STの取得</h3>
+<p>クライアントは、TGSに対して、「このサービスを利用するためのチケットを取得したい」というリクエストを送信します。このリクエストは、<code>TGS_REQ</code>と呼ばれます。このリクエストを行う際には、以下の3つ情報を送信します。</p>
+<ol>
+<li>TGSが持つ鍵で暗号化されたTGT</li>
+<li>アクセスしたいサービスのSPN</li>
+<li>「クライアント/TGSセッション鍵」で暗号化された<strong>Authenticator</strong>(Authenticatorには以下の情報を含む)</li>
+</ol>
+<ul>
+<li>クライアントのプリンシパル名</li>
+<li>クライアントのタイムスタンプ</li>
+</ul>
+<p>TGSはこれらの情報を受け取ると、初めに暗号化されたTGTを復号します。送られてくるTGTは、TGSが持つ鍵で暗号化されているため復号できます。TGTを復号できるとTGSは、「クライアント/TGSセッション鍵」を手に入れることができます。そのため手に入れたセッション鍵を用いて、受け取った暗号化されているAuthenticatorを復号します。これにより判明したクライアントのプリンシパル名と復号したTGTに記載されているクライアントのプリンシパル名を比較して一致することを確認します。問題がなければ、以下の2つの情報をクライアントにレスポンスします。このレスポンスのことを<code>TGS_REP</code>と呼びます。</p>
+<ol>
+<li>SSが持つ鍵で暗号化されたST(STには以下の情報を含む)</li>
+</ol>
+<ul>
+<li>クライアントのプリンシパル名</li>
+<li>クライアントのIPアドレス</li>
+<li>チケットの有効期限</li>
+<li>クライアント/SSのセッション鍵</li>
+</ul>
+<ol start="2">
+<li>「クライアント/TGSセッション鍵」で暗号化された「クライアント/SSセッション鍵」</li>
+</ol>
+<p>これらを受け取ったクライアントは、Kerberos対応されたサービスの利用のリクエストを行うことが出来るようになりました。最後にクライアントがSTを用いて、当該サービスを利用する処理に移ります。</p>
+<h3 id="4-サービスの利用">4. サービスの利用</h3>
+<p>クライアントが、サービスを利用するためにリクエストを行う際に送信する情報は以下の2つです。</p>
+<ol>
+<li>ST</li>
+<li>「クライアント/SSセッション鍵」で暗号化されたAuthenticator(含む情報は上述したものと同じ)</li>
+</ol>
+<p>これらを受け取ったSSは、STを復号します。送られてくるSTは、SSが持つ鍵で暗号化されているため復号できます。SSは、STを復号すると「クライアント/SSセッション鍵」を手に入れることができるので、Authenticatorを復号できるようになります。そこでこれを復号し、受け取った２つの情報が復号できると、TGSの時と同じようにそれぞれに格納されているクライアントのプリンシパル名を確認します。これが一致する場合、サービス提供サーバはクライアントに対してAuthenticatorに含まれるタイムスタンプを「クライアント/SSセッション鍵」で暗号化してクライアントにレスポンスします。そしてこれを受け取ったクライアントは、タイムスタンプを復号し正常な時間かどうかを確認します。正常であれば、その後クライアントはSSへサービスの要求を開始し利用することができるようになります。</p>
+<h2 id="おわりに">おわりに</h2>
+<p>本記事では、Kerberosを用いてクライアントがサービスを利用するまでの流れを詳細に見てきました。大雑把にまとめてしまうとKerberosは、ユーザが一度ログインしてしまえば、ある一定期間はログイン済みであることを証明するTGTと呼ばれるチケットを用いて、各種サービスへのアクセスを要求し、当該サービスを利用するためのチケットを取得することで利用できるようになるシステムです。次回の記事では、本記事の知識を前提にKerberosにおける攻撃手法を解説します。</p>
+<h2 id="参考文献">参考文献</h2>
+<ul>
+<li><a href="http://web.mit.edu/kerberos/">Kerberos: The Network Authentication Protocol</a></li>
+<li><a href="https://www.infraexpert.com/study/security18.html">ケルベロス認証（Kerberos Authentication）とは</a></li>
+<li><a href="https://www.oreilly.co.jp/books/4873111862/">Kerberos: The Definitive Guide</a></li>
+<li><a href="https://www.keicode.com/windows/kerberos-basic.php">Kerberos の概要とチケット取得の様子を目で確認した結果</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Kerberos_(protocol)">Kerberos(Protocol)</a></li>
+</ul>
+
+</div>
+
+  
+<footer class='entry-footer'>
+  <div class='container sep-before'><div class='categories'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M22,19a2,2,0,0,1-2,2H4a2,2,0,0,1-2-2V5A2,2,0,0,1,4,3H9l2,3h9a2,2,0,0,1,2,2Z" />
+</svg>
+<span class='screen-reader-text'>Categories: </span><a class='category' href='/categories/security/'>security</a></div>
+
+  </div>
+</footer>
+
+
+</article>
+
+<nav class='entry-nav'>
+  <div class='container'><div class='prev-entry sep-before'>
+      <a href='/blog/linux_malware101/'>
+        <span aria-hidden='true'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="20" y1="12" x2="4" y2="12" />
+<polyline points="10 18 4 12 10 6" />
+</svg>
+ Previous</span>
+        <span class='screen-reader-text'>Previous post: </span>令和元年のうちに抑えておくLinuxマルウェアの基本</a>
+    </div><div class='next-entry sep-before'>
+      <a href='/blog/krb5_attacks_101/'>
+        <span class='screen-reader-text'>Next post: </span>Kerberos への攻撃手法<span aria-hidden='true'>Next <svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="4" y1="12" x2="20" y2="12" />
+<polyline points="14 6 20 12 14 18" />
+</svg>
+</span>
+      </a>
+    </div></div>
+</nav>
+
+
+
+
+      </main>
+
+      <footer id='footer' class='footer'>
+        <div class='container sep-before'><section class='widget widget-social_menu sep-after'><nav aria-label='Social Menu'>
+    <ul><li>
+        <a href='https://github.com/owlinux1000' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Github account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+</svg>
+</a>
+      </li><li>
+        <a href='https://facebook.com/MunifTanjim' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Facebook account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+</svg>
+</a>
+      </li><li>
+        <a href='https://twitter.com/encry1024' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Twitter account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" />
+</svg>
+</a>
+      </li><li>
+        <a href='https://instagram.com/encry1024' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Instagram account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+<path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+<line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+</svg>
+</a>
+      </li><li>
+        <a href='mailto:encry1024@gmail.com' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Contact via Email</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+<polyline points="22,6 12,13 2,6" />
+</svg>
+</a>
+      </li></ul>
+  </nav>
+</section><div class='copyright'>
+  <p> &copy; 2021 Chihiro Hasegawa </p>
+</div>
+
+        </div>
+      </footer>
+
+    </div>
+  </div><script>window.__assets_js_src="/assets/js/"</script>
+
+<script src='/assets/js/main.c3bcf2df.js'></script><script src='/js/custom.js'></script>
+
+</body>
+
+</html>
+

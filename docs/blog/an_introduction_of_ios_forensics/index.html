@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang='en' dir='auto'><head>
+  <meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta name='description' content='はじめに 本記事では、iOSフォレンジックをやったことない人向けに基本的な情報をまとめてみました。取っ掛かりとしては簡単に読める内容だと思います。主にiOSデバイスのバックアップデータやその解析ツールについてご紹介しています。
+準備 本記事では主に以下のデバイスやソフトウェアを使って検証しています。当該デバイスやバージョンでない場合同じ結果や解釈にならない可能性もありますのでご了承ください。
+ iPad mini4 (iOS 12.1.1 非Jailbreak) MacBookPro (High Sierra 10.13.6) iTunes (12.8.3)  iOS 概要 iOSは、iPhoneやiPad、Apple Watch等で利用されているOSです。iOSは大きく分けて、以下の4つのシステムから構成されています。
+ Cocoa Touch Media Cocoa Service Core OS  Cocoa Touchは、名前からもわかるようにタッチ操作を始めとするユーザーインタフェースのシステムです。Mediaは、動画像や音楽などMedia用のシステムです。Cocoa Serviceは、アプリケーションにとって必要な基本的なシステムを提供しています。最後のCore OSは、ハードウェアに近いより低レイヤーなネットワークやメモリ管理、スレッドの機能などを提供しています。
+次に、iOSで用いられているファイルシステムについて簡単にご紹介いたします。近年のiOSではAPFS（Apple File System）と呼ばれるファイルシステムが利用されています。従来はHFS、HFS&#43;が使われていましたが、2017年のiOS 10.3からAPFSが導入されました。APFSの特徴としては、inodeが64bitに拡張されたためより多くのファイルが扱えるようになったり、CoW（Copy on Write）のサポート、タイムスタンプがナノ秒単位まで記録するようになったりなど従来のファイルシステムに比べ大きく変わっています。より詳細な情報としては以下のWebページなどが参考になると思います。
+ Apple File System ファイルシステムがAPFSになった事による変更点  iTunesバックアップ iOSデバイスにおけるデータを抽出する方法としては、物理と論理の2通りの方法があります。しかしながら、物理デバイスから情報を抽出するためには、機材が必要であったり、論理面でも有償のツールが必要なことが多く入門には不向きです。そこで本記事では、iTunesのバックアップデータを元にiOSデバイスのフォレンジック調査に役立つ情報をまとめていこうと思います。もしすでにホストマシンにiTunesを用いてバックアップをとっている人はそのデータをお使いできます。もしなければ、iOSデバイスを接続し、iTunesの画面よりバックアップをとってください。
+iOSデバイスのバックアップデータは、以下の場所に格納されます。
+ Mac：/User/ユーザ名/Library/Application Support/MobileSync/Backup Windows：\AppData\Roaming\Apple Computer\MobileSync\Backup\ Windowsストアアプリ経由でiTunesを入れた場合：%USERPROFILE%\Apple\MobileSync\Backup  バックアップを行っている状態で、上記フォルダにアクセスするとハッシュ値が名前のフォルダがあると思います。それがバックアップデータの本体です。バックアップデータのフォルダの中には、主に以下のファイルやフォルダが格納されていると思います。
+ Manifest.plist Manifest.db Info.plist Status.plist 大量のフォルダ  Manifest.plistは、主にバックアップの内容について記載されています。例えばバックアップした日時、バックアップを暗号化しているかどうか、インストールしたアプリケーション一覧などがあげられます。Manifest.dbは、SQLiteのデータベースファイルで、バックアップデータに含まれるファイルやフォルダの情報が格納してあります。fileIDカラムには、SHA1が格納されており、これはファイル名を表しています。そのため、バックアップフォルダの中で、このハッシュ値を使って検索したりします。
+以下の図は、DB Browser for SQLiteでManifest.dbを読み込んだときの図です。CUIのsqlite3コマンドなどでも良いのですが、フォレンジック業務をやるときには、フィルターやソート、検索などが手軽に使えるほうが効率が良いので、こういったGUIツールを使っています。
+Info.plistは、主にバックアップ対象のデバイス情報について記載されています。例えば、IMEIやシリアルナンバー、最後にバックアップした日などが挙げられます。Status.plistは、主にバックアップ状況について記載されています。'>
+<meta name='theme-color' content='#ffcd00'>
+
+<meta property='og:title' content='iOSデバイスフォレンジック入門 • $ make life'>
+<meta property='og:description' content='はじめに 本記事では、iOSフォレンジックをやったことない人向けに基本的な情報をまとめてみました。取っ掛かりとしては簡単に読める内容だと思います。主にiOSデバイスのバックアップデータやその解析ツールについてご紹介しています。
+準備 本記事では主に以下のデバイスやソフトウェアを使って検証しています。当該デバイスやバージョンでない場合同じ結果や解釈にならない可能性もありますのでご了承ください。
+ iPad mini4 (iOS 12.1.1 非Jailbreak) MacBookPro (High Sierra 10.13.6) iTunes (12.8.3)  iOS 概要 iOSは、iPhoneやiPad、Apple Watch等で利用されているOSです。iOSは大きく分けて、以下の4つのシステムから構成されています。
+ Cocoa Touch Media Cocoa Service Core OS  Cocoa Touchは、名前からもわかるようにタッチ操作を始めとするユーザーインタフェースのシステムです。Mediaは、動画像や音楽などMedia用のシステムです。Cocoa Serviceは、アプリケーションにとって必要な基本的なシステムを提供しています。最後のCore OSは、ハードウェアに近いより低レイヤーなネットワークやメモリ管理、スレッドの機能などを提供しています。
+次に、iOSで用いられているファイルシステムについて簡単にご紹介いたします。近年のiOSではAPFS（Apple File System）と呼ばれるファイルシステムが利用されています。従来はHFS、HFS&#43;が使われていましたが、2017年のiOS 10.3からAPFSが導入されました。APFSの特徴としては、inodeが64bitに拡張されたためより多くのファイルが扱えるようになったり、CoW（Copy on Write）のサポート、タイムスタンプがナノ秒単位まで記録するようになったりなど従来のファイルシステムに比べ大きく変わっています。より詳細な情報としては以下のWebページなどが参考になると思います。
+ Apple File System ファイルシステムがAPFSになった事による変更点  iTunesバックアップ iOSデバイスにおけるデータを抽出する方法としては、物理と論理の2通りの方法があります。しかしながら、物理デバイスから情報を抽出するためには、機材が必要であったり、論理面でも有償のツールが必要なことが多く入門には不向きです。そこで本記事では、iTunesのバックアップデータを元にiOSデバイスのフォレンジック調査に役立つ情報をまとめていこうと思います。もしすでにホストマシンにiTunesを用いてバックアップをとっている人はそのデータをお使いできます。もしなければ、iOSデバイスを接続し、iTunesの画面よりバックアップをとってください。
+iOSデバイスのバックアップデータは、以下の場所に格納されます。
+ Mac：/User/ユーザ名/Library/Application Support/MobileSync/Backup Windows：\AppData\Roaming\Apple Computer\MobileSync\Backup\ Windowsストアアプリ経由でiTunesを入れた場合：%USERPROFILE%\Apple\MobileSync\Backup  バックアップを行っている状態で、上記フォルダにアクセスするとハッシュ値が名前のフォルダがあると思います。それがバックアップデータの本体です。バックアップデータのフォルダの中には、主に以下のファイルやフォルダが格納されていると思います。
+ Manifest.plist Manifest.db Info.plist Status.plist 大量のフォルダ  Manifest.plistは、主にバックアップの内容について記載されています。例えばバックアップした日時、バックアップを暗号化しているかどうか、インストールしたアプリケーション一覧などがあげられます。Manifest.dbは、SQLiteのデータベースファイルで、バックアップデータに含まれるファイルやフォルダの情報が格納してあります。fileIDカラムには、SHA1が格納されており、これはファイル名を表しています。そのため、バックアップフォルダの中で、このハッシュ値を使って検索したりします。
+以下の図は、DB Browser for SQLiteでManifest.dbを読み込んだときの図です。CUIのsqlite3コマンドなどでも良いのですが、フォレンジック業務をやるときには、フィルターやソート、検索などが手軽に使えるほうが効率が良いので、こういったGUIツールを使っています。
+Info.plistは、主にバックアップ対象のデバイス情報について記載されています。例えば、IMEIやシリアルナンバー、最後にバックアップした日などが挙げられます。Status.plistは、主にバックアップ状況について記載されています。'>
+<meta property='og:url' content='https://owlinux1000.github.io/blog/an_introduction_of_ios_forensics/'>
+<meta property='og:site_name' content='$ make life'>
+<meta property='og:type' content='article'><meta property='article:section' content='blog'><meta property='article:tag' content='mobile'><meta property='article:published_time' content='2019-02-28T21:00:00&#43;09:00'/><meta property='article:modified_time' content='2019-02-28T21:00:00&#43;09:00'/><meta name='twitter:card' content='summary'><meta name='twitter:site' content='@encry1024'>
+
+<meta name="generator" content="Hugo 0.73.0" />
+
+  <title>iOSデバイスフォレンジック入門 • $ make life</title>
+  <link rel='canonical' href='https://owlinux1000.github.io/blog/an_introduction_of_ios_forensics/'>
+  
+  
+  <link rel='icon' href='/favicon.ico'>
+<link rel='stylesheet' href='/assets/css/main.ab98e12b.css'><link rel='stylesheet' href='/css/custom.css'><style>
+:root{--color-accent:#ffcd00;}
+</style>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-154126244-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  
+
+</head>
+<body class='page type-blog has-sidebar'>
+
+  <div class='site'><div id='sidebar' class='sidebar'>
+  <a class='screen-reader-text' href='#main-menu'>Skip to Main Menu</a>
+
+  <div class='container'><section class='widget widget-about sep-after'>
+  <header>
+    
+    <div class='logo'>
+      <a href='/'>
+        <img src='/images/me.jpg'>
+      </a>
+    </div>
+    
+    <h2 class='title site-title '>
+      <a href='/'>
+      $ make life
+      </a>
+    </h2>
+    <div class='desc'>
+    Welcome to my homepage :)
+    </div>
+  </header>
+
+</section>
+</div>
+
+  <div class='sidebar-overlay'></div>
+</div><div class='main'><nav id='main-menu' class='menu main-menu' aria-label='Main Menu'>
+  <div class='container'>
+    <a class='screen-reader-text' href='#content'>Skip to Content</a>
+
+<button id='sidebar-toggler' class='sidebar-toggler' aria-controls='sidebar'>
+  <span class='screen-reader-text'>Toggle Sidebar</span>
+  <span class='open'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="3" y1="12" x2="21" y2="12" />
+<line x1="3" y1="6" x2="21" y2="6" />
+<line x1="3" y1="18" x2="21" y2="18" />
+</svg>
+</span>
+  <span class='close'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="18" y1="6" x2="6" y2="18" />
+<line x1="6" y1="6" x2="18" y2="18" />
+</svg>
+</span>
+</button>
+    <ul><li class='item'>
+        <a href='/resume/'>Résumé</a>
+      </li><li class='item'>
+        <a href='/blog/'>Blog</a>
+      </li><li class='item'>
+        <a href='/private/'>Private</a>
+      </li></ul>
+  </div>
+</nav><div class='header-widgets'>
+        <div class='container'></div>
+      </div>
+
+      <header id='header' class='header site-header'>
+        <div class='container sep-after'>
+          <div class='header-info'><p class='site-title title'>$ make life</p><p class='desc site-desc'>Making the world more secure</p>
+          </div>
+        </div>
+      </header>
+
+      <main id='content'>
+
+
+<article lang='en' class='entry'>
+  <header class='header entry-header'>
+  <div class='container sep-after'>
+    <div class='header-info'>
+      <h1 class='title'>iOSデバイスフォレンジック入門</h1>
+      
+
+    </div>
+    <div class='entry-meta'>
+  <span class='posted-on'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+<line x1="16" y1="2" x2="16" y2="6" />
+<line x1="8" y1="2" x2="8" y2="6" />
+<line x1="3" y1="10" x2="21" y2="10" />
+</svg>
+<span class='screen-reader-text'>Posted on </span>
+  <time class='entry-date' datetime='2019-02-28T21:00:00&#43;09:00'>2019, Feb 28</time>
+</span>
+
+  
+  
+<span class='reading-time'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><circle cx="12" cy="12" r="10" />
+<polyline points="12 6 12 12 15 15" />
+</svg>
+One min read
+</span>
+
+
+</div>
+
+
+  </div>
+</header>
+
+  
+  
+
+  <div class='container entry-content'>
+  <h2 id="はじめに">はじめに</h2>
+<p>本記事では、<strong>iOSフォレンジックをやったことない</strong>人向けに基本的な情報をまとめてみました。取っ掛かりとしては簡単に読める内容だと思います。主にiOSデバイスのバックアップデータやその解析ツールについてご紹介しています。</p>
+<h2 id="準備">準備</h2>
+<p>本記事では主に以下のデバイスやソフトウェアを使って検証しています。当該デバイスやバージョンでない場合同じ結果や解釈にならない可能性もありますのでご了承ください。</p>
+<ul>
+<li>iPad mini4 (iOS 12.1.1 非Jailbreak)</li>
+<li>MacBookPro (High Sierra 10.13.6)</li>
+<li>iTunes (12.8.3)</li>
+</ul>
+<h2 id="ios-概要">iOS 概要</h2>
+<p>iOSは、iPhoneやiPad、Apple Watch等で利用されているOSです。iOSは大きく分けて、以下の4つのシステムから構成されています。</p>
+<ul>
+<li>Cocoa Touch</li>
+<li>Media</li>
+<li>Cocoa Service</li>
+<li>Core OS</li>
+</ul>
+<p>Cocoa Touchは、名前からもわかるようにタッチ操作を始めとするユーザーインタフェースのシステムです。Mediaは、動画像や音楽などMedia用のシステムです。Cocoa Serviceは、アプリケーションにとって必要な基本的なシステムを提供しています。最後のCore OSは、ハードウェアに近いより低レイヤーなネットワークやメモリ管理、スレッドの機能などを提供しています。</p>
+<p>次に、iOSで用いられているファイルシステムについて簡単にご紹介いたします。近年のiOSではAPFS（Apple File System）と呼ばれるファイルシステムが利用されています。従来はHFS、HFS+が使われていましたが、2017年のiOS 10.3からAPFSが導入されました。APFSの特徴としては、inodeが64bitに拡張されたためより多くのファイルが扱えるようになったり、CoW（Copy on Write）のサポート、タイムスタンプがナノ秒単位まで記録するようになったりなど従来のファイルシステムに比べ大きく変わっています。より詳細な情報としては以下のWebページなどが参考になると思います。</p>
+<ul>
+<li><a href="https://ja.wikipedia.org/wiki/Apple_File_System">Apple File System</a></li>
+<li><a href="https://cyberforensic.focus-s.com/knowledge/articles_detail/356/">ファイルシステムがAPFSになった事による変更点</a></li>
+</ul>
+<h2 id="itunesバックアップ">iTunesバックアップ</h2>
+<p>iOSデバイスにおけるデータを抽出する方法としては、物理と論理の2通りの方法があります。しかしながら、物理デバイスから情報を抽出するためには、機材が必要であったり、論理面でも有償のツールが必要なことが多く入門には不向きです。そこで本記事では、iTunesのバックアップデータを元にiOSデバイスのフォレンジック調査に役立つ情報をまとめていこうと思います。もしすでにホストマシンにiTunesを用いてバックアップをとっている人はそのデータをお使いできます。もしなければ、iOSデバイスを接続し、iTunesの画面よりバックアップをとってください。</p>
+<p>iOSデバイスのバックアップデータは、以下の場所に格納されます。</p>
+<ul>
+<li>Mac：<code>/User/ユーザ名/Library/Application Support/MobileSync/Backup</code></li>
+<li>Windows：<code>\AppData\Roaming\Apple Computer\MobileSync\Backup\</code></li>
+<li>Windowsストアアプリ経由でiTunesを入れた場合：<code>%USERPROFILE%\Apple\MobileSync\Backup</code></li>
+</ul>
+<p>バックアップを行っている状態で、上記フォルダにアクセスするとハッシュ値が名前のフォルダがあると思います。それがバックアップデータの本体です。バックアップデータのフォルダの中には、主に以下のファイルやフォルダが格納されていると思います。</p>
+<ul>
+<li>Manifest.plist</li>
+<li>Manifest.db</li>
+<li>Info.plist</li>
+<li>Status.plist</li>
+<li>大量のフォルダ</li>
+</ul>
+<p>Manifest.plistは、主にバックアップの内容について記載されています。例えばバックアップした日時、バックアップを暗号化しているかどうか、インストールしたアプリケーション一覧などがあげられます。Manifest.dbは、SQLiteのデータベースファイルで、バックアップデータに含まれるファイルやフォルダの情報が格納してあります。<code>fileID</code>カラムには、SHA1が格納されており、これはファイル名を表しています。そのため、バックアップフォルダの中で、このハッシュ値を使って検索したりします。<br>
+以下の図は、DB Browser for SQLiteでManifest.dbを読み込んだときの図です。CUIのsqlite3コマンドなどでも良いのですが、フォレンジック業務をやるときには、フィルターやソート、検索などが手軽に使えるほうが効率が良いので、こういったGUIツールを使っています。</p>
+<p><img src="https://imgur.com/download/2PzjpVu" alt="Manifest.db"></p>
+<p>Info.plistは、主にバックアップ対象のデバイス情報について記載されています。例えば、IMEIやシリアルナンバー、最後にバックアップした日などが挙げられます。Status.plistは、主にバックアップ状況について記載されています。</p>
+<p>バックアップフォルダの中に格納されている主要なアーティファクトは、SANSの公開資料の<a href="https://digital-forensics.sans.org/media/DFIR-Smartphone-Forensics-Poster.pdf">DFIR-Smartphone-Forensics-Poster.pdf</a> に掲載されています。とても便利なのでダウンロードしておくことをおすすめします。</p>
+<h2 id="itunesバックアップ解析ツール">iTunesバックアップ解析ツール</h2>
+<p>今まで見てきたバックアップデータなどを解析する際に役立つツールをご紹介します。</p>
+<h3 id="plutil">plutil</h3>
+<p>拡張子plistのバイナリファイルの中身を解析する際には、<code>plutil</code>コマンドが便利です。Macの場合は標準でインストールされているのですぐに使えます。Windowsでは、<a href="https://www.icopybot.com/plist-editor.htm">plist Editor Pro for Windows</a>というものが存在するので、それを利用できそうです（未検証）。</p>
+<p>本来<code>plutil</code>コマンドはいろいろな操作ができますが、今回はフォレンジックでよく使うplistファイルを別のファイルに変換する操作をご紹介します。以下は、<code>Info.plist</code>ファイルをxmlファイルに変換する場合の例です。plistファイルはバイナリファイルなので、こういった変換を行うことが必要となってきます。</p>
+<pre><code>$ plutil -t convert xml1 Info.plist -o Info.xml
+</code></pre><p><code>-o</code>オプションを忘れてしまうとplistファイル自体の中身が書き換わってしまうので注意してください。<br>
+その他Pythonが利用できる環境であれば、<code>plistlib</code>ライブラリが利用できるので、これを用いてプログラマブルに解析することも可能です。</p>
+<h3 id="iexplorer">iExplorer</h3>
+<p><img src="https://imgur.com/download/Aogfu9Z" alt="iExplorer"></p>
+<p>iExplorerは、高機能なiOSデバイスファイルブラウザーです。<a href="https://macroplant.com/iexplorer">iExplorer</a> よりダウンロードできます。iExplorerは、Manifest.dbなどの情報を自動でパースし、より人間にわかりやすい形で表示してくれます。正直これがあれば、バックアップデータの閲覧には困らないと思います。全体的に眺めたい際などは、こちらを使って足りない場合、前述した<code>plutil</code>コマンドなどを使って解析します。同様のツールとして<code>iBackupBot</code>や<code>iBackup Viewer</code>などがあるので、使い比べてみて自分にあったものを使うと良いでしょう。</p>
+<h2 id="おわりに">おわりに</h2>
+<p>今回は、iOSの基本構造やバックアップデータを用いた解析方法などについて簡単にご紹介しました。次は、気が向けば個々のアーティファクトについてより詳細にとりあげて記事を今度書こうかなと思っています。</p>
+<h2 id="参考資料">参考資料</h2>
+<ul>
+<li><a href="https://www.packtpub.com/networking-and-servers/practical-mobile-forensics-third-edition">Practical Mobile Forensics - Third Edition</a></li>
+</ul>
+
+</div>
+
+  
+<footer class='entry-footer'>
+  <div class='container sep-before'><div class='categories'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M22,19a2,2,0,0,1-2,2H4a2,2,0,0,1-2-2V5A2,2,0,0,1,4,3H9l2,3h9a2,2,0,0,1,2,2Z" />
+</svg>
+<span class='screen-reader-text'>Categories: </span><a class='category' href='/categories/forensics/'>forensics</a></div>
+<div class='tags'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M20.59,13.41l-7.17,7.17a2,2,0,0,1-2.83,0L2,12V2H12l8.59,8.59A2,2,0,0,1,20.59,13.41Z" />
+<line x1="7" y1="7" x2="7" y2="7" />
+</svg>
+<span class='screen-reader-text'>Tags: </span><a class='tag' href='/tags/mobile/'>mobile</a></div>
+
+  </div>
+</footer>
+
+
+</article>
+
+<nav class='entry-nav'>
+  <div class='container'><div class='prev-entry sep-before'>
+      <a href='/blog/system_time_for_forensics/'>
+        <span aria-hidden='true'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="20" y1="12" x2="4" y2="12" />
+<polyline points="10 18 4 12 10 6" />
+</svg>
+ Previous</span>
+        <span class='screen-reader-text'>Previous post: </span>フォレンジックのためのシステム時刻入門</a>
+    </div><div class='next-entry sep-before'>
+      <a href='/blog/analyzing_binary_cookie/'>
+        <span class='screen-reader-text'>Next post: </span>binarycookiesファイル解析ツールbincookie<span aria-hidden='true'>Next <svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="4" y1="12" x2="20" y2="12" />
+<polyline points="14 6 20 12 14 18" />
+</svg>
+</span>
+      </a>
+    </div></div>
+</nav>
+
+
+
+
+      </main>
+
+      <footer id='footer' class='footer'>
+        <div class='container sep-before'><section class='widget widget-social_menu sep-after'><nav aria-label='Social Menu'>
+    <ul><li>
+        <a href='https://github.com/owlinux1000' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Github account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+</svg>
+</a>
+      </li><li>
+        <a href='https://facebook.com/MunifTanjim' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Facebook account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+</svg>
+</a>
+      </li><li>
+        <a href='https://twitter.com/encry1024' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Twitter account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" />
+</svg>
+</a>
+      </li><li>
+        <a href='https://instagram.com/encry1024' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Instagram account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+<path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+<line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+</svg>
+</a>
+      </li><li>
+        <a href='mailto:encry1024@gmail.com' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Contact via Email</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+<polyline points="22,6 12,13 2,6" />
+</svg>
+</a>
+      </li></ul>
+  </nav>
+</section><div class='copyright'>
+  <p> &copy; 2021 Chihiro Hasegawa </p>
+</div>
+
+        </div>
+      </footer>
+
+    </div>
+  </div><script>window.__assets_js_src="/assets/js/"</script>
+
+<script src='/assets/js/main.c3bcf2df.js'></script><script src='/js/custom.js'></script>
+
+</body>
+
+</html>
+

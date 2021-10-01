@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>cryptography on $ make life</title>
+    <link>https://owlinux1000.github.io/categories/cryptography/</link>
+    <description>Recent content in cryptography on $ make life</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Mon, 01 Apr 2019 22:33:26 +0900</lastBuildDate>
+    
+	<atom:link href="https://owlinux1000.github.io/categories/cryptography/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>線形合同法で生成される乱数値を予測する</title>
+      <link>https://owlinux1000.github.io/blog/predict_lcg/</link>
+      <pubDate>Mon, 01 Apr 2019 22:33:26 +0900</pubDate>
+      
+      <guid>https://owlinux1000.github.io/blog/predict_lcg/</guid>
+      <description>はじめに 線形合同法（LCG）とは、至極一般的かつ簡易に実装することができる乱数生成手法の1つです。先日行われたVolgaCTF 2019では、この線形合同法により生成される乱数値を予測する問題（問題名LG）が出題されました。本問題ではx0 ~ x6に相当する6つの乱数が表示され、それを元に次の値を算出する問題です。
+線形合同法 線形合同法は、以下の式で定義されます。
+x1 = (a * x0 + c) % p このとき、x0は乱数のseed値、a, c, pがパラメータとなり適切な値を選びます。今回の問題では、x0 ~ x6までの値が与えられ、その次の値を入力するといったものでした。「a, c, pがわからないと無理じゃない？ｗ」と思ってしまったのですが、どうやら行列演算することで「a, c, p」を算出可能らしいです。
+線形合同法のパラメータの算出 まずはじめに、各種x0 ~ x6を用いて以下の4つの行列を作成します。それらの行列式を用いて、各行列式の最大公約数(GCD)を算出します。これが、「p」に相当します。その後、(x3 - x4) と(x2 - x3)の法pにおける逆元を乗算し、再度pで割ると「a」になります。最後に、(x4 - a * x3) % pで割った際の剰余がcになる。以上の計算を行うコードを以下に示す。
+#!/usr/bin/env python #coding: utf-8 import math import numpy as np x0 = 64302589647963933737451564 x1 = 23099347408308738343740115 x2 = 60779187967701597680605077 x3 = 41531243105709646792416331 x4 = 71461317334046189800115379 x5 = 50094315434186546595562390 x6 = 27719142972686291997765807 # なんかnp.</description>
+    </item>
+    
+  </channel>
+</rss>

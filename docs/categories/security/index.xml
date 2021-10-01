@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>security on $ make life</title>
+    <link>https://owlinux1000.github.io/categories/security/</link>
+    <description>Recent content in security on $ make life</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sat, 29 Feb 2020 10:17:51 +0900</lastBuildDate>
+    
+	<atom:link href="https://owlinux1000.github.io/categories/security/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Kerberos への攻撃手法</title>
+      <link>https://owlinux1000.github.io/blog/krb5_attacks_101/</link>
+      <pubDate>Sat, 29 Feb 2020 10:17:51 +0900</pubDate>
+      
+      <guid>https://owlinux1000.github.io/blog/krb5_attacks_101/</guid>
+      <description>目次 はじめに 本記事では、前記事(Kerberos 入門)で学んだKerberosの基本的な概念や動作を知っていることを前提にKerberosへの攻撃手法について解説します。ここで紹介している内容は、自分で管理している端末外では決して行わないでください。
+Brute Force Attack for Kerberos Kerberosにおいてもブルートフォース攻撃は有効です。Kerberosへのブルートフォース攻撃を行うために必要な条件は基本的には1つです。それは、KDCへの接続ができるという条件だけです。さらにKerberosの認証のレスポンスで、パスワードが間違っている場合、ユーザ名が正しいかどうかを教えてくれます。つまり、存在するユーザかどうかの判断を行うことができます。しかしながら、試行回数などによりブロックしたりすることも可能なので、本攻撃を行う際には注意が必要です。
+ブルートフォースを行うツールとしては、kerbruteが便利です。ユーザ名とパスワードを記載したファイル、ドメインを指定することでブルートフォース攻撃が行えます。
+kali@kali:~/bin/kerbrute$ ./kerbrute.py -users ./username.txt -passwords ./password.txt -domain dc01.alicemacs.local Impacket v0.9.21.dev1+20200217.163437.e5e676d7 - Copyright 2020 SecureAuth Corporation [*] Stupendous =&amp;gt; snickers66:snickers66 [*] Saved TGT in snickers66.ccache [*] Valid user =&amp;gt; Administrator 上記の実行結果では、ユーザ名とパスワードが同じsnickers66というドメインユーザを特定しており、snickers66.ccacheというファイルにTGTが保存されています。また、パスワードは違いますが、Administratorというユーザが存在することも判明しています(余談ですが、Windowsでは今回判明したような簡単なパスワードは、通常パスワードの複雑さのグループポリシーで許可されていません。そのため、今回はグループポリシーの「パスワードのポリシー」の項目の1つである「複雑さの要件を満たす必要があるパスワード」という項目を無効化しました)。
+AS-REP Roasting Kerberos 5には、事前認証(Pre-authentication)という概念があります。クライアントがAS_REQを送信した後、ASは誰にでもAS_REPをレスポンスするのではなく、KRB_ERRORという事前認証を要求するメッセージをレスポンスします。これを受け取ったクライアントは、クライアントのプリンシパル名と「クライアントの鍵」で暗号化したタイムスタンプを送信します。これを受け取ったASは、クライアントが正しいかを確認してからTGTを返信します。Active Directoryでは、本機能はユーザ単位で制御することができます。デフォルトでは、「事前認証を必要としない」という設定が無効になっているため、通常は事前認証が要求されます。
+しかし、もしこの設定を有効にしていたり、Kerberos 4を利用している場合は、どんなプリンシパルからのTGTの要求に対しても、ASはTGTを返信してしまいます(ASは、プリンシパルが存在すること、タイムスタンプがずれていないことしか確認しないため)。そのため、事前認証が無効のユーザを装った偽のAS_REQを送信することで、AS_REPをレスポンスさせることが可能となります。実は、このAS_REPのメッセージ内には、クライアントのパスワードがもとになって生成された鍵で暗号化されたデータが含まれています。そのため、手にれたデータをオフラインで解析することで、最終的にパスワードを特定することが可能となる場合もあります。
+AS-REP Roastingを行うには、impacketのGetNPUsers.pyが利用できます。下記のように-no-passオプションを利用することで、パスワードがわかっていない場合でもAS_REPに含まれる暗号化されたデータを抽出できます。また、抽出したデータは、HashcatとJohn The Ripperの2つのフォーマットで出力できます。今回はJohn The Ripperで辞書攻撃を行うため-johnオプションを設定しています。また、ここでは本データをsnickers66.asrepというファイルに保存しておきました。
+kali@kali:~/bin/impacket/examples$ python GetNPUsers.py dc01.alicemacs.local/snickers66 -no-pass --john Impacket v0.9.21.dev1+20200217.163437.e5e676d7 - Copyright 2020 SecureAuth Corporation [*] Getting TGT for snickers66 $krb5asrep$snickers66@DC01.</description>
+    </item>
+    
+    <item>
+      <title>Kerberos 入門</title>
+      <link>https://owlinux1000.github.io/blog/krb5_101/</link>
+      <pubDate>Mon, 24 Feb 2020 17:36:24 +0900</pubDate>
+      
+      <guid>https://owlinux1000.github.io/blog/krb5_101/</guid>
+      <description>はじめに 本記事では、基本的なKerberosの概念や動作概要について紹介します。次回執筆予定のKerberosに対するペネトレーションテストの記事を理解するために必要な知識をまとめています。Kerberosは一見複雑そうに見えるプロトコルですが、Kerberos用語などを理解すると動作内容がとても明快でシンプルなことがわかります。そこで、まずは知らない用語も含まれてきてしまうかもしれませんが、基本用語を始めに記載しました。まずは、ここに目を通していただいてから、動作概要を見ていただくのが良いかと思います。筆者自身もKerberosについて深い理解があるわけではなく勉強がてらまとめているので間違いなどありましたら、Twitterなどでご指摘いただけると幸いです。
+Kerberosとは Kerberosは、パスワードがネットワーク上を流れる箇所を減らし、代わりにチケットと呼ばれる暗号化されたデータを用いて、各種サービスを利用する仕組みを提供するプロトコルです。Kerberosには、大きく分けて3つのバージョンの括りが存在します。バージョン1,2,3はテストの目的で作られMITの内部でのみ使われていました。MITが最初に外部に配布したのがバージョン4です。しかしながら、バージョン4ではDES暗号を使っており、当時のアメリカ合衆国政府が課した暗号化ソフトウェアに対する輸出規制のためアメリカ合衆国以外へ輸出することができませんでした（そのため、MITの開発チームは、Kerberosからすべての暗号化コードを抜いた輸出可能なBonesというソフトウェアを構築しました）。そして、現在主流となるのがバージョン5です。バージョン4では提供されなかった機能の追加やセキュリティの強化を目的として開発されました。今日ではKerberosは、MicrosoftのActive Directoryなどにも採用されており企業ネットワークでは非常に重要な存在になっています。
+基本用語  レルム(REALM)  Kerberosにおける管理対象となる論理的なネットワーク レルム名には、**DNSのドメイン名(大文字)**が利用されることが多い  例) ALICEMACS.COM     プリンシパル(PRINCIPAL)  Kerberosから認識されるユーザ、サービスやホストのこと  ユーザプリンシパル、サービスプリンシパル(SPN)、ホストプリンシパルの3つに大別される   プリンシパル名と呼ばれる一意な名前を利用する([]内はオプション項目)  username[/instance]@REALM (instanceは、ホスト名) service[/FQDN]@REALM (ホストプリンシパルの場合、serviceが&amp;quot;host&amp;quot;という固定文字列になる)     サービスサーバ(SS: Service Server)  Kerberos対応したサービスを提供するサーバ   サービスチケット(ST: Service Ticket)  サービスの利用するためにクライアントがサービスサーバに送信するチケット   チケット交付チケット(TGT: Ticket Granting Ticket)  サービスチケットを要求するために利用されるチケット   認証サーバ(AS: Authentication Server)  クライアントに、暗号化されたTGTを発行する この暗号化には、クライアントのパスワードが利用されるため本人でないと復号できない   チケット交付サーバ(TGS: Ticket Granting Server)  サービスチケットをクライアントに発行する   鍵配布センター(KDC: Key Distribution Center)  以下の3つの要素から構成される  すべてのプリンシパルと関連する暗号化鍵のデータベース 認証サーバ チケット交付サーバ   1つのレルムには少なくとも1つの鍵配布センターが必要    動作概要 ここでは、例としてあるユーザがクライアントからKerberos対応したサービスを利用するまでの流れを見ていきます。初めに以降に説明する流れを簡単に図示したものを示します。適宜、この図を見返しながら読むとわかりやすいかもしれません。</description>
+    </item>
+    
+  </channel>
+</rss>

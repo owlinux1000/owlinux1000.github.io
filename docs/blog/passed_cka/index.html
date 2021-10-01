@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang='en' dir='auto'><head>
+  <meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta name='description' content='はじめに 2021年5月16日に、Certified Kubernetes Administrator (CKA) を受験し88%で合格したので、勉強内容や受験時の振り返りをする。一言で感想を言う慣れば、決して難しい試験ではないと思うが、油断してると足元すくわれるいい難易度の試験だと思った(試験問題に関しては口外禁止なため触れない)。また、試験要項や注意事項、禁止事項などは変わる恐れがあるので、常に最新の情報を確認してもらいたい。
+Credly でのバッジが増えて嬉しい。
+試験勉強 試験勉強としては主に以下の2つのコンテンツを利用した。
+ Certified Kubernetes Administrator (CKA) with Practice Tests  動画での学習サービスのUdemy のコース 通常時は24000円ぐらいするがセール時には2000円切ることもあるので安いときに買うと良い 自分でクラスタを組む必要もなく無料で利用できるクラスタで解く独自の試験問題もついており最も合格に貢献したコンテンツである   Kubernetes完全ガイド 第2版  副読本として読んだ 完全理解はオーバーキルだと感じたので必要な箇所だけピックアップして優先的に読んだ(後日読んでいない章を楽しむ予定)    その他、過去の受験体験記を色々読み漁ったりした。ただ、本試験は受けた時期によって試験要項 や試験時間などが異なっているため注意が必要である。また、勉強する際に気をつけたこととして以下が挙げられる。
+ 勉強しながらブックマークを作成していく  試験では許可されたWeb リソースのみ閲覧可能なため、できるだけ多くブックマークを作成しておく しかしながら、ある程度勉強したり使い慣れている人だとあまり見る場面も多くない気がするので自分のスキル感に合わせて用意する   kubectl run busybox --image busybox -oyaml --dry-run=client --env key=value --command sleep 4800 &gt; busybox.yaml のように宣言的にリソースを作る練習をしておくこと  一部この方法では設定できないパラメータなどがある(例: kubectl expose で nodePort の設定はできない)ためYAMLを作成してから手で編集することにも慣れておく PersistentVolume や PersistentVolumeClaim を始めとしてこのような作り方ができないリソースに関しては、Kubernetes Documentation の該当ページの例をコピペして編集する   CKA は管理者試験なので、Kubernetes クラスタの構築や各コンポーネントの役割なども理解する  試験前日 今回は自宅で受験するためデスク周りの掃除をした。特に机の上には必要最低限のものしかおいてはいけないため、不要物は隠したりした。実際のイメージとしては、以下の写真を参考に。'>
+<meta name='theme-color' content='#ffcd00'>
+
+<meta property='og:title' content='Certified Kubernetes Administrator (CKA) 合格体験記 • $ make life'>
+<meta property='og:description' content='はじめに 2021年5月16日に、Certified Kubernetes Administrator (CKA) を受験し88%で合格したので、勉強内容や受験時の振り返りをする。一言で感想を言う慣れば、決して難しい試験ではないと思うが、油断してると足元すくわれるいい難易度の試験だと思った(試験問題に関しては口外禁止なため触れない)。また、試験要項や注意事項、禁止事項などは変わる恐れがあるので、常に最新の情報を確認してもらいたい。
+Credly でのバッジが増えて嬉しい。
+試験勉強 試験勉強としては主に以下の2つのコンテンツを利用した。
+ Certified Kubernetes Administrator (CKA) with Practice Tests  動画での学習サービスのUdemy のコース 通常時は24000円ぐらいするがセール時には2000円切ることもあるので安いときに買うと良い 自分でクラスタを組む必要もなく無料で利用できるクラスタで解く独自の試験問題もついており最も合格に貢献したコンテンツである   Kubernetes完全ガイド 第2版  副読本として読んだ 完全理解はオーバーキルだと感じたので必要な箇所だけピックアップして優先的に読んだ(後日読んでいない章を楽しむ予定)    その他、過去の受験体験記を色々読み漁ったりした。ただ、本試験は受けた時期によって試験要項 や試験時間などが異なっているため注意が必要である。また、勉強する際に気をつけたこととして以下が挙げられる。
+ 勉強しながらブックマークを作成していく  試験では許可されたWeb リソースのみ閲覧可能なため、できるだけ多くブックマークを作成しておく しかしながら、ある程度勉強したり使い慣れている人だとあまり見る場面も多くない気がするので自分のスキル感に合わせて用意する   kubectl run busybox --image busybox -oyaml --dry-run=client --env key=value --command sleep 4800 &gt; busybox.yaml のように宣言的にリソースを作る練習をしておくこと  一部この方法では設定できないパラメータなどがある(例: kubectl expose で nodePort の設定はできない)ためYAMLを作成してから手で編集することにも慣れておく PersistentVolume や PersistentVolumeClaim を始めとしてこのような作り方ができないリソースに関しては、Kubernetes Documentation の該当ページの例をコピペして編集する   CKA は管理者試験なので、Kubernetes クラスタの構築や各コンポーネントの役割なども理解する  試験前日 今回は自宅で受験するためデスク周りの掃除をした。特に机の上には必要最低限のものしかおいてはいけないため、不要物は隠したりした。実際のイメージとしては、以下の写真を参考に。'>
+<meta property='og:url' content='https://owlinux1000.github.io/blog/passed_cka/'>
+<meta property='og:site_name' content='$ make life'>
+<meta property='og:type' content='article'><meta property='article:section' content='blog'><meta property='article:tag' content='CKA'><meta property='article:published_time' content='2021-05-17T20:50:52&#43;09:00'/><meta property='article:modified_time' content='2021-05-17T20:50:52&#43;09:00'/><meta name='twitter:card' content='summary'><meta name='twitter:site' content='@encry1024'>
+
+<meta name="generator" content="Hugo 0.73.0" />
+
+  <title>Certified Kubernetes Administrator (CKA) 合格体験記 • $ make life</title>
+  <link rel='canonical' href='https://owlinux1000.github.io/blog/passed_cka/'>
+  
+  
+  <link rel='icon' href='/favicon.ico'>
+<link rel='stylesheet' href='/assets/css/main.ab98e12b.css'><link rel='stylesheet' href='/css/custom.css'><style>
+:root{--color-accent:#ffcd00;}
+</style>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-154126244-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  
+
+</head>
+<body class='page type-blog has-sidebar'>
+
+  <div class='site'><div id='sidebar' class='sidebar'>
+  <a class='screen-reader-text' href='#main-menu'>Skip to Main Menu</a>
+
+  <div class='container'><section class='widget widget-about sep-after'>
+  <header>
+    
+    <div class='logo'>
+      <a href='/'>
+        <img src='/images/me.jpg'>
+      </a>
+    </div>
+    
+    <h2 class='title site-title '>
+      <a href='/'>
+      $ make life
+      </a>
+    </h2>
+    <div class='desc'>
+    Welcome to my homepage :)
+    </div>
+  </header>
+
+</section>
+</div>
+
+  <div class='sidebar-overlay'></div>
+</div><div class='main'><nav id='main-menu' class='menu main-menu' aria-label='Main Menu'>
+  <div class='container'>
+    <a class='screen-reader-text' href='#content'>Skip to Content</a>
+
+<button id='sidebar-toggler' class='sidebar-toggler' aria-controls='sidebar'>
+  <span class='screen-reader-text'>Toggle Sidebar</span>
+  <span class='open'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="3" y1="12" x2="21" y2="12" />
+<line x1="3" y1="6" x2="21" y2="6" />
+<line x1="3" y1="18" x2="21" y2="18" />
+</svg>
+</span>
+  <span class='close'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="18" y1="6" x2="6" y2="18" />
+<line x1="6" y1="6" x2="18" y2="18" />
+</svg>
+</span>
+</button>
+    <ul><li class='item'>
+        <a href='/resume/'>Résumé</a>
+      </li><li class='item'>
+        <a href='/blog/'>Blog</a>
+      </li><li class='item'>
+        <a href='/private/'>Private</a>
+      </li></ul>
+  </div>
+</nav><div class='header-widgets'>
+        <div class='container'></div>
+      </div>
+
+      <header id='header' class='header site-header'>
+        <div class='container sep-after'>
+          <div class='header-info'><p class='site-title title'>$ make life</p><p class='desc site-desc'>Making the world more secure</p>
+          </div>
+        </div>
+      </header>
+
+      <main id='content'>
+
+
+<article lang='en' class='entry'>
+  <header class='header entry-header'>
+  <div class='container sep-after'>
+    <div class='header-info'>
+      <h1 class='title'>Certified Kubernetes Administrator (CKA) 合格体験記</h1>
+      
+
+    </div>
+    <div class='entry-meta'>
+  <span class='posted-on'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+<line x1="16" y1="2" x2="16" y2="6" />
+<line x1="8" y1="2" x2="8" y2="6" />
+<line x1="3" y1="10" x2="21" y2="10" />
+</svg>
+<span class='screen-reader-text'>Posted on </span>
+  <time class='entry-date' datetime='2021-05-17T20:50:52&#43;09:00'>2021, May 17</time>
+</span>
+
+  
+  
+<span class='reading-time'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><circle cx="12" cy="12" r="10" />
+<polyline points="12 6 12 12 15 15" />
+</svg>
+One min read
+</span>
+
+
+</div>
+
+
+  </div>
+</header>
+
+  
+  
+
+  <div class='container entry-content'>
+  <h2 id="はじめに">はじめに</h2>
+<p>2021年5月16日に、<a href="https://training.linuxfoundation.org/ja/certification/certified-kubernetes-administrator-cka/">Certified Kubernetes Administrator (CKA)</a> を受験し88%で合格したので、勉強内容や受験時の振り返りをする。一言で感想を言う慣れば、決して難しい試験ではないと思うが、油断してると足元すくわれるいい難易度の試験だと思った(試験問題に関しては口外禁止なため触れない)。また、試験要項や注意事項、禁止事項などは変わる恐れがあるので、常に最新の情報を確認してもらいたい。</p>
+<p>Credly でのバッジが増えて嬉しい。<br>
+<img src="https://i.imgur.com/qxj6zTll.png" alt="Credlyでの所有バッジ"></p>
+<h2 id="試験勉強">試験勉強</h2>
+<p>試験勉強としては主に以下の2つのコンテンツを利用した。</p>
+<ul>
+<li><a href="https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/">Certified Kubernetes Administrator (CKA) with Practice Tests</a>
+<ul>
+<li>動画での学習サービスのUdemy のコース</li>
+<li>通常時は24000円ぐらいするがセール時には2000円切ることもあるので安いときに買うと良い</li>
+<li>自分でクラスタを組む必要もなく無料で利用できるクラスタで解く独自の試験問題もついており最も合格に貢献したコンテンツである</li>
+</ul>
+</li>
+<li><a href="https://book.impress.co.jp/books/1119101148">Kubernetes完全ガイド 第2版</a>
+<ul>
+<li>副読本として読んだ</li>
+<li>完全理解はオーバーキルだと感じたので必要な箇所だけピックアップして優先的に読んだ(後日読んでいない章を楽しむ予定)</li>
+</ul>
+</li>
+</ul>
+<p>その他、過去の受験体験記を色々読み漁ったりした。ただ、本試験は受けた時期によって<a href="https://github.com/cncf/curriculum/blob/master/CKA_Curriculum_v1.20.pdf">試験要項</a> や試験時間などが異なっているため注意が必要である。また、勉強する際に気をつけたこととして以下が挙げられる。</p>
+<ul>
+<li>勉強しながらブックマークを作成していく
+<ul>
+<li>試験では許可されたWeb リソースのみ閲覧可能なため、できるだけ多くブックマークを作成しておく</li>
+<li>しかしながら、ある程度勉強したり使い慣れている人だとあまり見る場面も多くない気がするので自分のスキル感に合わせて用意する</li>
+</ul>
+</li>
+<li><code>kubectl run busybox --image busybox -oyaml --dry-run=client --env key=value --command sleep 4800 &gt; busybox.yaml</code> のように宣言的にリソースを作る練習をしておくこと
+<ul>
+<li>一部この方法では設定できないパラメータなどがある(例: <code>kubectl expose</code> で nodePort の設定はできない)ためYAMLを作成してから手で編集することにも慣れておく</li>
+<li>PersistentVolume や PersistentVolumeClaim を始めとしてこのような作り方ができないリソースに関しては、<a href="https://kubernetes.io/docs/home/">Kubernetes Documentation</a> の該当ページの例をコピペして編集する</li>
+</ul>
+</li>
+<li>CKA は管理者試験なので、Kubernetes クラスタの構築や各コンポーネントの役割なども理解する</li>
+</ul>
+<h2 id="試験前日">試験前日</h2>
+<p>今回は自宅で受験するためデスク周りの掃除をした。特に机の上には必要最低限のものしかおいてはいけないため、不要物は隠したりした。実際のイメージとしては、以下の写真を参考に。</p>
+<p><img src="https://i.imgur.com/MvseuPol.png" alt="試験場所"></p>
+<p>その他、MacBookPro自体のDockから不要なアプリケーションを消したり(誤って起動するのを防ぐため)、Chrome でCKA 専用のプロファイルを作成するなどした。タブを3つ開いてはいけないという決まりもあったので、ショートカットで誤ってタブ開かないようにタブ数を制限するExtension などを入れたりしていた。</p>
+<h2 id="受験当日">受験当日</h2>
+<p>受験当日は11:00 - 13:00 で試験の予定だったが、10:45になっても試験官がやってこなかった。試験ページにチャット機能が備わっているためそこで連絡したが結局11:00になって試験官がやってきた。そこからパスポートを見せて本人確認したり、部屋の中をMacBookPro の内蔵カメラで移しまわったりしたため試験開始は11:30頃となった。<br>
+試験開始してすぐに<code>.vimrc</code> を書いたり、<code>alias k=kubectl</code> などやる予定だったが変に緊張してしまいそれを忘れて問題を解き始めた。前述したとおり冷静になればすぐ解ける問題も少し焦ってしまいとりあえず解けそうな問題から着手することにして、徐々に得点率を稼いでいくスタイルでやった。最終的に数問勉強不足でわからない問題があり最後それを粘って終了だった。受験後は24時間以内に合否連絡が来るとメールが来ていた(36時間経っても音沙汰なければ問い合わせろともか書かれていた)。実際自分は、約24時間で合格通知が来た。<br>
+また、様々な受験体験記に、Proctor ツールが停止してブラウザ再起動したや試験環境フリーズしたなどを見かけたが自分は一度もそんなことなく試験時間が遅れたこと以外は何も不自由なく試験完了できた。</p>
+<h2 id="おわりに">おわりに</h2>
+<p>初めてセキュリティ以外の実技試験が含まれる資格試験を受けたので緊張していた。終わったときは正直落ちていたと思っていたので、合格したことに結構驚いている。また、合格したとしても合格点すれすれだと思っていた。この資格取得のための勉強を通して浅く広くKubernetes のことについて学ぶことができたのはすごく自分にとって良い経験になった。まだ、自宅でKubernetes 環境をしっかりと構築していないので、合間見つけてやっていこうと思う。また本業であるセキュリティエンジニアとしての職に、この資格で学んだことを活かしていきたいと思う(業務はまったく関係ないが&hellip;)。</p>
+<h2 id="謝辞">謝辞</h2>
+<p>試験時間を確保するために雨の中娘を抱っこして家を開けてくれた妻、そしていい子にしててくれた娘には感謝です。</p>
+
+</div>
+
+  
+<footer class='entry-footer'>
+  <div class='container sep-before'><div class='categories'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M22,19a2,2,0,0,1-2,2H4a2,2,0,0,1-2-2V5A2,2,0,0,1,4,3H9l2,3h9a2,2,0,0,1,2,2Z" />
+</svg>
+<span class='screen-reader-text'>Categories: </span><a class='category' href='/categories/certification/'>certification</a></div>
+<div class='tags'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M20.59,13.41l-7.17,7.17a2,2,0,0,1-2.83,0L2,12V2H12l8.59,8.59A2,2,0,0,1,20.59,13.41Z" />
+<line x1="7" y1="7" x2="7" y2="7" />
+</svg>
+<span class='screen-reader-text'>Tags: </span><a class='tag' href='/tags/cka/'>CKA</a></div>
+
+  </div>
+</footer>
+
+
+</article>
+
+<nav class='entry-nav'>
+  <div class='container'><div class='prev-entry sep-before'>
+      <a href='/blog/krb5_attacks_101/'>
+        <span aria-hidden='true'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="20" y1="12" x2="4" y2="12" />
+<polyline points="10 18 4 12 10 6" />
+</svg>
+ Previous</span>
+        <span class='screen-reader-text'>Previous post: </span>Kerberos への攻撃手法</a>
+    </div><div class='next-entry sep-before'>
+      <a href='/blog/passed_oscp/'>
+        <span class='screen-reader-text'>Next post: </span>Offensive Security Certified Professional (OSCP) 合格体験記<span aria-hidden='true'>Next <svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="4" y1="12" x2="20" y2="12" />
+<polyline points="14 6 20 12 14 18" />
+</svg>
+</span>
+      </a>
+    </div></div>
+</nav>
+
+
+
+
+      </main>
+
+      <footer id='footer' class='footer'>
+        <div class='container sep-before'><section class='widget widget-social_menu sep-after'><nav aria-label='Social Menu'>
+    <ul><li>
+        <a href='https://github.com/owlinux1000' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Github account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+</svg>
+</a>
+      </li><li>
+        <a href='https://facebook.com/MunifTanjim' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Facebook account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+</svg>
+</a>
+      </li><li>
+        <a href='https://twitter.com/encry1024' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Twitter account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" />
+</svg>
+</a>
+      </li><li>
+        <a href='https://instagram.com/encry1024' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Instagram account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+<path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+<line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+</svg>
+</a>
+      </li><li>
+        <a href='mailto:encry1024@gmail.com' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Contact via Email</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+<polyline points="22,6 12,13 2,6" />
+</svg>
+</a>
+      </li></ul>
+  </nav>
+</section><div class='copyright'>
+  <p> &copy; 2021 Chihiro Hasegawa </p>
+</div>
+
+        </div>
+      </footer>
+
+    </div>
+  </div><script>window.__assets_js_src="/assets/js/"</script>
+
+<script src='/assets/js/main.c3bcf2df.js'></script><script src='/js/custom.js'></script>
+
+</body>
+
+</html>
+

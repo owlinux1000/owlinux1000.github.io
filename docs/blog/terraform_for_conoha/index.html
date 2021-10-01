@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang='en' dir='auto'><head>
+  <meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta name='description' content='はじめに 最近(?)、自分の中で触ってみたかった技術の1つにTerraformがある。そこで今回は、Terraform でConoha のインスタンスを立ててみる。自分の中での理解をまとめているので間違いあれば教えてください。
+Terraform とは Terraform は、Vagrant などで有名なHashiCorp が開発しているツールで、クラウドサービスやOpenStack を対象に、独自の定義ファイルを用いてインスタンスの管理（構築・削除）を行うことができる。定義ファイルには、HCL を用いて主にtf ファイルに記載していく。私の第一印象としては、Ruby のDSL のような雰囲気を感じるが、Vagrantfile ほどRuby 感はない。どちらかというとjson などに近い雰囲気だ。
+Terraform のインストール 今回は、MacBook Proで行っているので、brew 経由でインストールする。
+$ brew install terraform また、HCLを書いていくためエディタ側にもプラグイン等をインストールしてあげよう。渡しの場合は、Emacsのhcl-modeを導入してみた。
+定義ファイルの作成 今回は、main.tf というファイル名で以下の内容を作成した。以下の内容は、ほぼ参考記事 と同一である。今回は、勉強も兼ねているので、これを丁寧に読み解いていく。
+まずはじめに、Provider の設定だ。
+provider &quot;openstack&quot; { user_name = &quot;hgoehoge&quot; password = &quot;hagehage&quot; tenant_name = &quot;fugafuga&quot; auth_url = &quot;https://identity.tyo1.conoha.io/v2.0&quot; } Provider の設定では、provider キーワードを用いてブロックを定義する。次に、実際のProvider 名を設定するのだが、Conoha がOpenStack を使っているため、Provider にopenstack を設定する。ここには、aws やazure といった様々なクラウドサービスなどを指定することができる。今回のopenstackの場合は、API用のユーザ名やパスワード、テナントを名、認証用URLを設定する。
+次に、Keypairについて見ていく。
+resource &quot;openstack_compute_keypair_v2&quot; &quot;keypair&quot; { name = &quot;terraform-keypair&quot; public_key = &quot;ssh-rsa hogehoge&quot; } ここでは、構築したインスタンスにssh する際に利用する公開鍵の設定をしている。resource ブロックを用いて、リソースを定義する。resource キーワードの次に、リソースの種類、リソース名を設定する。このブロックの中では、一意に識別するためのname や公開鍵を貼り付けるpublic_key を設定している。'>
+<meta name='theme-color' content='#ffcd00'>
+
+<meta property='og:title' content='Terraform でConoha のインスタンスを立ててみる • $ make life'>
+<meta property='og:description' content='はじめに 最近(?)、自分の中で触ってみたかった技術の1つにTerraformがある。そこで今回は、Terraform でConoha のインスタンスを立ててみる。自分の中での理解をまとめているので間違いあれば教えてください。
+Terraform とは Terraform は、Vagrant などで有名なHashiCorp が開発しているツールで、クラウドサービスやOpenStack を対象に、独自の定義ファイルを用いてインスタンスの管理（構築・削除）を行うことができる。定義ファイルには、HCL を用いて主にtf ファイルに記載していく。私の第一印象としては、Ruby のDSL のような雰囲気を感じるが、Vagrantfile ほどRuby 感はない。どちらかというとjson などに近い雰囲気だ。
+Terraform のインストール 今回は、MacBook Proで行っているので、brew 経由でインストールする。
+$ brew install terraform また、HCLを書いていくためエディタ側にもプラグイン等をインストールしてあげよう。渡しの場合は、Emacsのhcl-modeを導入してみた。
+定義ファイルの作成 今回は、main.tf というファイル名で以下の内容を作成した。以下の内容は、ほぼ参考記事 と同一である。今回は、勉強も兼ねているので、これを丁寧に読み解いていく。
+まずはじめに、Provider の設定だ。
+provider &quot;openstack&quot; { user_name = &quot;hgoehoge&quot; password = &quot;hagehage&quot; tenant_name = &quot;fugafuga&quot; auth_url = &quot;https://identity.tyo1.conoha.io/v2.0&quot; } Provider の設定では、provider キーワードを用いてブロックを定義する。次に、実際のProvider 名を設定するのだが、Conoha がOpenStack を使っているため、Provider にopenstack を設定する。ここには、aws やazure といった様々なクラウドサービスなどを指定することができる。今回のopenstackの場合は、API用のユーザ名やパスワード、テナントを名、認証用URLを設定する。
+次に、Keypairについて見ていく。
+resource &quot;openstack_compute_keypair_v2&quot; &quot;keypair&quot; { name = &quot;terraform-keypair&quot; public_key = &quot;ssh-rsa hogehoge&quot; } ここでは、構築したインスタンスにssh する際に利用する公開鍵の設定をしている。resource ブロックを用いて、リソースを定義する。resource キーワードの次に、リソースの種類、リソース名を設定する。このブロックの中では、一意に識別するためのname や公開鍵を貼り付けるpublic_key を設定している。'>
+<meta property='og:url' content='https://owlinux1000.github.io/blog/terraform_for_conoha/'>
+<meta property='og:site_name' content='$ make life'>
+<meta property='og:type' content='article'><meta property='article:section' content='blog'><meta property='article:tag' content='Terraform'><meta property='article:published_time' content='2019-05-18T12:24:26&#43;09:00'/><meta property='article:modified_time' content='2019-05-18T12:24:26&#43;09:00'/><meta name='twitter:card' content='summary'><meta name='twitter:site' content='@encry1024'>
+
+<meta name="generator" content="Hugo 0.73.0" />
+
+  <title>Terraform でConoha のインスタンスを立ててみる • $ make life</title>
+  <link rel='canonical' href='https://owlinux1000.github.io/blog/terraform_for_conoha/'>
+  
+  
+  <link rel='icon' href='/favicon.ico'>
+<link rel='stylesheet' href='/assets/css/main.ab98e12b.css'><link rel='stylesheet' href='/css/custom.css'><style>
+:root{--color-accent:#ffcd00;}
+</style>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-154126244-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  
+
+</head>
+<body class='page type-blog has-sidebar'>
+
+  <div class='site'><div id='sidebar' class='sidebar'>
+  <a class='screen-reader-text' href='#main-menu'>Skip to Main Menu</a>
+
+  <div class='container'><section class='widget widget-about sep-after'>
+  <header>
+    
+    <div class='logo'>
+      <a href='/'>
+        <img src='/images/me.jpg'>
+      </a>
+    </div>
+    
+    <h2 class='title site-title '>
+      <a href='/'>
+      $ make life
+      </a>
+    </h2>
+    <div class='desc'>
+    Welcome to my homepage :)
+    </div>
+  </header>
+
+</section>
+</div>
+
+  <div class='sidebar-overlay'></div>
+</div><div class='main'><nav id='main-menu' class='menu main-menu' aria-label='Main Menu'>
+  <div class='container'>
+    <a class='screen-reader-text' href='#content'>Skip to Content</a>
+
+<button id='sidebar-toggler' class='sidebar-toggler' aria-controls='sidebar'>
+  <span class='screen-reader-text'>Toggle Sidebar</span>
+  <span class='open'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="3" y1="12" x2="21" y2="12" />
+<line x1="3" y1="6" x2="21" y2="6" />
+<line x1="3" y1="18" x2="21" y2="18" />
+</svg>
+</span>
+  <span class='close'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="18" y1="6" x2="6" y2="18" />
+<line x1="6" y1="6" x2="18" y2="18" />
+</svg>
+</span>
+</button>
+    <ul><li class='item'>
+        <a href='/resume/'>Résumé</a>
+      </li><li class='item'>
+        <a href='/blog/'>Blog</a>
+      </li><li class='item'>
+        <a href='/private/'>Private</a>
+      </li></ul>
+  </div>
+</nav><div class='header-widgets'>
+        <div class='container'></div>
+      </div>
+
+      <header id='header' class='header site-header'>
+        <div class='container sep-after'>
+          <div class='header-info'><p class='site-title title'>$ make life</p><p class='desc site-desc'>Making the world more secure</p>
+          </div>
+        </div>
+      </header>
+
+      <main id='content'>
+
+
+<article lang='en' class='entry'>
+  <header class='header entry-header'>
+  <div class='container sep-after'>
+    <div class='header-info'>
+      <h1 class='title'>Terraform でConoha のインスタンスを立ててみる</h1>
+      
+
+    </div>
+    <div class='entry-meta'>
+  <span class='posted-on'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+<line x1="16" y1="2" x2="16" y2="6" />
+<line x1="8" y1="2" x2="8" y2="6" />
+<line x1="3" y1="10" x2="21" y2="10" />
+</svg>
+<span class='screen-reader-text'>Posted on </span>
+  <time class='entry-date' datetime='2019-05-18T12:24:26&#43;09:00'>2019, May 18</time>
+</span>
+
+  
+  
+<span class='reading-time'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><circle cx="12" cy="12" r="10" />
+<polyline points="12 6 12 12 15 15" />
+</svg>
+One min read
+</span>
+
+
+</div>
+
+
+  </div>
+</header>
+
+  
+  
+
+  <div class='container entry-content'>
+  <h2 id="はじめに">はじめに</h2>
+<p>最近(?)、自分の中で触ってみたかった技術の1つにTerraformがある。そこで今回は、Terraform でConoha のインスタンスを立ててみる。自分の中での理解をまとめているので間違いあれば教えてください。</p>
+<h2 id="terraform-とは">Terraform とは</h2>
+<p>Terraform は、Vagrant などで有名な<a href="https://www.hashicorp.com/">HashiCorp </a>が開発しているツールで、クラウドサービスやOpenStack を対象に、独自の定義ファイルを用いてインスタンスの管理（構築・削除）を行うことができる。定義ファイルには、<code>HCL</code> を用いて主に<code>tf</code> ファイルに記載していく。私の第一印象としては、Ruby のDSL のような雰囲気を感じるが、<code>Vagrantfile</code> ほどRuby 感はない。どちらかというと<code>json</code> などに近い雰囲気だ。</p>
+<h2 id="terraform-のインストール">Terraform のインストール</h2>
+<p>今回は、MacBook Proで行っているので、<code>brew</code> 経由でインストールする。</p>
+<pre><code>$ brew install terraform
+</code></pre><p>また、<code>HCL</code>を書いていくためエディタ側にもプラグイン等をインストールしてあげよう。渡しの場合は、Emacsの<code>hcl-mode</code>を導入してみた。</p>
+<h2 id="定義ファイルの作成">定義ファイルの作成</h2>
+<p>今回は、<code>main.tf</code> というファイル名で以下の内容を作成した。以下の内容は、ほぼ<a href="https://qiita.com/kaminchu/items/d0776c381213d54a3a69">参考記事</a> と同一である。今回は、勉強も兼ねているので、これを丁寧に読み解いていく。<br>
+まずはじめに、Provider の設定だ。</p>
+<pre><code>provider &quot;openstack&quot; {
+  user_name   = &quot;hgoehoge&quot;
+  password    = &quot;hagehage&quot;
+  tenant_name = &quot;fugafuga&quot;
+  auth_url    = &quot;https://identity.tyo1.conoha.io/v2.0&quot;
+}
+</code></pre><p>Provider の設定では、<code>provider</code> キーワードを用いてブロックを定義する。次に、実際のProvider 名を設定するのだが、Conoha がOpenStack を使っているため、Provider に<code>openstack</code> を設定する。ここには、<code>aws</code> や<code>azure</code> といった様々なクラウドサービスなどを指定することができる。今回の<code>openstack</code>の場合は、API用のユーザ名やパスワード、テナントを名、認証用URLを設定する。<br>
+次に、Keypairについて見ていく。</p>
+<pre><code>resource &quot;openstack_compute_keypair_v2&quot; &quot;keypair&quot; {
+  name       = &quot;terraform-keypair&quot;
+  public_key = &quot;ssh-rsa hogehoge&quot;
+}
+</code></pre><p>ここでは、構築したインスタンスにssh する際に利用する公開鍵の設定をしている。<code>resource</code> ブロックを用いて、リソースを定義する。<code>resource</code> キーワードの次に、リソースの種類、リソース名を設定する。このブロックの中では、一意に識別するための<code>name</code> や公開鍵を貼り付ける<code>public_key</code> を設定している。</p>
+<p>次に、実際にインスタンス自体の設定について見ていく。</p>
+<pre><code>resource &quot;openstack_compute_instance_v2&quot; &quot;basic&quot; {
+  name        = &quot;basic&quot;                             # 好きな名前
+  image_name  = &quot;vmi-ubuntu-18.04-amd64-20gb&quot;
+  flavor_name = &quot;g-512mb&quot;
+  key_pair    = &quot;terraform-keypair&quot;
+  security_groups = [
+    &quot;gncs-ipv4-all&quot;,
+  ]
+}
+</code></pre><p>こちらも、先程と同様に<code>resource</code> ブロックを使って定義する。インスタンス自体の設定に関しては、<code>openstack_compute_instance_v2</code> で設定できるようだ。<code>image_name</code> や<code>flavor_name</code> は、ConohaのAPIを使って設定できる値がわかるので、その値を設定する。今回は最安値プランのVPS構成だ。また、<code>key_pair</code> には先程定義した<code>name</code> 設定する。最後に、<code>security_groups</code> では、通信許可に関する設定だが、今回はIPv4における全開放を指定している。</p>
+<p>今回は、設定ファイルにクレデンシャル情報をハードコードしているが、実際には環境変数で渡したり別ファイルに定義したりなどを行うように注意する。</p>
+<h2 id="terraform-の実行">Terraform の実行</h2>
+<p>Terraform では、まずはじめに<code>init</code> サブコマンドを実行する。ここで、Provider用のプラグインや各種初期化処理などが走る。次に、<code>plan</code> サブコマンドを用いて、実行計画の作成など実際に行われる処理の確認ができる。そして、<code>apply</code> サブコマンドを用いて、実際に処理を実行させる。また、削除した場合は、<code>destroy</code> サブコマンドを利用する。</p>
+<pre><code>$ terraform init
+...(skip)
+$ terraform plan
+...(skip)
+$ terraform apply
+</code></pre><p><code>apply</code> サブコマンドが成功すると結果が出力されるので、そのIP アドレスに対して、ssh すると構築されたサーバにアクセスできることがわかる。また、ssh が確認できたら<code>destroy</code> サブコマンドを実行してみるとインスタンスが削除されている。ここらへんは、逐次実行しながらConoha のコンパネを見ると具体的なイメージが湧きやすい。</p>
+<h2 id="おわりに">おわりに</h2>
+<p>今回は、既存の記事を参考にTerraform を使ってConoha にVPSを構築してみた。若干~元記事に騙されて時間をとかしたが、実際に構築することができた。これがあれば、また新しくVPS を立てたいときやイベントを行う際などには便利だと思った。もうちょっと使い道を模索して慣れていきたい。</p>
+
+</div>
+
+  
+<footer class='entry-footer'>
+  <div class='container sep-before'><div class='categories'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M22,19a2,2,0,0,1-2,2H4a2,2,0,0,1-2-2V5A2,2,0,0,1,4,3H9l2,3h9a2,2,0,0,1,2,2Z" />
+</svg>
+<span class='screen-reader-text'>Categories: </span><a class='category' href='/categories/infrastructure/'>Infrastructure</a></div>
+<div class='tags'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M20.59,13.41l-7.17,7.17a2,2,0,0,1-2.83,0L2,12V2H12l8.59,8.59A2,2,0,0,1,20.59,13.41Z" />
+<line x1="7" y1="7" x2="7" y2="7" />
+</svg>
+<span class='screen-reader-text'>Tags: </span><a class='tag' href='/tags/terraform/'>Terraform</a></div>
+
+  </div>
+</footer>
+
+
+</article>
+
+<nav class='entry-nav'>
+  <div class='container'><div class='prev-entry sep-before'>
+      <a href='/blog/passed_grem/'>
+        <span aria-hidden='true'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="20" y1="12" x2="4" y2="12" />
+<polyline points="10 18 4 12 10 6" />
+</svg>
+ Previous</span>
+        <span class='screen-reader-text'>Previous post: </span>GIAC Reverse Engineering Malware（GREM）合格体験記</a>
+    </div><div class='next-entry sep-before'>
+      <a href='/blog/harekazectf2019/'>
+        <span class='screen-reader-text'>Next post: </span>HarekazeCTF 2019 writeup<span aria-hidden='true'>Next <svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="4" y1="12" x2="20" y2="12" />
+<polyline points="14 6 20 12 14 18" />
+</svg>
+</span>
+      </a>
+    </div></div>
+</nav>
+
+
+
+
+      </main>
+
+      <footer id='footer' class='footer'>
+        <div class='container sep-before'><section class='widget widget-social_menu sep-after'><nav aria-label='Social Menu'>
+    <ul><li>
+        <a href='https://github.com/owlinux1000' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Github account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+</svg>
+</a>
+      </li><li>
+        <a href='https://facebook.com/MunifTanjim' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Facebook account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+</svg>
+</a>
+      </li><li>
+        <a href='https://twitter.com/encry1024' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Twitter account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" />
+</svg>
+</a>
+      </li><li>
+        <a href='https://instagram.com/encry1024' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Instagram account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+<path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+<line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+</svg>
+</a>
+      </li><li>
+        <a href='mailto:encry1024@gmail.com' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Contact via Email</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+<polyline points="22,6 12,13 2,6" />
+</svg>
+</a>
+      </li></ul>
+  </nav>
+</section><div class='copyright'>
+  <p> &copy; 2021 Chihiro Hasegawa </p>
+</div>
+
+        </div>
+      </footer>
+
+    </div>
+  </div><script>window.__assets_js_src="/assets/js/"</script>
+
+<script src='/assets/js/main.c3bcf2df.js'></script><script src='/js/custom.js'></script>
+
+</body>
+
+</html>
+

