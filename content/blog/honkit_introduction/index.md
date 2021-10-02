@@ -246,4 +246,4 @@ Commands:
 
 ## おわりに
 
-元々GitBook自体は知っていたけれど、それがDeprecatedになってたことすら知らなかったし、HonkitというこのFork版ができているのも知らなかった。VuePressなど似たようなツールはいくつもあるが、個人的には結構シンプルに使えるので気に入っている。[OSCP](https://owlinux1000.github.io/blog/passed_oscp/)受験のチートシート作成の際にガッツリ使ったが、かなり良かったので、もっといろんなところで利用していきたい。
+元々GitBook自体は知っていたけれど、それがDeprecatedになってたことすら知らなかったし、HonkitというこのFork版ができているのも知らなかった。VuePressなど似たようなツールはいくつもあるが、個人的には結構シンプルに使えるので気に入っている。[OSCP](https://owlinux1000.github.io/blog/passed_oscp/)受験のチートシート作成の際にガッツリ使ったが、かなり良かったので、もっといろんなところで利用していきたい。[GitHub](https://github.com/owlinux1000/honkit_template)に本内容を網羅したリポジトリがあるので参考にしてみてください。
