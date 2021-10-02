@@ -5,10 +5,22 @@
     <link>https://owlinux1000.github.io/</link>
     <description>Recent content on $ make life</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Wed, 29 Sep 2021 09:54:40 +0900</lastBuildDate>
+    <lastBuildDate>Sat, 02 Oct 2021 12:13:41 +0900</lastBuildDate>
     
 	<atom:link href="https://owlinux1000.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Honkit 入門</title>
+      <link>https://owlinux1000.github.io/blog/honkit_introduction/</link>
+      <pubDate>Sat, 02 Oct 2021 12:13:41 +0900</pubDate>
+      
+      <guid>https://owlinux1000.github.io/blog/honkit_introduction/</guid>
+      <description>Honkit とは Honkitは、旧GitBookをForkして開発されたソフトウェアです。何ができるかといえば、MarkdownやAsciiDocなどの文書を本のような形式なHTMLとして出力したりすることができます。
+とりあえず使ってみる 公式サイトのQuick Start に習ってやってみる。まずは作業用のディレクトリを作成しておく。今回は、honkit_templateというディレクトリをルートとして扱い、src/ ディレクトリの中に実際のマークダウンファイルなどを格納していく。
+$ mkdir honkit_template &amp;amp;&amp;amp; cd honkit_template $ mkdir src 次に、npm を使ってプロジェクトの初期化やHonkitのインストールを行う。公式サイト的に、ローカルに入れるのを推奨しているのでそうする。
+$ npm init --yes Wrote to /Users/chihiro/Desktop/honkit_template/package.json: { &amp;#34;name&amp;#34;: &amp;#34;honkit_template&amp;#34;, &amp;#34;version&amp;#34;: &amp;#34;1.0.0&amp;#34;, &amp;#34;description&amp;#34;: &amp;#34;&amp;#34;, &amp;#34;main&amp;#34;: &amp;#34;index.js&amp;#34;, &amp;#34;scripts&amp;#34;: { &amp;#34;test&amp;#34;: &amp;#34;echo \&amp;#34;Error: no test specified\&amp;#34; &amp;amp;&amp;amp; exit 1&amp;#34; }, &amp;#34;keywords&amp;#34;: [], &amp;#34;author&amp;#34;: &amp;#34;&amp;#34;, &amp;#34;license&amp;#34;: &amp;#34;ISC&amp;#34; } $ npm install honkit --save-dev npm WARN deprecated request@2.88.2: request has been deprecated, see https://github.com/request/request/issues/3142 npm WARN deprecated har-validator@5.</description>
+    </item>
     
     <item>
       <title>Offensive Security Certified Professional (OSCP) 合格体験記</title>

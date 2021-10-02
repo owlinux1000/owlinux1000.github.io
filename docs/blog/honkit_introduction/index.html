@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang='en' dir='auto'><head>
+  <meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta name='description' content='Honkit とは Honkitは、旧GitBookをForkして開発されたソフトウェアです。何ができるかといえば、MarkdownやAsciiDocなどの文書を本のような形式なHTMLとして出力したりすることができます。
+とりあえず使ってみる 公式サイトのQuick Start に習ってやってみる。まずは作業用のディレクトリを作成しておく。今回は、honkit_templateというディレクトリをルートとして扱い、src/ ディレクトリの中に実際のマークダウンファイルなどを格納していく。
+$ mkdir honkit_template &amp;&amp; cd honkit_template $ mkdir src 次に、npm を使ってプロジェクトの初期化やHonkitのインストールを行う。公式サイト的に、ローカルに入れるのを推奨しているのでそうする。
+$ npm init --yes Wrote to /Users/chihiro/Desktop/honkit_template/package.json: { &#34;name&#34;: &#34;honkit_template&#34;, &#34;version&#34;: &#34;1.0.0&#34;, &#34;description&#34;: &#34;&#34;, &#34;main&#34;: &#34;index.js&#34;, &#34;scripts&#34;: { &#34;test&#34;: &#34;echo \&#34;Error: no test specified\&#34; &amp;&amp; exit 1&#34; }, &#34;keywords&#34;: [], &#34;author&#34;: &#34;&#34;, &#34;license&#34;: &#34;ISC&#34; } $ npm install honkit --save-dev npm WARN deprecated request@2.88.2: request has been deprecated, see https://github.com/request/request/issues/3142 npm WARN deprecated har-validator@5.'>
+<meta name='theme-color' content='#ffcd00'>
+
+<meta property='og:title' content='Honkit 入門 • $ make life'>
+<meta property='og:description' content='Honkit とは Honkitは、旧GitBookをForkして開発されたソフトウェアです。何ができるかといえば、MarkdownやAsciiDocなどの文書を本のような形式なHTMLとして出力したりすることができます。
+とりあえず使ってみる 公式サイトのQuick Start に習ってやってみる。まずは作業用のディレクトリを作成しておく。今回は、honkit_templateというディレクトリをルートとして扱い、src/ ディレクトリの中に実際のマークダウンファイルなどを格納していく。
+$ mkdir honkit_template &amp;&amp; cd honkit_template $ mkdir src 次に、npm を使ってプロジェクトの初期化やHonkitのインストールを行う。公式サイト的に、ローカルに入れるのを推奨しているのでそうする。
+$ npm init --yes Wrote to /Users/chihiro/Desktop/honkit_template/package.json: { &#34;name&#34;: &#34;honkit_template&#34;, &#34;version&#34;: &#34;1.0.0&#34;, &#34;description&#34;: &#34;&#34;, &#34;main&#34;: &#34;index.js&#34;, &#34;scripts&#34;: { &#34;test&#34;: &#34;echo \&#34;Error: no test specified\&#34; &amp;&amp; exit 1&#34; }, &#34;keywords&#34;: [], &#34;author&#34;: &#34;&#34;, &#34;license&#34;: &#34;ISC&#34; } $ npm install honkit --save-dev npm WARN deprecated request@2.88.2: request has been deprecated, see https://github.com/request/request/issues/3142 npm WARN deprecated har-validator@5.'>
+<meta property='og:url' content='https://owlinux1000.github.io/blog/honkit_introduction/'>
+<meta property='og:site_name' content='$ make life'>
+<meta property='og:type' content='article'><meta property='article:section' content='blog'><meta property='article:published_time' content='2021-10-02T12:13:41&#43;09:00'/><meta property='article:modified_time' content='2021-10-02T12:13:41&#43;09:00'/><meta name='twitter:card' content='summary'><meta name='twitter:site' content='@encry1024'>
+
+<meta name="generator" content="Hugo 0.73.0" />
+
+  <title>Honkit 入門 • $ make life</title>
+  <link rel='canonical' href='https://owlinux1000.github.io/blog/honkit_introduction/'>
+  
+  
+  <link rel='icon' href='/favicon.ico'>
+<link rel='stylesheet' href='/assets/css/main.ab98e12b.css'><link rel='stylesheet' href='/css/custom.css'><style>
+:root{--color-accent:#ffcd00;}
+</style>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-154126244-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  
+
+</head>
+<body class='page type-blog has-sidebar'>
+
+  <div class='site'><div id='sidebar' class='sidebar'>
+  <a class='screen-reader-text' href='#main-menu'>Skip to Main Menu</a>
+
+  <div class='container'><section class='widget widget-about sep-after'>
+  <header>
+    
+    <div class='logo'>
+      <a href='/'>
+        <img src='/images/me.jpg'>
+      </a>
+    </div>
+    
+    <h2 class='title site-title '>
+      <a href='/'>
+      $ make life
+      </a>
+    </h2>
+    <div class='desc'>
+    Welcome to my homepage :)
+    </div>
+  </header>
+
+</section>
+</div>
+
+  <div class='sidebar-overlay'></div>
+</div><div class='main'><nav id='main-menu' class='menu main-menu' aria-label='Main Menu'>
+  <div class='container'>
+    <a class='screen-reader-text' href='#content'>Skip to Content</a>
+
+<button id='sidebar-toggler' class='sidebar-toggler' aria-controls='sidebar'>
+  <span class='screen-reader-text'>Toggle Sidebar</span>
+  <span class='open'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="3" y1="12" x2="21" y2="12" />
+<line x1="3" y1="6" x2="21" y2="6" />
+<line x1="3" y1="18" x2="21" y2="18" />
+</svg>
+</span>
+  <span class='close'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="18" y1="6" x2="6" y2="18" />
+<line x1="6" y1="6" x2="18" y2="18" />
+</svg>
+</span>
+</button>
+    <ul><li class='item'>
+        <a href='/resume/'>Résumé</a>
+      </li><li class='item'>
+        <a href='/blog/'>Blog</a>
+      </li><li class='item'>
+        <a href='/private/'>Private</a>
+      </li></ul>
+  </div>
+</nav><div class='header-widgets'>
+        <div class='container'></div>
+      </div>
+
+      <header id='header' class='header site-header'>
+        <div class='container sep-after'>
+          <div class='header-info'><p class='site-title title'>$ make life</p><p class='desc site-desc'>Making the world more secure</p>
+          </div>
+        </div>
+      </header>
+
+      <main id='content'>
+
+
+<article lang='en' class='entry'>
+  <header class='header entry-header'>
+  <div class='container sep-after'>
+    <div class='header-info'>
+      <h1 class='title'>Honkit 入門</h1>
+      
+
+    </div>
+    <div class='entry-meta'>
+  <span class='posted-on'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+<line x1="16" y1="2" x2="16" y2="6" />
+<line x1="8" y1="2" x2="8" y2="6" />
+<line x1="3" y1="10" x2="21" y2="10" />
+</svg>
+<span class='screen-reader-text'>Posted on </span>
+  <time class='entry-date' datetime='2021-10-02T12:13:41&#43;09:00'>2021, Oct 02</time>
+</span>
+
+  
+  
+<span class='reading-time'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><circle cx="12" cy="12" r="10" />
+<polyline points="12 6 12 12 15 15" />
+</svg>
+3 mins read
+</span>
+
+
+</div>
+
+
+  </div>
+</header>
+
+  
+  
+
+  <div class='container entry-content'>
+  <h2 id="honkit-とは">Honkit とは</h2>
+<p>Honkitは、旧GitBookをForkして開発されたソフトウェアです。何ができるかといえば、MarkdownやAsciiDocなどの文書を本のような形式なHTMLとして出力したりすることができます。</p>
+<h2 id="とりあえず使ってみる">とりあえず使ってみる</h2>
+<p><a href="https://github.com/honkit/honkit">公式サイト</a>のQuick Start に習ってやってみる。まずは作業用のディレクトリを作成しておく。今回は、<code>honkit_template</code>というディレクトリをルートとして扱い、<code>src/</code> ディレクトリの中に実際のマークダウンファイルなどを格納していく。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ mkdir honkit_template <span style="color:#f92672">&amp;&amp;</span> cd honkit_template
+$ mkdir src
+</code></pre></div><p>次に、<code>npm</code> を使ってプロジェクトの初期化やHonkitのインストールを行う。公式サイト的に、ローカルに入れるのを推奨しているのでそうする。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ npm init --yes
+Wrote to /Users/chihiro/Desktop/honkit_template/package.json:
+
+<span style="color:#f92672">{</span>
+  <span style="color:#e6db74">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;honkit_template&#34;</span>,
+  <span style="color:#e6db74">&#34;version&#34;</span>: <span style="color:#e6db74">&#34;1.0.0&#34;</span>,
+  <span style="color:#e6db74">&#34;description&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+  <span style="color:#e6db74">&#34;main&#34;</span>: <span style="color:#e6db74">&#34;index.js&#34;</span>,
+  <span style="color:#e6db74">&#34;scripts&#34;</span>: <span style="color:#f92672">{</span>
+    <span style="color:#e6db74">&#34;test&#34;</span>: <span style="color:#e6db74">&#34;echo \&#34;Error: no test specified\&#34; &amp;&amp; exit 1&#34;</span>
+  <span style="color:#f92672">}</span>,
+  <span style="color:#e6db74">&#34;keywords&#34;</span>: <span style="color:#f92672">[]</span>,
+  <span style="color:#e6db74">&#34;author&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+  <span style="color:#e6db74">&#34;license&#34;</span>: <span style="color:#e6db74">&#34;ISC&#34;</span>
+<span style="color:#f92672">}</span>
+$ npm install honkit --save-dev
+npm WARN deprecated request@2.88.2: request has been deprecated, see https://github.com/request/request/issues/3142
+npm WARN deprecated har-validator@5.1.5: this library is no longer supported
+npm WARN deprecated uuid@3.4.0: Please upgrade  to version <span style="color:#ae81ff">7</span> or higher.  Older versions may use Math.random<span style="color:#f92672">()</span> in certain circumstances, which is known to be problematic.  See https://v8.dev/blog/math-random <span style="color:#66d9ef">for</span> details.
+npm notice created a lockfile as package-lock.json. You should commit this file.
+npm WARN honkit_template@1.0.0 No description
+npm WARN honkit_template@1.0.0 No repository field.
+
++ honkit@3.6.21
+added <span style="color:#ae81ff">320</span> packages from <span style="color:#ae81ff">347</span> contributors and audited <span style="color:#ae81ff">320</span> packages in 31.833s
+
+<span style="color:#ae81ff">19</span> packages are looking <span style="color:#66d9ef">for</span> funding
+  run <span style="color:#e6db74">`</span>npm fund<span style="color:#e6db74">`</span> <span style="color:#66d9ef">for</span> details
+
+found <span style="color:#ae81ff">0</span> vulnerabilities
+$ npx honkit --version
+3.6.21
+</code></pre></div><p>インストールが完了したら、Honkitによる初期化とホットリロード可能な簡易HTTPサーバでの動作確認をしていく。今回実際のマークダウンなどは、<code>src/</code>にあるため引数にてそれを設定している。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ npx honkit init ./src
+warn: no summary file in this book
+info: create README.md
+info: create SUMMARY.md
+info: initialization is finished
+$ npx honkit serve ./src
+Live reload server started on port: <span style="color:#ae81ff">35729</span>
+Press CTRL+C to quit ...
+
+Starting server ...
+info: <span style="color:#ae81ff">6</span> plugins are installed
+info: <span style="color:#ae81ff">6</span> explicitly listed
+info: plugin <span style="color:#e6db74">&#34;livereload&#34;</span> is loaded
+info: plugin <span style="color:#e6db74">&#34;highlight&#34;</span> is loaded
+info: plugin <span style="color:#e6db74">&#34;search&#34;</span> is loaded
+info: plugin <span style="color:#e6db74">&#34;lunr&#34;</span> is loaded
+info: plugin <span style="color:#e6db74">&#34;fontsettings&#34;</span> is loaded
+info: plugin <span style="color:#e6db74">&#34;theme-default&#34;</span> is loaded
+info: found <span style="color:#ae81ff">1</span> pages
+info: found <span style="color:#ae81ff">0</span> asset files
+info: &gt;&gt; generation finished with success in 0.3s !
+Serving book on http://localhost:4000
+</code></pre></div><p>Webブラウザなどで、<code>http://localhost:4000</code> にアクセスしてみると初期コンテンツとしては以下のような画面が現れる。</p>
+<p><img src="img/honkit_sample.png" alt=""></p>
+<h2 id="カスタマイズしてみる">カスタマイズしてみる</h2>
+<p>これだけだと味気ないので少し内部を見たりいじっていく。まずはディレクトリ構造。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ ls src/
+README.md   SUMMARY.md
+</code></pre></div><p><code>src/</code> ディレクトリの下には、2つのファイルが存在する。それぞれの中身は以下の通り。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ cat src/README.md
+<span style="color:#75715e"># Introduction</span>
+
+$ cat src/SUMMARY.md
+<span style="color:#75715e"># Summary</span>
+
+* <span style="color:#f92672">[</span>Introduction<span style="color:#f92672">](</span>README.md<span style="color:#f92672">)</span>
+</code></pre></div><p>先程のスクリーンショットと見比べてみるとわかるが、<code>SUMMARY.md</code> がサイドバーの目次に使われており、<code>README.md</code> が記事の中身に利用される。目次を増やしていきたい場合は、<code>SUMMARY.md</code>をいじって、リンクするファイルの記載を増やしていけば良いことがわかった。<br>
+この他にも、<code>GLOSSARY.md</code> という用語定義などをする機能も備わっている。<code>src/GLOSSARY.md</code>の作成と<code>src/README.md</code>を書き換えてみる。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ cat src/GLOSSARY.md
+<span style="color:#75715e">## test</span>
+
+これは、テスト用の単語です。
+</code></pre></div><p>この状態で、再度アクセスして、testという単語にカーソルをあわせてみると下記のような表示に変わり、用語の定義が表示される。また、クリックすることで、<code>GLOSSARY.html</code>に飛ぶことができる。技術文書書く際にありがちな言葉の定義をしっかり定めてすぐ参照できるので非常にいい。</p>
+<p><img src="img/honkit_glossary.png" alt=""></p>
+<p>次に、Honkitの設定ファイルである<code>book.json</code> を作成してカスタマイズしてみる。下記のような内容のファイルを作成する。このファイル自体は、<code>src/</code>と同じ階層に配置する。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ cat book.json
+<span style="color:#f92672">{</span>
+    <span style="color:#e6db74">&#34;root&#34;</span>: <span style="color:#e6db74">&#34;./src&#34;</span>,
+    <span style="color:#e6db74">&#34;title&#34;</span>: <span style="color:#e6db74">&#34;Honkit Template&#34;</span>,
+    <span style="color:#e6db74">&#34;description&#34;</span>: <span style="color:#e6db74">&#34;新規に作成するときに流用するHonkit のテンプレート&#34;</span>,
+    <span style="color:#e6db74">&#34;author&#34;</span>: <span style="color:#e6db74">&#34;Chihiro Hasegawa&#34;</span>,
+    <span style="color:#e6db74">&#34;language&#34;</span>: <span style="color:#e6db74">&#34;ja&#34;</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>記載された値で理解が難しいと思われるものは無いので説明は割愛する、今回このファイルで、Honkitのルートを指定しているため、<code>npx honkit</code> する際には、下記のように引数を追加することなく実行することができるようになる。</p>
+<pre><code>$ npx honkit serve
+Live reload server started on port: 35729
+Press CTRL+C to quit ...
+
+Starting server ...
+info: 6 plugins are installed
+info: 6 explicitly listed
+info: plugin &quot;livereload&quot; is loaded
+info: plugin &quot;highlight&quot; is loaded
+info: plugin &quot;search&quot; is loaded
+info: plugin &quot;lunr&quot; is loaded
+info: plugin &quot;fontsettings&quot; is loaded
+info: plugin &quot;theme-default&quot; is loaded
+info: found 2 pages
+info: found 0 asset files
+info: &gt;&gt; generation finished with success in 0.3s !
+Serving book on http://localhost:4000
+</code></pre><p>その他、詳細なパラメータなどは<a href="https://honkit.netlify.app/config.html">公式サイト</a>を参照しよう。</p>
+<h2 id="本番利用するために">本番利用するために</h2>
+<p>ここまでは、<code>npx honkit serve</code>コマンドにて簡易HTTPサーバを起動していた。しかしながら、実際に本番環境などにデプロイする際は、純粋なHTMLやCSS、JavaScriptが格納されたディレクトリだけで十分だ。それのために、<code>npx honkit build</code> コマンドを使うことで実際のHTMLなどを吐くことができるようになっている。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">npx honkit build
+info: <span style="color:#ae81ff">5</span> plugins are installed
+info: <span style="color:#ae81ff">5</span> explicitly listed
+info: plugin <span style="color:#e6db74">&#34;highlight&#34;</span> is loaded
+info: plugin <span style="color:#e6db74">&#34;search&#34;</span> is loaded
+info: plugin <span style="color:#e6db74">&#34;lunr&#34;</span> is loaded
+info: plugin <span style="color:#e6db74">&#34;fontsettings&#34;</span> is loaded
+info: plugin <span style="color:#e6db74">&#34;theme-default&#34;</span> is loaded
+info: found <span style="color:#ae81ff">2</span> pages
+info: found <span style="color:#ae81ff">1</span> asset files
+info: &gt;&gt; generation finished with success in 0.4s !
+ls _book/
+GLOSSARY.html      gitbook/           index.html         search_index.json
+</code></pre></div><p>本コマンドでビルドをすると、<code>_book</code>というディレクトリで中身が作成される。GitHub Pagesなどにデプロイしたい場合に、<code>docs/</code>ディレクトリなどにHTML郡を出力したいするには、下記のように出力先を指定する必要があるのだが、位置引数なため、ソースディレクトリを指定する必要がありそうだ。<code>book.json</code> とかで、設定できないように見える。いいやり方があったら教えてほしい。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ mkdir docs
+$ npx honkit src docs
+</code></pre></div><p>また、Honkit では<code>SUMMARY.md</code>に記載されていないファイルは全部コピーされてしまう(ビルド時などだと思われる)ようで、不要なファイルがある場合は、<code>.bookignore</code> ファイルを用意すると良いらしい。例えば、<code>package.json</code> や<code>package-lock.json</code> は不要なので、除外するには下記のように記載すれば良い。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ cat .bookignore
+package.json
+package-lock.json
+</code></pre></div><p>Honkit は、<code>.gitignore</code><strong>も</strong>見てくれるそうなので、Git管理すらしなくて良いファイルは、そちらに記載して、Honkit でビルドする時だけ除外したいものを<code>.bookignore</code>に書くようにすると良さそうだ。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">node_modules/
+_book
+</code></pre></div><h2 id="その他個人的に良いなと思った機能">その他、個人的に良いなと思った機能</h2>
+<h3 id="脚注footnotes">脚注(Footnotes)</h3>
+<p>以下のように<code>[^1]</code>のような書き方をすることで簡単に脚注をつけることができる。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ cat src/README.md
+...<span style="color:#f92672">(</span>snip<span style="color:#f92672">)</span>...
+ここに脚注がはいる<span style="color:#f92672">[</span>^1<span style="color:#f92672">]</span>
+
+<span style="color:#f92672">[</span>^1<span style="color:#f92672">]</span>: これは脚注
+</code></pre></div><p><img src="img/honkit_footnotes.png" alt=""></p>
+<h3 id="サイト内検索機能">サイト内検索機能</h3>
+<p>画面の左上にある検索画面からサイト内検索することができる。</p>
+<p><img src="img/honkit_search.png" alt=""></p>
+<h3 id="epubmobipdfでビルドする機能">ePub/Mobi/PDFでビルドする機能</h3>
+<p><code>honkit</code>コマンドのヘルプを見るとわかるように、これらの形式でビルドすることが可能なようだ。未検証だが、いざ電子書籍などで出版するときは便利そうだ。<a href="https://honkit.netlify.app/ebook.html">公式サイト</a>によると、利用するためには、<code>ebook-convert</code>というツールが必要なようで、<a href="https://calibre-ebook.com/">Calibre Application</a> をインストールすると中に入ってるバイナリらしい。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ npx honkit -h
+Usage: honkit <span style="color:#f92672">[</span>options<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>command<span style="color:#f92672">]</span>
+
+Options:
+  -V, --version                    output the version number
+  -h, --help                       display help <span style="color:#66d9ef">for</span> command
+
+Commands:
+  build <span style="color:#f92672">[</span>options<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>book<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>output<span style="color:#f92672">]</span>  build a book
+  serve <span style="color:#f92672">[</span>options<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>book<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>output<span style="color:#f92672">]</span>  serve the book as a website <span style="color:#66d9ef">for</span> testing
+  parse <span style="color:#f92672">[</span>options<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>book<span style="color:#f92672">]</span>           parse and print debug information about a book
+  init <span style="color:#f92672">[</span>options<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>book<span style="color:#f92672">]</span>            setup and create files <span style="color:#66d9ef">for</span> chapters
+  pdf <span style="color:#f92672">[</span>options<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>book<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>output<span style="color:#f92672">]</span>    build a book into an ebook file
+  epub <span style="color:#f92672">[</span>options<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>book<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>output<span style="color:#f92672">]</span>   build a book into an ebook file
+  mobi <span style="color:#f92672">[</span>options<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>book<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>output<span style="color:#f92672">]</span>   build a book into an ebook file
+  help <span style="color:#f92672">[</span>command<span style="color:#f92672">]</span>                   display help <span style="color:#66d9ef">for</span> command
+</code></pre></div><h2 id="おわりに">おわりに</h2>
+<p>元々GitBook自体は知っていたけれど、それがDeprecatedになってたことすら知らなかったし、HonkitというこのFork版ができているのも知らなかった。VuePressなど似たようなツールはいくつもあるが、個人的には結構シンプルに使えるので気に入っている。<a href="https://owlinux1000.github.io/blog/passed_oscp/">OSCP</a>受験のチートシート作成の際にガッツリ使ったが、かなり良かったので、もっといろんなところで利用していきたい。</p>
+
+</div>
+
+  
+<footer class='entry-footer'>
+  <div class='container sep-before'>
+  </div>
+</footer>
+
+
+</article>
+
+<nav class='entry-nav'>
+  <div class='container'><div class='prev-entry sep-before'>
+      <a href='/blog/passed_oscp/'>
+        <span aria-hidden='true'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="20" y1="12" x2="4" y2="12" />
+<polyline points="10 18 4 12 10 6" />
+</svg>
+ Previous</span>
+        <span class='screen-reader-text'>Previous post: </span>Offensive Security Certified Professional (OSCP) 合格体験記</a>
+    </div></div>
+</nav>
+
+
+
+
+      </main>
+
+      <footer id='footer' class='footer'>
+        <div class='container sep-before'><section class='widget widget-social_menu sep-after'><nav aria-label='Social Menu'>
+    <ul><li>
+        <a href='https://github.com/owlinux1000' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Github account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+</svg>
+</a>
+      </li><li>
+        <a href='https://facebook.com/MunifTanjim' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Facebook account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+</svg>
+</a>
+      </li><li>
+        <a href='https://twitter.com/encry1024' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Twitter account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" />
+</svg>
+</a>
+      </li><li>
+        <a href='https://instagram.com/encry1024' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Open Instagram account in new tab</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+<path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+<line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+</svg>
+</a>
+      </li><li>
+        <a href='mailto:encry1024@gmail.com' target='_blank' rel='noopener me'>
+          <span class='screen-reader-text'>Contact via Email</span><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+<polyline points="22,6 12,13 2,6" />
+</svg>
+</a>
+      </li></ul>
+  </nav>
+</section><div class='copyright'>
+  <p> &copy; 2021 Chihiro Hasegawa </p>
+</div>
+
+        </div>
+      </footer>
+
+    </div>
+  </div><script>window.__assets_js_src="/assets/js/"</script>
+
+<script src='/assets/js/main.c3bcf2df.js'></script><script src='/js/custom.js'></script>
+
+</body>
+
+</html>
+
