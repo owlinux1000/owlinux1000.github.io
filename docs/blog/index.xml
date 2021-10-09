@@ -23,15 +23,6 @@
     </item>
     
     <item>
-      <title>Textlint_introduction</title>
-      <link>https://owlinux1000.github.io/blog/textlint_introduction/</link>
-      <pubDate>Tue, 05 Oct 2021 20:33:36 +0900</pubDate>
-      
-      <guid>https://owlinux1000.github.io/blog/textlint_introduction/</guid>
-      <description>とりあえず使ってみる $ npm init --yes Wrote to /Users/chihiro/Desktop/workspace/textlint_template/package.json: { &amp;#34;name&amp;#34;: &amp;#34;textlint_template&amp;#34;, &amp;#34;version&amp;#34;: &amp;#34;1.0.0&amp;#34;, &amp;#34;description&amp;#34;: &amp;#34;&amp;#34;, &amp;#34;main&amp;#34;: &amp;#34;index.js&amp;#34;, &amp;#34;scripts&amp;#34;: { &amp;#34;test&amp;#34;: &amp;#34;echo \&amp;#34;Error: no test specified\&amp;#34; &amp;amp;&amp;amp; exit 1&amp;#34; }, &amp;#34;keywords&amp;#34;: [], &amp;#34;author&amp;#34;: &amp;#34;&amp;#34;, &amp;#34;license&amp;#34;: &amp;#34;ISC&amp;#34; } $ npm install --save-dev \  textlint \  textlint-rule-preset-ja-spacing \  textlint-rule-preset-ja-technical-writing \  textlint-rule-spellcheck-tech-word npm install --save-dev \  textlint \  textlint-rule-preset-ja-spacing \  textlint-rule-preset-ja-technical-writing \  textlint-rule-spellcheck-tech-word added 358 packages, and audited 359 packages in 36s 98 packages are looking for funding run `npm fund` for details found 0 vulnerabilities textlintの設定ファイルを初期化して作成する。</description>
-    </item>
-    
-    <item>
       <title>Honkit 入門</title>
       <link>https://owlinux1000.github.io/blog/honkit_introduction/</link>
       <pubDate>Sat, 02 Oct 2021 12:13:41 +0900</pubDate>

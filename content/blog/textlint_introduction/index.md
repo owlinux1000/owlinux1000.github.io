@@ -1,7 +1,7 @@
 ---
 title: "Textlint_introduction"
 date: 2021-10-05T20:33:36+09:00
-draft: false
+draft: true
 ---
 
 ## とりあえず使ってみる
