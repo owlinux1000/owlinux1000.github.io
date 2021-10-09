@@ -5,10 +5,31 @@
     <link>https://owlinux1000.github.io/</link>
     <description>Recent content on $ make life</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Sat, 02 Oct 2021 12:13:41 +0900</lastBuildDate>
+    <lastBuildDate>Sat, 09 Oct 2021 20:17:31 +0900</lastBuildDate>
     
 	<atom:link href="https://owlinux1000.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Happy Hacking Keyboard Professional HYBRID Type-S 日本語配列／墨を使い始めた</title>
+      <link>https://owlinux1000.github.io/blog/hhkb_hybrid/</link>
+      <pubDate>Sat, 09 Oct 2021 20:17:31 +0900</pubDate>
+      
+      <guid>https://owlinux1000.github.io/blog/hhkb_hybrid/</guid>
+      <description>つい先日、会社の先輩からHappy Hacking Keyboard Professional HYBRID Type-S 日本語配列／墨をOSCPの合格祝いにプレゼントしてもらった。HHKB自体は、自宅用にHHKB Professional BTの墨、会社用にHHKB Professional2の白を持っている。
+自分が普段使っているラップトップは、もうUSB Type-Cしか刺さらないため、充電したり有線で使うためには変換を噛ませたりする必要があり手間を感じていた。お金に余裕ができたら、買い換えようと思っていた矢先に、プレゼントとしていただけたので非常に助かった。その先輩に、「お礼を&amp;hellip;」という話をしたところ、「同僚や後輩が良い成果を出したら何かをプレゼントする、連鎖を続けてほしい」と言われて、なんてかっこいいんだと思った。
+今まで家で使っていたHHKB Professional BTと比べると、HYBRIDは静音でもあり、打鍵感が非常に軽く驚いた。もはや従来のHHKBの打鍵感と違いすぎて、まったく違うキーボードのようだった。おそらく、従来のユーザからすると、かなり賛否が分かれる感じがある。しかしながら、私自身は少し使っただけで違和感無く移行することができた。
+これから、この相棒と共に何か新しいこと、やっていきたい。</description>
+    </item>
+    
+    <item>
+      <title>Textlint_introduction</title>
+      <link>https://owlinux1000.github.io/blog/textlint_introduction/</link>
+      <pubDate>Tue, 05 Oct 2021 20:33:36 +0900</pubDate>
+      
+      <guid>https://owlinux1000.github.io/blog/textlint_introduction/</guid>
+      <description>とりあえず使ってみる $ npm init --yes Wrote to /Users/chihiro/Desktop/workspace/textlint_template/package.json: { &amp;#34;name&amp;#34;: &amp;#34;textlint_template&amp;#34;, &amp;#34;version&amp;#34;: &amp;#34;1.0.0&amp;#34;, &amp;#34;description&amp;#34;: &amp;#34;&amp;#34;, &amp;#34;main&amp;#34;: &amp;#34;index.js&amp;#34;, &amp;#34;scripts&amp;#34;: { &amp;#34;test&amp;#34;: &amp;#34;echo \&amp;#34;Error: no test specified\&amp;#34; &amp;amp;&amp;amp; exit 1&amp;#34; }, &amp;#34;keywords&amp;#34;: [], &amp;#34;author&amp;#34;: &amp;#34;&amp;#34;, &amp;#34;license&amp;#34;: &amp;#34;ISC&amp;#34; } $ npm install --save-dev \  textlint \  textlint-rule-preset-ja-spacing \  textlint-rule-preset-ja-technical-writing \  textlint-rule-spellcheck-tech-word npm install --save-dev \  textlint \  textlint-rule-preset-ja-spacing \  textlint-rule-preset-ja-technical-writing \  textlint-rule-spellcheck-tech-word added 358 packages, and audited 359 packages in 36s 98 packages are looking for funding run `npm fund` for details found 0 vulnerabilities textlintの設定ファイルを初期化して作成する。</description>
+    </item>
     
     <item>
       <title>Honkit 入門</title>
