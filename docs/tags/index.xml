@@ -5,37 +5,10 @@
     <link>https://owlinux1000.github.io/tags/</link>
     <description>Recent content in Tags on $ make life</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Wed, 29 Sep 2021 09:54:40 +0900</lastBuildDate>
+    <lastBuildDate>Sat, 18 May 2019 12:24:26 +0900</lastBuildDate>
     
 	<atom:link href="https://owlinux1000.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>OSCP</title>
-      <link>https://owlinux1000.github.io/tags/oscp/</link>
-      <pubDate>Wed, 29 Sep 2021 09:54:40 +0900</pubDate>
-      
-      <guid>https://owlinux1000.github.io/tags/oscp/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>CKA</title>
-      <link>https://owlinux1000.github.io/tags/cka/</link>
-      <pubDate>Mon, 17 May 2021 20:50:52 +0900</pubDate>
-      
-      <guid>https://owlinux1000.github.io/tags/cka/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>GIAC</title>
-      <link>https://owlinux1000.github.io/tags/giac/</link>
-      <pubDate>Fri, 01 Nov 2019 21:15:46 +0900</pubDate>
-      
-      <guid>https://owlinux1000.github.io/tags/giac/</guid>
-      <description></description>
-    </item>
     
     <item>
       <title>Terraform</title>
