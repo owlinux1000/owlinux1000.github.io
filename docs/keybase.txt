@@ -1,0 +1,68 @@
+==================================================================
+https://keybase.io/encry1024
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://owlinux1000.github.io
+  * I am encry1024 (https://keybase.io/encry1024) on keybase.
+  * I have a public key with fingerprint 4700 4903 128A DC0E EBE6  0B67 242C FA24 5C43 A431
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "0101277b3da789519e1300980386d6e2e4b922e35903cf9aa534856ca03b42b177810a",
+      "fingerprint": "47004903128adc0eebe60b67242cfa245c43a431",
+      "host": "keybase.io",
+      "key_id": "242cfa245c43a431",
+      "kid": "0101277b3da789519e1300980386d6e2e4b922e35903cf9aa534856ca03b42b177810a",
+      "uid": "c3e5c6d7e1d8e948f5eb3886c64d4d19",
+      "username": "encry1024"
+    },
+    "service": {
+      "hostname": "owlinux1000.github.io",
+      "protocol": "https:"
+    },
+    "type": "web_service_binding",
+    "version": 1
+  },
+  "ctime": 1639677434,
+  "expire_in": 157680000,
+  "prev": "48b43e2dae971951e7156320c67e94ad1c19f7f980369aef149e9f134209b34c",
+  "seqno": 14,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: Keybase OpenPGP v2.1.13
+Comment: https://keybase.io/crypto
+
+yMIwAnicrVJLSFRRGB6tqcaQisxF9LA7WosmO+eecx/HhYUQ1KKCyDKohnPuPaPX
+0XunmTs+sSKfIZRJz4W9w4QUhBY5UWSFUga1sBZFEL0MApEILKPoXLNdy1aH8/N9
+3/9/3/8/zJzly0j71nhq0dTjsc1pI4OXkz56u2GqXmKOWSsV1EtRPv3wCpMn3HDU
+MqUCCUAAZU1jyKSaThRIOEQAEB0gXTVVLnPMiCxzpBCAjAihVEFYV1SDAsSwzKCm
+6RBQKSRFLLuUx2Nxy3aFLNYAwIICZZ2aBuCccRUwVZOxbESojBUDI4oRFMQyJ+Ex
+xHCMJni+5Yia+ISnx/sH/j/PnZyWMxBXDNXUODR1TrAeUThDuq4aKjaxCYkHTPC4
+TSu5QHPbiNdCIGOpISSJcpVlcC9Zz8oMxKmusOxkDQQA5JdablmS/XEWizuuYzgV
+AlLmurFEgSfh1sY8TjVn4Rm1MLNsUyQqGFU8nrAcWyqAAmm4licPVURUTcMIhyRe
+E7PiPGx5CEVTddEReH14lbcHnWHEZZNyokERE9egoiIZGKombFITGpBEtIiXm0oo
+j0BMOIlAhGVAGMKG5Pk7YDtCW7RyaanQTFilNnWTcS413L+3d7YvLcM3x5/unZov
+I7Dw7wGmeub+ymle1g47fn0077AXxcP+N9u0OVb58xMVq9N7zrX5R3uPk+/DI6lg
+tPtgYTDr2Zn0yZuDneVvpea72Xl5j3w5X8efdJdvPR1aHnz14ycMtBZ92VbU11bc
+e7iwLnju/NU6MrnCerfhxq3Lm4dWFX450vO6rvI8OxTo8i/vnHhwZUkK5SnJ660X
+4fuNbmVzw7uOGxMdmRcmAiUja7oeHw7WZyqXOps+7NtZtvRa0/55k81dyexcX3v7
+wLqlz4dyxnZ0bHF2Ty3a0/9qRWx7+8XoyU0tx3qzdmUsqKtPtbDhmvdn+0e2+odX
+Dqz90Tjff9Q3nvs0Z/bnlzQ6mr1+cdbojpK+Z59+A/jiP4E=
+=L3Ql
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/encry1024
+
+==================================================================
