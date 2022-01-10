@@ -40,8 +40,9 @@ Here is my **unofficial** résumé. But, if you are interested in me or have a q
 - International Certifications
   - GIAC Reverse Engineering Malware (GREM)
   - GIAC Exploit Researcher and Advanced Penetration Tester (GXPN)
-  - Certified Kubernetest Administrator (CKA)
+  - Certified Kubernetes Administrator (CKA)
   - Offensive Security Certified Professional (OSCP)
+  - Certified Kubernetes Security Specialist (CKS)
 - [Credly](https://www.credly.com/users/chihiro-hasegawa/badges?sort=-state_updated_at&page=1)
 
 ## Past Activites
