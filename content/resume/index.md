@@ -43,6 +43,7 @@ Here is my **unofficial** résumé. But, if you are interested in me or have a q
   - Certified Kubernetes Administrator (CKA)
   - Offensive Security Certified Professional (OSCP)
   - Certified Kubernetes Security Specialist (CKS)
+  - Microsoft Azure Fundamentals (AZ-900)
 - [Credly](https://www.credly.com/users/chihiro-hasegawa/badges?sort=-state_updated_at&page=1)
 
 ## Past Activites
