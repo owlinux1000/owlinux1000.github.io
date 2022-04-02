@@ -8,11 +8,6 @@ Here is my **unofficial** résumé. But, if you are interested in me or have a q
 - Languages: Japanese, English
 - Resides: Kanagawa, Japan
 - Email: encry1024[at]gmail.com
-
-## Objective
-
-- Penetration Tester
-- Research and Development for Threat Intelligence
   
 ## Experience and Skills
 - Security engineer
