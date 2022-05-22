@@ -3,6 +3,7 @@
 Here is my **unofficial** résumé. But, if you are interested in me or have a question about me, feel free to contact me with email!
 
 ## Personal Data
+
 - Name: Chihiro Hasegawa
 - Birthday: 1996/03/28
 - Languages: Japanese, English
@@ -10,11 +11,11 @@ Here is my **unofficial** résumé. But, if you are interested in me or have a q
 - Email: encry1024[at]gmail.com
   
 ## Experience and Skills
-- Security engineer
+
+- Security Engineer
   - Malware analysis
   - Research threat intelligence
-  - Incident Response
-  - Digital Forensics
+  - Digital Forensics/Incident Response
 - Server and network administrator
   - Network Appliance(Cisco, Juniper, IIJ)
   - Provisoning (Vagrant, Ansible, Docker)
@@ -26,6 +27,7 @@ Here is my **unofficial** résumé. But, if you are interested in me or have a q
   - Exploit Development for Penetration Test
 
 ## Certifications
+
 - National Certifications
   - Information Technology Passport Examination
   - Fundamental Information Technology Engineer Examination
@@ -39,7 +41,6 @@ Here is my **unofficial** résumé. But, if you are interested in me or have a q
   - Offensive Security Certified Professional (OSCP)
   - Certified Kubernetes Security Specialist (CKS)
   - Microsoft Azure Fundamentals (AZ-900)
-- [Credly](https://www.credly.com/users/chihiro-hasegawa/badges?sort=-state_updated_at&page=1)
 
 ## Past Activites
 - Competiton event staff
@@ -60,3 +61,9 @@ Here is my **unofficial** résumé. But, if you are interested in me or have a q
 - [One-dimensional convolutional neural networks for Android malware detection](https://ieeexplore.ieee.org/abstract/document/8368693)
 - [セキュリティコンテストのためのCTF問題集 (co-author)](https://book.mynavi.jp/ec/products/detail/id=75673)
 
+## Links
+
+- [Twitter](https://twitter.com/encry1024)
+- [GitHub](https://github.com/owlinux1000/)
+- [Credly](https://www.credly.com/users/chihiro-hasegawa/badges?sort=-state_updated_at&page=1)
+- [DEV](https://dev.to/alicemacs)
