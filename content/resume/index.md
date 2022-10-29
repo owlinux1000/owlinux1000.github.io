@@ -12,11 +12,9 @@ Here is my **unofficial** résumé. But, if you are interested in me or have a q
   
 ## Experience and Skills
 
-- Security Engineer
-  - Malware analysis
-  - Research threat intelligence
-  - Digital Forensics/Incident Response
-- Server and network administrator
+- Security
+  - Malware Analysis
+- Infrastructure
   - Network Appliance(Cisco, Juniper, IIJ)
   - Provisoning (Vagrant, Ansible, Docker)
   - Monitoring system (Zabbix, Prometheus, SNMP)
@@ -41,6 +39,8 @@ Here is my **unofficial** résumé. But, if you are interested in me or have a q
   - Offensive Security Certified Professional (OSCP)
   - Certified Kubernetes Security Specialist (CKS)
   - Microsoft Azure Fundamentals (AZ-900)
+  - Certified Information Systems Security Professional (CISSP)
+    - **Under review status at 2022/10/29**
 
 ## Past Activites
 - Competiton event staff
@@ -60,6 +60,7 @@ Here is my **unofficial** résumé. But, if you are interested in me or have a q
 ## Publications
 - [One-dimensional convolutional neural networks for Android malware detection](https://ieeexplore.ieee.org/abstract/document/8368693)
 - [セキュリティコンテストのためのCTF問題集 (co-author)](https://book.mynavi.jp/ec/products/detail/id=75673)
+- [Sysdig Secure/Falcoの活用術! ~Kubernetes基盤の脅威モデリングとランタイムセキュリティの強化~](https://speakerdeck.com/owlinux1000/falcofalsehuo-yong-shu-kubernetesji-pan-falsexie-wei-moderingutorantaimusekiyuriteifalseqiang-hua)
 
 ## Links
 
